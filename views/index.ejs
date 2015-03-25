@@ -2,84 +2,306 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>Battleship</title>
   <link type="text/css" rel="stylesheet" href="/css/main.css">
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="/js/app.js"></script>
 </head>
 <body>
-
   <div class="gameboard">
     <table class="opponent">
       <tr><th colspan="11">Opponent</th></tr>
-      <tr class="header"><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
       <tr>
-        <td>a</td><td data-id="a1"><td data-id="a2"><td data-id="a3"><td data-id="a4"><td data-id="a5"><td data-id="a6"><td data-id="a7"><td data-id="a8"><td data-id="a9"><td data-id="a10"></td>
+        <td class="noColor" data-id="header"></td>
+        <td data-id="header">1</td>
+        <td data-id="header">2</td>
+        <td data-id="header">3</td>
+        <td data-id="header">4</td>
+        <td data-id="header">5</td>
+        <td data-id="header">6</td>
+        <td data-id="header">7</td>
+        <td data-id="header">8</td>
+        <td data-id="header">9</td>
+        <td data-id="header">10</td>
       </tr>
-      <tr>  
-        <td>b</td><td data-id="b1"><td data-id="b2"><td data-id="b3"><td data-id="b4"><td data-id="b5"><td data-id="b6"><td data-id="b7"><td data-id="b8"><td data-id="b9"><td data-id="b10"></td>
+      <tr>
+        <td data-id="header">a</td>
+        <td data-id="a1" data-state="unselected"></td>
+        <td data-id="a2" data-state="unselected"></td>
+        <td data-id="a3" data-state="unselected"></td>
+        <td data-id="a4" data-state="unselected"></td>
+        <td data-id="a5" data-state="unselected"></td>
+        <td data-id="a6" data-state="unselected"></td>
+        <td data-id="a7" data-state="unselected"></td>
+        <td data-id="a8" data-state="unselected"></td>
+        <td data-id="a9" data-state="unselected"></td>
+        <td data-id="a10" data-state="unselected"></td>
       </tr>
+      <tr>
+        <td data-id="header">b</td>
+        <td data-id="b1" data-state="unselected"></td>
+        <td data-id="b2" data-state="unselected"></td>
+        <td data-id="b3" data-state="unselected"></td>
+        <td data-id="b4" data-state="unselected"></td>
+        <td data-id="b5" data-state="unselected"></td>
+        <td data-id="b6" data-state="unselected"></td>
+        <td data-id="b7" data-state="unselected"></td>
+        <td data-id="b8" data-state="unselected"></td>
+        <td data-id="b9" data-state="unselected"></td>
+        <td data-id="b10" data-state="unselected"></td>
       </tr>
-        <td>c</td><td data-id="c1"><td data-id="c2"><td data-id="c3"><td data-id="c4"><td data-id="c5"><td data-id="c6"><td data-id="c7"><td data-id="c8"><td data-id="c9"><td data-id="c10"></td>
+      <tr>
+        <td data-id="header">c</td>
+        <td data-id="c1" data-state="unselected"></td>
+        <td data-id="c2" data-state="unselected"></td>
+        <td data-id="c3" data-state="unselected"></td>
+        <td data-id="c4" data-state="unselected"></td>
+        <td data-id="c5" data-state="unselected"></td>
+        <td data-id="c6" data-state="unselected"></td>
+        <td data-id="c7" data-state="unselected"></td>
+        <td data-id="c8" data-state="unselected"></td>
+        <td data-id="c9" data-state="unselected"></td>
+        <td data-id="c10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>d</td><td data-id="d1"><td data-id="d2"><td data-id="d3"><td data-id="d4"><td data-id="d5"><td data-id="d6"><td data-id="d7"><td data-id="d8"><td data-id="d9"><td data-id="d10"></td>
+      <tr>
+        <td data-id="header">d</td>
+        <td data-id="d1" data-state="unselected"></td>
+        <td data-id="d2" data-state="unselected"></td>
+        <td data-id="d3" data-state="unselected"></td>
+        <td data-id="d4" data-state="unselected"></td>
+        <td data-id="d5" data-state="unselected"></td>
+        <td data-id="d6" data-state="unselected"></td>
+        <td data-id="d7" data-state="unselected"></td>
+        <td data-id="d8" data-state="unselected"></td>
+        <td data-id="d9" data-state="unselected"></td>
+        <td data-id="d10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>e</td><td data-id="e1"><td data-id="e2"><td data-id="e3"><td data-id="e4"><td data-id="e5"><td data-id="e6"><td data-id="e7"><td data-id="e8"><td data-id="e9"><td data-id="e10"></td>
+      <tr>
+        <td data-id="header">e</td>
+        <td data-id="e1" data-state="unselected"></td>
+        <td data-id="e2" data-state="unselected"></td>
+        <td data-id="e3" data-state="unselected"></td>
+        <td data-id="e4" data-state="unselected"></td>
+        <td data-id="e5" data-state="unselected"></td>
+        <td data-id="e6" data-state="unselected"></td>
+        <td data-id="e7" data-state="unselected"></td>
+        <td data-id="e8" data-state="unselected"></td>
+        <td data-id="e9" data-state="unselected"></td>
+        <td data-id="e10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>f</td><td data-id="f1"><td data-id="f2"><td data-id="f3"><td data-id="f4"><td data-id="f5"><td data-id="f6"><td data-id="f7"><td data-id="f8"><td data-id="f9"><td data-id="f10"></td>
+      <tr>
+        <td data-id="header">f</td>
+        <td data-id="f1" data-state="unselected"></td>
+        <td data-id="f2" data-state="unselected"></td>
+        <td data-id="f3" data-state="unselected"></td>
+        <td data-id="f4" data-state="unselected"></td>
+        <td data-id="f5" data-state="unselected"></td>
+        <td data-id="f6" data-state="unselected"></td>
+        <td data-id="f7" data-state="unselected"></td>
+        <td data-id="f8" data-state="unselected"></td>
+        <td data-id="f9" data-state="unselected"></td>
+        <td data-id="f10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>g</td><td data-id="g1"><td data-id="g2"><td data-id="g3"><td data-id="g4"><td data-id="g5"><td data-id="g6"><td data-id="g7"><td data-id="g8"><td data-id="g9"><td data-id="g10"></td>
+      <tr>
+        <td data-id="header">g</td>
+        <td data-id="g1" data-state="unselected"></td>
+        <td data-id="g2" data-state="unselected"></td>
+        <td data-id="g3" data-state="unselected"></td>
+        <td data-id="g4" data-state="unselected"></td>
+        <td data-id="g5" data-state="unselected"></td>
+        <td data-id="g6" data-state="unselected"></td>
+        <td data-id="g7" data-state="unselected"></td>
+        <td data-id="g8" data-state="unselected"></td>
+        <td data-id="g9" data-state="unselected"></td>
+        <td data-id="g10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>h</td><td data-id="h1"><td data-id="h2"><td data-id="h3"><td data-id="h4"><td data-id="h5"><td data-id="h6"><td data-id="h7"><td data-id="h8"><td data-id="h9"><td data-id="h10"></td>
+      <tr>
+        <td data-id="header">h</td>
+        <td data-id="h1" data-state="unselected"></td>
+        <td data-id="h2" data-state="unselected"></td>
+        <td data-id="h3" data-state="unselected"></td>
+        <td data-id="h4" data-state="unselected"></td>
+        <td data-id="h5" data-state="unselected"></td>
+        <td data-id="h6" data-state="unselected"></td>
+        <td data-id="h7" data-state="unselected"></td>
+        <td data-id="h8" data-state="unselected"></td>
+        <td data-id="h9" data-state="unselected"></td>
+        <td data-id="h10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>i</td><td data-id="i1"><td data-id="i2"><td data-id="i3"><td data-id="i4"><td data-id="i5"><td data-id="i6"><td data-id="i7"><td data-id="i8"><td data-id="i9"><td data-id="i10"></td>
+      <tr>
+        <td data-id="header">i</td>
+        <td data-id="i1" data-state="unselected"></td>
+        <td data-id="i2" data-state="unselected"></td>
+        <td data-id="i3" data-state="unselected"></td>
+        <td data-id="i4" data-state="unselected"></td>
+        <td data-id="i5" data-state="unselected"></td>
+        <td data-id="i6" data-state="unselected"></td>
+        <td data-id="i7" data-state="unselected"></td>
+        <td data-id="i8" data-state="unselected"></td>
+        <td data-id="i9" data-state="unselected"></td>
+        <td data-id="i10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>j</td><td data-id="j1"><td data-id="j2"><td data-id="j3"><td data-id="j4"><td data-id="j5"><td data-id="j6"><td data-id="j7"><td data-id="j8"><td data-id="j9"><td data-id="j10"></td>
+      <tr>
+        <td data-id="header">j</td>
+        <td data-id="j1" data-state="unselected"></td>
+        <td data-id="j2" data-state="unselected"></td>
+        <td data-id="j3" data-state="unselected"></td>
+        <td data-id="j4" data-state="unselected"></td>
+        <td data-id="j5" data-state="unselected"></td>
+        <td data-id="j6" data-state="unselected"></td>
+        <td data-id="j7" data-state="unselected"></td>
+        <td data-id="j8" data-state="unselected"></td>
+        <td data-id="j9" data-state="unselected"></td>
+        <td data-id="j10" data-state="unselected"></td>
       </tr>
     </table>
 
     <table class="currentPlayer">
     <tr><th colspan="11">Your Ships</th></tr>
-      <tr class="header"><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
       <tr>
-        <td>a</td><td data-id="a1"><td data-id="a2"><td data-id="a3"><td data-id="a4"><td data-id="a5"><td data-id="a6"><td data-id="a7"><td data-id="a8"><td data-id="a9"><td data-id="a10"></td>
+        <td class="noColor" data-id="header"></td>
+        <td data-id="header">1</td>
+        <td data-id="header">2</td>
+        <td data-id="header">3</td>
+        <td data-id="header">4</td>
+        <td data-id="header">5</td>
+        <td data-id="header">6</td>
+        <td data-id="header">7</td>
+        <td data-id="header">8</td>
+        <td data-id="header">9</td>
+        <td data-id="header">10</td>
       </tr>
-      <tr>  
-        <td>b</td><td data-id="b1"><td data-id="b2"><td data-id="b3"><td data-id="b4"><td data-id="b5"><td data-id="b6"><td data-id="b7"><td data-id="b8"><td data-id="b9"><td data-id="b10"></td>
+      <tr>
+        <td data-id="header">a</td>
+        <td data-id="a1" data-state="unselected"></td>
+        <td data-id="a2" data-state="unselected"></td>
+        <td data-id="a3" data-state="unselected"></td>
+        <td data-id="a4" data-state="unselected"></td>
+        <td data-id="a5" data-state="unselected"></td>
+        <td data-id="a6" data-state="unselected"></td>
+        <td data-id="a7" data-state="unselected"></td>
+        <td data-id="a8" data-state="unselected"></td>
+        <td data-id="a9" data-state="unselected"></td>
+        <td data-id="a10" data-state="unselected"></td>
       </tr>
+      <tr>
+        <td data-id="header">b</td>
+        <td data-id="b1" data-state="unselected"></td>
+        <td data-id="b2" data-state="unselected"></td>
+        <td data-id="b3" data-state="unselected"></td>
+        <td data-id="b4" data-state="unselected"></td>
+        <td data-id="b5" data-state="unselected"></td>
+        <td data-id="b6" data-state="unselected"></td>
+        <td data-id="b7" data-state="unselected"></td>
+        <td data-id="b8" data-state="unselected"></td>
+        <td data-id="b9" data-state="unselected"></td>
+        <td data-id="b10" data-state="unselected"></td>
       </tr>
-        <td>c</td><td data-id="c1"><td data-id="c2"><td data-id="c3"><td data-id="c4"><td data-id="c5"><td data-id="c6"><td data-id="c7"><td data-id="c8"><td data-id="c9"><td data-id="c10"></td>
+      <tr>
+        <td data-id="header">c</td>
+        <td data-id="c1" data-state="unselected"></td>
+        <td data-id="c2" data-state="unselected"></td>
+        <td data-id="c3" data-state="unselected"></td>
+        <td data-id="c4" data-state="unselected"></td>
+        <td data-id="c5" data-state="unselected"></td>
+        <td data-id="c6" data-state="unselected"></td>
+        <td data-id="c7" data-state="unselected"></td>
+        <td data-id="c8" data-state="unselected"></td>
+        <td data-id="c9" data-state="unselected"></td>
+        <td data-id="c10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>d</td><td data-id="d1"><td data-id="d2"><td data-id="d3"><td data-id="d4"><td data-id="d5"><td data-id="d6"><td data-id="d7"><td data-id="d8"><td data-id="d9"><td data-id="d10"></td>
+      <tr>
+        <td data-id="header">d</td>
+        <td data-id="d1" data-state="unselected"></td>
+        <td data-id="d2" data-state="unselected"></td>
+        <td data-id="d3" data-state="unselected"></td>
+        <td data-id="d4" data-state="unselected"></td>
+        <td data-id="d5" data-state="unselected"></td>
+        <td data-id="d6" data-state="unselected"></td>
+        <td data-id="d7" data-state="unselected"></td>
+        <td data-id="d8" data-state="unselected"></td>
+        <td data-id="d9" data-state="unselected"></td>
+        <td data-id="d10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>e</td><td data-id="e1"><td data-id="e2"><td data-id="e3"><td data-id="e4"><td data-id="e5"><td data-id="e6"><td data-id="e7"><td data-id="e8"><td data-id="e9"><td data-id="e10"></td>
+      <tr>
+        <td data-id="header">e</td>
+        <td data-id="e1" data-state="unselected"></td>
+        <td data-id="e2" data-state="unselected"></td>
+        <td data-id="e3" data-state="unselected"></td>
+        <td data-id="e4" data-state="unselected"></td>
+        <td data-id="e5" data-state="unselected"></td>
+        <td data-id="e6" data-state="unselected"></td>
+        <td data-id="e7" data-state="unselected"></td>
+        <td data-id="e8" data-state="unselected"></td>
+        <td data-id="e9" data-state="unselected"></td>
+        <td data-id="e10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>f</td><td data-id="f1"><td data-id="f2"><td data-id="f3"><td data-id="f4"><td data-id="f5"><td data-id="f6"><td data-id="f7"><td data-id="f8"><td data-id="f9"><td data-id="f10"></td>
+      <tr>
+        <td data-id="header">f</td>
+        <td data-id="f1" data-state="unselected"></td>
+        <td data-id="f2" data-state="unselected"></td>
+        <td data-id="f3" data-state="unselected"></td>
+        <td data-id="f4" data-state="unselected"></td>
+        <td data-id="f5" data-state="unselected"></td>
+        <td data-id="f6" data-state="unselected"></td>
+        <td data-id="f7" data-state="unselected"></td>
+        <td data-id="f8" data-state="unselected"></td>
+        <td data-id="f9" data-state="unselected"></td>
+        <td data-id="f10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>g</td><td data-id="g1"><td data-id="g2"><td data-id="g3"><td data-id="g4"><td data-id="g5"><td data-id="g6"><td data-id="g7"><td data-id="g8"><td data-id="g9"><td data-id="g10"></td>
+      <tr>
+        <td data-id="header">g</td>
+        <td data-id="g1" data-state="unselected"></td>
+        <td data-id="g2" data-state="unselected"></td>
+        <td data-id="g3" data-state="unselected"></td>
+        <td data-id="g4" data-state="unselected"></td>
+        <td data-id="g5" data-state="unselected"></td>
+        <td data-id="g6" data-state="unselected"></td>
+        <td data-id="g7" data-state="unselected"></td>
+        <td data-id="g8" data-state="unselected"></td>
+        <td data-id="g9" data-state="unselected"></td>
+        <td data-id="g10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>h</td><td data-id="h1"><td data-id="h2"><td data-id="h3"><td data-id="h4"><td data-id="h5"><td data-id="h6"><td data-id="h7"><td data-id="h8"><td data-id="h9"><td data-id="h10"></td>
+      <tr>
+        <td data-id="header">h</td>
+        <td data-id="h1" data-state="unselected"></td>
+        <td data-id="h2" data-state="unselected"></td>
+        <td data-id="h3" data-state="unselected"></td>
+        <td data-id="h4" data-state="unselected"></td>
+        <td data-id="h5" data-state="unselected"></td>
+        <td data-id="h6" data-state="unselected"></td>
+        <td data-id="h7" data-state="unselected"></td>
+        <td data-id="h8" data-state="unselected"></td>
+        <td data-id="h9" data-state="unselected"></td>
+        <td data-id="h10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>i</td><td data-id="i1"><td data-id="i2"><td data-id="i3"><td data-id="i4"><td data-id="i5"><td data-id="i6"><td data-id="i7"><td data-id="i8"><td data-id="i9"><td data-id="i10"></td>
+      <tr>
+        <td data-id="header">i</td>
+        <td data-id="i1" data-state="unselected"></td>
+        <td data-id="i2" data-state="unselected"></td>
+        <td data-id="i3" data-state="unselected"></td>
+        <td data-id="i4" data-state="unselected"></td>
+        <td data-id="i5" data-state="unselected"></td>
+        <td data-id="i6" data-state="unselected"></td>
+        <td data-id="i7" data-state="unselected"></td>
+        <td data-id="i8" data-state="unselected"></td>
+        <td data-id="i9" data-state="unselected"></td>
+        <td data-id="i10" data-state="unselected"></td>
       </tr>
-      <tr>  
-        <td>j</td><td data-id="j1"><td data-id="j2"><td data-id="j3"><td data-id="j4"><td data-id="j5"><td data-id="j6"><td data-id="j7"><td data-id="j8"><td data-id="j9"><td data-id="j10"></td>
+      <tr>
+        <td data-id="header">j</td>
+        <td data-id="j1" data-state="unselected"></td>
+        <td data-id="j2" data-state="unselected"></td>
+        <td data-id="j3" data-state="unselected"></td>
+        <td data-id="j4" data-state="unselected"></td>
+        <td data-id="j5" data-state="unselected"></td>
+        <td data-id="j6" data-state="unselected"></td>
+        <td data-id="j7" data-state="unselected"></td>
+        <td data-id="j8" data-state="unselected"></td>
+        <td data-id="j9" data-state="unselected"></td>
+        <td data-id="j10" data-state="unselected"></td>
       </tr>
     </table>
-</div>
-
+  </div>
 </body>
 </html>

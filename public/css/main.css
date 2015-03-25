@@ -13,11 +13,10 @@ table {
 }
 
 /*Classes*/
-.gameboard {
+.gameboard, .noColor {
   background: yellow;
   text-align: middle;
   position-align: center;
 }
-
 
 /*IDs*/
