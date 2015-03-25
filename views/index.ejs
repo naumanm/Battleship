@@ -9,6 +9,9 @@
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 </head>
 <body>
+
+  <h3 id="userName"></h3>
+  <h4 id="shotId"></h4>
   <div class="gameboard">
     <table class="opponent">
       <tr><th colspan="11">Opponent</th></tr>
@@ -304,5 +307,28 @@
       </tr>
     </table>
   </div>
+
+  <script>
+    // This gets and sets the person who logs in
+    var person = prompt("Please enter your name");
+    if (person !== null) {
+      document.getElementById("userName").innerHTML =
+      "Hello " + person + "!";
+    }
+
+    var socket = io();
+    // This receives shot from opponent
+    socket.on('chat message', function(msg){
+      $('#messages').prepend($('<li>').text(msg));
+    });
+
+    socket.on('shot', function(cellId){
+      document.getElementById("shotId").innerHTML =
+      cellId;
+    });
+
+
+  </script>
+
 </body>
 </html>

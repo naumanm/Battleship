@@ -27,6 +27,7 @@ io.on('connection', function(socket){
   console.log('a user connected');
 
   socket.on('shot', function(cellId){
+    io.emit('shot', cellId);
     console.log(cellId);
   });
 

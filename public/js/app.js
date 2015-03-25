@@ -34,7 +34,9 @@ $(document).ready(function() {
         if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
           selectedArr.push(cellId); // push the selected cell into the selectedArr
           console.log(selectedArr);
-          socket.emit('shot', cellId);
+
+          // this should send a stringified object to the server {person: person, cellId: id}
+          socket.emit('shot', person + " " + cellId);
         }
       }
     });
@@ -44,6 +46,7 @@ $(document).ready(function() {
   function initialize() {
     console.log("board is loaded");
     gamePlay();
+    console.log(person);
   }
 
   initialize();
