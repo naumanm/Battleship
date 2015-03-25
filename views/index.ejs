@@ -309,23 +309,20 @@
   </div>
 
   <script>
-    // This gets and sets the person who logs in
-    var person = prompt("Please enter your name");
-    if (person !== null) {
-      document.getElementById("userName").innerHTML =
-      "Hello " + person + "!";
-    }
 
-    var socket = io();
-    // This receives shot from opponent
-    socket.on('chat message', function(msg){
-      $('#messages').prepend($('<li>').text(msg));
-    });
+  var socket = io();
 
-    socket.on('shot', function(cellId){
-      document.getElementById("shotId").innerHTML =
-      cellId;
-    });
+  // This gets and sets the person who logs in
+  var person = prompt("Please enter your name");
+  if (person !== null) {
+    document.getElementById("userName").innerHTML =
+    "Hello " + person + "!";
+  }
+
+  socket.on('shot', function(cellId){
+    document.getElementById("shotId").innerHTML =
+    cellId;
+  });
 
 
   </script>
