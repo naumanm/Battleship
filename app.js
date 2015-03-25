@@ -16,10 +16,25 @@ app.use(express.static(__dirname + '/public'));
 
 // root route
 app.get('/', function(req, res){
-  //res.sendFile(__dirname + '/index.ejs');
   res.render("index.ejs");
 });
 
+
+io.on('connection', function(socket){
+
+  socket.join("Mike's chat");
+
+  console.log('a user connected');
+
+  socket.on('shot', function(cellId){
+    console.log(cellId);
+  });
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+
+});
 
 
 

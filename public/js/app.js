@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
-
   function gamePlay() {
 
+    var socket = io();
     var selectedArr = []; // array of all shots
 
     // color change on hover
@@ -34,6 +34,7 @@ $(document).ready(function() {
         if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
           selectedArr.push(cellId); // push the selected cell into the selectedArr
           console.log(selectedArr);
+          socket.emit('shot', cellId);
         }
       }
     });
