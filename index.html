@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link type="text/css" rel="stylesheet" href="main.css">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="app.js"></script>
+</head>
+<body>
+
+  <div class="gameboard">
+    <table class="opponent">
+      <tr><th colspan="11">Opponent</th></tr>
+      <tr class="header"><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+      <tr>
+        <td>a</td><td data-id="a1"><td data-id="a2"><td data-id="a3"><td data-id="a4"><td data-id="a5"><td data-id="a6"><td data-id="a7"><td data-id="a8"><td data-id="a9"><td data-id="a10"></td>
+      </tr>
+      <tr>  
+        <td>b</td><td data-id="b1"><td data-id="b2"><td data-id="b3"><td data-id="b4"><td data-id="b5"><td data-id="b6"><td data-id="b7"><td data-id="b8"><td data-id="b9"><td data-id="b10"></td>
+      </tr>
+      </tr>
+        <td>c</td><td data-id="c1"><td data-id="c2"><td data-id="c3"><td data-id="c4"><td data-id="c5"><td data-id="c6"><td data-id="c7"><td data-id="c8"><td data-id="c9"><td data-id="c10"></td>
+      </tr>
+      <tr>  
+        <td>d</td><td data-id="d1"><td data-id="d2"><td data-id="d3"><td data-id="d4"><td data-id="d5"><td data-id="d6"><td data-id="d7"><td data-id="d8"><td data-id="d9"><td data-id="d10"></td>
+      </tr>
+      <tr>  
+        <td>e</td><td data-id="e1"><td data-id="e2"><td data-id="e3"><td data-id="e4"><td data-id="e5"><td data-id="e6"><td data-id="e7"><td data-id="e8"><td data-id="e9"><td data-id="e10"></td>
+      </tr>
+      <tr>  
+        <td>f</td><td data-id="f1"><td data-id="f2"><td data-id="f3"><td data-id="f4"><td data-id="f5"><td data-id="f6"><td data-id="f7"><td data-id="f8"><td data-id="f9"><td data-id="f10"></td>
+      </tr>
+      <tr>  
+        <td>g</td><td data-id="g1"><td data-id="g2"><td data-id="g3"><td data-id="g4"><td data-id="g5"><td data-id="g6"><td data-id="g7"><td data-id="g8"><td data-id="g9"><td data-id="g10"></td>
+      </tr>
+      <tr>  
+        <td>h</td><td data-id="h1"><td data-id="h2"><td data-id="h3"><td data-id="h4"><td data-id="h5"><td data-id="h6"><td data-id="h7"><td data-id="h8"><td data-id="h9"><td data-id="h10"></td>
+      </tr>
+      <tr>  
+        <td>i</td><td data-id="i1"><td data-id="i2"><td data-id="i3"><td data-id="i4"><td data-id="i5"><td data-id="i6"><td data-id="i7"><td data-id="i8"><td data-id="i9"><td data-id="i10"></td>
+      </tr>
+      <tr>  
+        <td>j</td><td data-id="j1"><td data-id="j2"><td data-id="j3"><td data-id="j4"><td data-id="j5"><td data-id="j6"><td data-id="j7"><td data-id="j8"><td data-id="j9"><td data-id="j10"></td>
+      </tr>
+    </table>
+
+    <table class="currentPlayer">
+    <tr><th colspan="11">Your Ships</th></tr>
+      <tr class="header"><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+      <tr>
+        <td>a</td><td data-id="a1"><td data-id="a2"><td data-id="a3"><td data-id="a4"><td data-id="a5"><td data-id="a6"><td data-id="a7"><td data-id="a8"><td data-id="a9"><td data-id="a10"></td>
+      </tr>
+      <tr>  
+        <td>b</td><td data-id="b1"><td data-id="b2"><td data-id="b3"><td data-id="b4"><td data-id="b5"><td data-id="b6"><td data-id="b7"><td data-id="b8"><td data-id="b9"><td data-id="b10"></td>
+      </tr>
+      </tr>
+        <td>c</td><td data-id="c1"><td data-id="c2"><td data-id="c3"><td data-id="c4"><td data-id="c5"><td data-id="c6"><td data-id="c7"><td data-id="c8"><td data-id="c9"><td data-id="c10"></td>
+      </tr>
+      <tr>  
+        <td>d</td><td data-id="d1"><td data-id="d2"><td data-id="d3"><td data-id="d4"><td data-id="d5"><td data-id="d6"><td data-id="d7"><td data-id="d8"><td data-id="d9"><td data-id="d10"></td>
+      </tr>
+      <tr>  
+        <td>e</td><td data-id="e1"><td data-id="e2"><td data-id="e3"><td data-id="e4"><td data-id="e5"><td data-id="e6"><td data-id="e7"><td data-id="e8"><td data-id="e9"><td data-id="e10"></td>
+      </tr>
+      <tr>  
+        <td>f</td><td data-id="f1"><td data-id="f2"><td data-id="f3"><td data-id="f4"><td data-id="f5"><td data-id="f6"><td data-id="f7"><td data-id="f8"><td data-id="f9"><td data-id="f10"></td>
+      </tr>
+      <tr>  
+        <td>g</td><td data-id="g1"><td data-id="g2"><td data-id="g3"><td data-id="g4"><td data-id="g5"><td data-id="g6"><td data-id="g7"><td data-id="g8"><td data-id="g9"><td data-id="g10"></td>
+      </tr>
+      <tr>  
+        <td>h</td><td data-id="h1"><td data-id="h2"><td data-id="h3"><td data-id="h4"><td data-id="h5"><td data-id="h6"><td data-id="h7"><td data-id="h8"><td data-id="h9"><td data-id="h10"></td>
+      </tr>
+      <tr>  
+        <td>i</td><td data-id="i1"><td data-id="i2"><td data-id="i3"><td data-id="i4"><td data-id="i5"><td data-id="i6"><td data-id="i7"><td data-id="i8"><td data-id="i9"><td data-id="i10"></td>
+      </tr>
+      <tr>  
+        <td>j</td><td data-id="j1"><td data-id="j2"><td data-id="j3"><td data-id="j4"><td data-id="j5"><td data-id="j6"><td data-id="j7"><td data-id="j8"><td data-id="j9"><td data-id="j10"></td>
+      </tr>
+    </table>
+</div>
+
+</body>
+</html>

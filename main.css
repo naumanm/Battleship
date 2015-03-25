@@ -1,0 +1,23 @@
+/*HTML*/
+
+td {
+  width: 25px;
+  height: 25px;
+  color: white;
+  background: gray;
+  text-align: middle;
+}
+
+table {
+  margin: 0 auto;
+}
+
+/*Classes*/
+.gameboard {
+  background: yellow;
+  text-align: middle;
+  position-align: center;
+}
+
+
+/*IDs*/
