@@ -12,7 +12,6 @@
 
   <h3 id="userName"></h3>
   <h4 id="shotPlayer"></h4>
-  <h4 id="cellId"></h4>
   <div class="gameboard">
     <table class="opponent">
       <tr><th colspan="11">Opponent</th></tr>
@@ -176,7 +175,7 @@
         <td data-id="header">9</td>
         <td data-id="header">10</td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">a</td>
         <td data-id="a1" data-state="unselected"></td>
         <td data-id="a2" data-state="unselected"></td>
@@ -189,7 +188,7 @@
         <td data-id="a9" data-state="unselected"></td>
         <td data-id="a10" data-state="unselected"></td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">b</td>
         <td data-id="b1" data-state="unselected"></td>
         <td data-id="b2" data-state="unselected"></td>
@@ -202,7 +201,7 @@
         <td data-id="b9" data-state="unselected"></td>
         <td data-id="b10" data-state="unselected"></td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">c</td>
         <td data-id="c1" data-state="unselected"></td>
         <td data-id="c2" data-state="unselected"></td>
@@ -215,7 +214,7 @@
         <td data-id="c9" data-state="unselected"></td>
         <td data-id="c10" data-state="unselected"></td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">d</td>
         <td data-id="d1" data-state="unselected"></td>
         <td data-id="d2" data-state="unselected"></td>
@@ -228,7 +227,7 @@
         <td data-id="d9" data-state="unselected"></td>
         <td data-id="d10" data-state="unselected"></td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">e</td>
         <td data-id="e1" data-state="unselected"></td>
         <td data-id="e2" data-state="unselected"></td>
@@ -241,7 +240,7 @@
         <td data-id="e9" data-state="unselected"></td>
         <td data-id="e10" data-state="unselected"></td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">f</td>
         <td data-id="f1" data-state="unselected"></td>
         <td data-id="f2" data-state="unselected"></td>
@@ -254,7 +253,7 @@
         <td data-id="f9" data-state="unselected"></td>
         <td data-id="f10" data-state="unselected"></td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">g</td>
         <td data-id="g1" data-state="unselected"></td>
         <td data-id="g2" data-state="unselected"></td>
@@ -267,7 +266,7 @@
         <td data-id="g9" data-state="unselected"></td>
         <td data-id="g10" data-state="unselected"></td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">h</td>
         <td data-id="h1" data-state="unselected"></td>
         <td data-id="h2" data-state="unselected"></td>
@@ -280,7 +279,7 @@
         <td data-id="h9" data-state="unselected"></td>
         <td data-id="h10" data-state="unselected"></td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">i</td>
         <td data-id="i1" data-state="unselected"></td>
         <td data-id="i2" data-state="unselected"></td>
@@ -293,7 +292,7 @@
         <td data-id="i9" data-state="unselected"></td>
         <td data-id="i10" data-state="unselected"></td>
       </tr>
-      <tr>
+      <tr class="currentPlayer">
         <td data-id="header">j</td>
         <td data-id="j1" data-state="unselected"></td>
         <td data-id="j2" data-state="unselected"></td>
@@ -311,6 +310,7 @@
 
   <script>
 
+  // fire up communication with socket io
   var socket = io();
 
   // This gets and sets the person who logs in
@@ -321,18 +321,14 @@
 
   // update the ship board with other players shots
   socket.on('shot', function(shotObj){
-    // document.getElementById("cellId").innerHTML = shotObj.id;
-
-    console.log(shotObj.player)
-    console.log(shotObj.id)
-
+    // Updates the Header UI for who took a shot and the cell location
     if (shotObj.player !== person) {
-
-      console.log(shotObj.player + " took a shot");
+      document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id;
+      // gets the shot fired and updates the gameboard
+      var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
+      $(hitArr[1]).css("background-color", "red");
     }
-
   });
-
 
   </script>
 

@@ -37,27 +37,13 @@ $(document).ready(function() {
           shotObj.player = person;
           shotObj.id = cellId;
           socket.emit('shot', shotObj);
-          console.log(selectedArr);
-          console.log(shotObj);
         }
       }
     });
   }  
 
-  function updateShipBoard(shotObj) {
-
-    console.log(shotObj.id);
-
-
-  }
-
-
-
-
   function initialize() {
-    console.log("board is loaded");
     gamePlay();
-    console.log(person);
   }
 
   initialize();
