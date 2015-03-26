@@ -23,6 +23,12 @@ $(document).ready(function() {
       }
     });
 
+
+    // NEED logic in here to prevent the wrong person from shooting
+    // also need logic to prompt who's turn it is.  
+
+
+
     // select to take a shot
     $("td").click(function(){
       var cellId = $(this).data("id"); // get the cellId for the current cell

@@ -325,6 +325,7 @@
     if (shotObj.player !== person) {
       document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id;
       // gets the shot fired and updates the gameboard
+      // this is klugy, needs a better way...
       var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
       $(hitArr[1]).css("background-color", "red");
     }
