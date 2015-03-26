@@ -26,9 +26,9 @@ io.on('connection', function(socket){
 
   console.log('a user connected');
 
-  socket.on('shot', function(cellId){
-    io.emit('shot', cellId);
-    console.log(cellId);
+  socket.on('shot', function(shotObj){
+    io.emit('shot', shotObj);
+    console.log(shotObj);
   });
 
   socket.on('disconnect', function(){
@@ -36,7 +36,6 @@ io.on('connection', function(socket){
   });
 
 });
-
 
 
 

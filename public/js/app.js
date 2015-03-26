@@ -44,6 +44,15 @@ $(document).ready(function() {
     });
   }  
 
+  function updateShipBoard(shotObj) {
+
+    console.log(shotObj.id);
+
+
+  }
+
+
+
 
   function initialize() {
     console.log("board is loaded");

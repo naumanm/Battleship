@@ -11,7 +11,8 @@
 <body>
 
   <h3 id="userName"></h3>
-  <h4 id="shotId"></h4>
+  <h4 id="shotPlayer"></h4>
+  <h4 id="cellId"></h4>
   <div class="gameboard">
     <table class="opponent">
       <tr><th colspan="11">Opponent</th></tr>
@@ -315,13 +316,21 @@
   // This gets and sets the person who logs in
   var person = prompt("Please enter your name");
   if (person !== null) {
-    document.getElementById("userName").innerHTML =
-    "Hello " + person + "!";
+    document.getElementById("userName").innerHTML = "Hello " + person + "!";
   }
 
-  socket.on('shot', function(cellId){
-    document.getElementById("shotId").innerHTML =
-    cellId;
+  // update the ship board with other players shots
+  socket.on('shot', function(shotObj){
+    // document.getElementById("cellId").innerHTML = shotObj.id;
+
+    console.log(shotObj.player)
+    console.log(shotObj.id)
+
+    if (shotObj.player !== person) {
+
+      console.log(shotObj.player + " took a shot");
+    }
+
   });
 
 
