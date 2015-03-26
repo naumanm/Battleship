@@ -29,6 +29,7 @@ $(document).ready(function() {
 
 
 
+
     // select to take a shot
     $("td").click(function(){
       var cellId = $(this).data("id"); // get the cellId for the current cell

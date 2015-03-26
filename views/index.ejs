@@ -10,8 +10,8 @@
 </head>
 <body>
 
-  <h3 id="userName"></h3>
-  <h4 id="shotPlayer"></h4>
+  <h3 id="userName">Player Name</h3>
+  <h4 id="shotPlayer">Last Shot</h4>
   <div class="gameboard">
     <table class="opponent">
       <tr><th colspan="11">Opponent</th></tr>
@@ -317,18 +317,24 @@
   var person = prompt("Please enter your name");
   if (person !== null) {
     document.getElementById("userName").innerHTML = "Hello " + person + "!";
+    socket.emit('playerJoined', person);
   }
 
   // update the ship board with other players shots
   socket.on('shot', function(shotObj){
     // Updates the Header UI for who took a shot and the cell location
     if (shotObj.player !== person) {
-      document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id;
+      document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
       // gets the shot fired and updates the gameboard
       // this is klugy, needs a better way...
       var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
       $(hitArr[1]).css("background-color", "red");
     }
+    // else 
+    // {
+    //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
+    // }
+
   });
 
   </script>

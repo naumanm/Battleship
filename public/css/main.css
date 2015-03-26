@@ -14,7 +14,7 @@ table {
 
 /*Classes*/
 .gameboard, .noColor {
-  background: yellow;
+  background: lightblue;
   text-align: middle;
   position-align: center;
 }
