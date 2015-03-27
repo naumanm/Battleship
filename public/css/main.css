@@ -9,7 +9,7 @@ td {
 }
 
 table {
-  margin: 0 auto;
+  margin: 5px;
 }
 
 /*Classes*/
@@ -25,9 +25,9 @@ table {
 
 .dashboard {
   background: blue;
-  width: 50px;
-  height: 200px;
+  width: 100px;
+  height: 300px;
+  margin: 10px;
 }
-
 
 /*IDs*/
