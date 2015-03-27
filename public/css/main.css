@@ -19,4 +19,9 @@ table {
   position-align: center;
 }
 
+.player, .opponent {
+  display: inline-block;
+}
+
+
 /*IDs*/
