@@ -19,8 +19,14 @@ table {
   position-align: center;
 }
 
-.player, .opponent {
+.player, .opponent, .dashboard {
   display: inline-block;
+}
+
+.dashboard {
+  background: blue;
+  width: 50px;
+  height: 200px;
 }
 
 
