@@ -25,9 +25,46 @@ table {
 
 .dashboard {
   background: blue;
-  width: 100px;
+  width: 150px;
   height: 300px;
   margin: 10px;
 }
+
+.aircraftCarrier,
+.battleship,
+.destroyer,
+.submarine,
+.ptBoat,
+.dashboardTitle {
+  height: 25px;
+  margin: 5px;
+  background: green;
+}
+
+.dashboardTitle {
+  background: blue;
+  border-width: 3px;
+  border-color: black;
+  text-align: center;
+  width: 150;
+  height: ;
+}
+
+.aircraftCarrier {
+  width: 125px;
+}
+
+.battleship {
+  width: 100px;
+}
+.destroyer,
+.submarine {
+  width: 75px;
+}
+
+.ptBoat {
+  width: 50px;  
+}
+
 
 /*IDs*/
