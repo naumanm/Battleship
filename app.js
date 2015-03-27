@@ -30,6 +30,7 @@ io.on('connection', function(socket){
 
   socket.on('shot', function(shotObj){
     io.emit('shot', shotObj);
+    client.LPUSH("shotFired", shotObj);
     console.log(shotObj);
   });
 
@@ -46,17 +47,25 @@ io.on('connection', function(socket){
 });
 
 // loop to check for players to start game
+// need to replace this with a form and be 
+// user driven
 setInterval(function(){checkTwoPlayers()}, 5000);
 
 
 function checkTwoPlayers() {
   console.log("Start Game check");
-  //console.log(client.LLEN(playerList));
+
+  client.lrange('playerList', 0, -1, function(err, reply) {
+      console.log(reply);
+      if (reply.length === 2) {
+        startGame(reply)
+      };
+  });
 }
 
 
 function startGame(playerList){
-
+  console.log("game started");
 
 }
 
