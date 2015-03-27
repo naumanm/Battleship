@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Battleship</title>
+  <link type="text/css" rel="stylesheet" href="/css/main.css">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+</head>
+<body>
+
+  <h3 id="userName">Player Name</h3>
+  <h4 id="shotPlayer">Last Shot</h4>
+  <div class="gameboard">
+    <table class="opponent">
+      <tr><th colspan="11">Opponent</th></tr>
+      <tr>
+        <td class="noColor" data-id="header"></td>
+        <td data-id="header">1</td>
+        <td data-id="header">2</td>
+        <td data-id="header">3</td>
+        <td data-id="header">4</td>
+        <td data-id="header">5</td>
+        <td data-id="header">6</td>
+        <td data-id="header">7</td>
+        <td data-id="header">8</td>
+        <td data-id="header">9</td>
+        <td data-id="header">10</td>
+      </tr>
+      <tr>
+        <td data-id="header">a</td>
+        <td data-id="a1" data-state="unselected"></td>
+        <td data-id="a2" data-state="unselected"></td>
+        <td data-id="a3" data-state="unselected"></td>
+        <td data-id="a4" data-state="unselected"></td>
+        <td data-id="a5" data-state="unselected"></td>
+        <td data-id="a6" data-state="unselected"></td>
+        <td data-id="a7" data-state="unselected"></td>
+        <td data-id="a8" data-state="unselected"></td>
+        <td data-id="a9" data-state="unselected"></td>
+        <td data-id="a10" data-state="unselected"></td>
+      </tr>
+      <tr>
+        <td data-id="header">b</td>
+        <td data-id="b1" data-state="unselected"></td>
+        <td data-id="b2" data-state="unselected"></td>
+        <td data-id="b3" data-state="unselected"></td>
+        <td data-id="b4" data-state="unselected"></td>
+        <td data-id="b5" data-state="unselected"></td>
+        <td data-id="b6" data-state="unselected"></td>
+        <td data-id="b7" data-state="unselected"></td>
+        <td data-id="b8" data-state="unselected"></td>
+        <td data-id="b9" data-state="unselected"></td>
+        <td data-id="b10" data-state="unselected"></td>
+      </tr>
+      <tr>
+        <td data-id="header">c</td>
+        <td data-id="c1" data-state="unselected"></td>
+        <td data-id="c2" data-state="unselected"></td>
+        <td data-id="c3" data-state="unselected"></td>
+        <td data-id="c4" data-state="unselected"></td>
+        <td data-id="c5" data-state="unselected"></td>
+        <td data-id="c6" data-state="unselected"></td>
+        <td data-id="c7" data-state="unselected"></td>
+        <td data-id="c8" data-state="unselected"></td>
+        <td data-id="c9" data-state="unselected"></td>
+        <td data-id="c10" data-state="unselected"></td>
+      </tr>
+      <tr>
+        <td data-id="header">d</td>
+        <td data-id="d1" data-state="unselected"></td>
+        <td data-id="d2" data-state="unselected"></td>
+        <td data-id="d3" data-state="unselected"></td>
+        <td data-id="d4" data-state="unselected"></td>
+        <td data-id="d5" data-state="unselected"></td>
+        <td data-id="d6" data-state="unselected"></td>
+        <td data-id="d7" data-state="unselected"></td>
+        <td data-id="d8" data-state="unselected"></td>
+        <td data-id="d9" data-state="unselected"></td>
+        <td data-id="d10" data-state="unselected"></td>
+      </tr>
+      <tr>
+        <td data-id="header">e</td>
+        <td data-id="e1" data-state="unselected"></td>
+        <td data-id="e2" data-state="unselected"></td>
+        <td data-id="e3" data-state="unselected"></td>
+        <td data-id="e4" data-state="unselected"></td>
+        <td data-id="e5" data-state="unselected"></td>
+        <td data-id="e6" data-state="unselected"></td>
+        <td data-id="e7" data-state="unselected"></td>
+        <td data-id="e8" data-state="unselected"></td>
+        <td data-id="e9" data-state="unselected"></td>
+        <td data-id="e10" data-state="unselected"></td>
+      </tr>
+      <tr>
+        <td data-id="header">f</td>
+        <td data-id="f1" data-state="unselected"></td>
+        <td data-id="f2" data-state="unselected"></td>
+        <td data-id="f3" data-state="unselected"></td>
+        <td data-id="f4" data-state="unselected"></td>
+        <td data-id="f5" data-state="unselected"></td>
+        <td data-id="f6" data-state="unselected"></td>
+        <td data-id="f7" data-state="unselected"></td>
+        <td data-id="f8" data-state="unselected"></td>
+        <td data-id="f9" data-state="unselected"></td>
+        <td data-id="f10" data-state="unselected"></td>
+      </tr>
+      <tr>
+        <td data-id="header">g</td>
+        <td data-id="g1" data-state="unselected"></td>
+        <td data-id="g2" data-state="unselected"></td>
+        <td data-id="g3" data-state="unselected"></td>
+        <td data-id="g4" data-state="unselected"></td>
+        <td data-id="g5" data-state="unselected"></td>
+        <td data-id="g6" data-state="unselected"></td>
+        <td data-id="g7" data-state="unselected"></td>
+        <td data-id="g8" data-state="unselected"></td>
+        <td data-id="g9" data-state="unselected"></td>
+        <td data-id="g10" data-state="unselected"></td>
+      </tr>
+      <tr>
+        <td data-id="header">h</td>
+        <td data-id="h1" data-state="unselected"></td>
+        <td data-id="h2" data-state="unselected"></td>
+        <td data-id="h3" data-state="unselected"></td>
+        <td data-id="h4" data-state="unselected"></td>
+        <td data-id="h5" data-state="unselected"></td>
+        <td data-id="h6" data-state="unselected"></td>
+        <td data-id="h7" data-state="unselected"></td>
+        <td data-id="h8" data-state="unselected"></td>
+        <td data-id="h9" data-state="unselected"></td>
+        <td data-id="h10" data-state="unselected"></td>
+      </tr>
+      <tr>
+        <td data-id="header">i</td>
+        <td data-id="i1" data-state="unselected"></td>
+        <td data-id="i2" data-state="unselected"></td>
+        <td data-id="i3" data-state="unselected"></td>
+        <td data-id="i4" data-state="unselected"></td>
+        <td data-id="i5" data-state="unselected"></td>
+        <td data-id="i6" data-state="unselected"></td>
+        <td data-id="i7" data-state="unselected"></td>
+        <td data-id="i8" data-state="unselected"></td>
+        <td data-id="i9" data-state="unselected"></td>
+        <td data-id="i10" data-state="unselected"></td>
+      </tr>
+      <tr>
+        <td data-id="header">j</td>
+        <td data-id="j1" data-state="unselected"></td>
+        <td data-id="j2" data-state="unselected"></td>
+        <td data-id="j3" data-state="unselected"></td>
+        <td data-id="j4" data-state="unselected"></td>
+        <td data-id="j5" data-state="unselected"></td>
+        <td data-id="j6" data-state="unselected"></td>
+        <td data-id="j7" data-state="unselected"></td>
+        <td data-id="j8" data-state="unselected"></td>
+        <td data-id="j9" data-state="unselected"></td>
+        <td data-id="j10" data-state="unselected"></td>
+      </tr>
+    </table>
+
+    <table class="currentPlayer">
+    <tr><th colspan="11">Your Ships</th></tr>
+      <tr>
+        <td class="noColor" data-id="header"></td>
+        <td data-id="header">1</td>
+        <td data-id="header">2</td>
+        <td data-id="header">3</td>
+        <td data-id="header">4</td>
+        <td data-id="header">5</td>
+        <td data-id="header">6</td>
+        <td data-id="header">7</td>
+        <td data-id="header">8</td>
+        <td data-id="header">9</td>
+        <td data-id="header">10</td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">a</td>
+        <td data-id="a1" data-state="unselected"></td>
+        <td data-id="a2" data-state="unselected"></td>
+        <td data-id="a3" data-state="unselected"></td>
+        <td data-id="a4" data-state="unselected"></td>
+        <td data-id="a5" data-state="unselected"></td>
+        <td data-id="a6" data-state="unselected"></td>
+        <td data-id="a7" data-state="unselected"></td>
+        <td data-id="a8" data-state="unselected"></td>
+        <td data-id="a9" data-state="unselected"></td>
+        <td data-id="a10" data-state="unselected"></td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">b</td>
+        <td data-id="b1" data-state="unselected"></td>
+        <td data-id="b2" data-state="unselected"></td>
+        <td data-id="b3" data-state="unselected"></td>
+        <td data-id="b4" data-state="unselected"></td>
+        <td data-id="b5" data-state="unselected"></td>
+        <td data-id="b6" data-state="unselected"></td>
+        <td data-id="b7" data-state="unselected"></td>
+        <td data-id="b8" data-state="unselected"></td>
+        <td data-id="b9" data-state="unselected"></td>
+        <td data-id="b10" data-state="unselected"></td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">c</td>
+        <td data-id="c1" data-state="unselected"></td>
+        <td data-id="c2" data-state="unselected"></td>
+        <td data-id="c3" data-state="unselected"></td>
+        <td data-id="c4" data-state="unselected"></td>
+        <td data-id="c5" data-state="unselected"></td>
+        <td data-id="c6" data-state="unselected"></td>
+        <td data-id="c7" data-state="unselected"></td>
+        <td data-id="c8" data-state="unselected"></td>
+        <td data-id="c9" data-state="unselected"></td>
+        <td data-id="c10" data-state="unselected"></td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">d</td>
+        <td data-id="d1" data-state="unselected"></td>
+        <td data-id="d2" data-state="unselected"></td>
+        <td data-id="d3" data-state="unselected"></td>
+        <td data-id="d4" data-state="unselected"></td>
+        <td data-id="d5" data-state="unselected"></td>
+        <td data-id="d6" data-state="unselected"></td>
+        <td data-id="d7" data-state="unselected"></td>
+        <td data-id="d8" data-state="unselected"></td>
+        <td data-id="d9" data-state="unselected"></td>
+        <td data-id="d10" data-state="unselected"></td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">e</td>
+        <td data-id="e1" data-state="unselected"></td>
+        <td data-id="e2" data-state="unselected"></td>
+        <td data-id="e3" data-state="unselected"></td>
+        <td data-id="e4" data-state="unselected"></td>
+        <td data-id="e5" data-state="unselected"></td>
+        <td data-id="e6" data-state="unselected"></td>
+        <td data-id="e7" data-state="unselected"></td>
+        <td data-id="e8" data-state="unselected"></td>
+        <td data-id="e9" data-state="unselected"></td>
+        <td data-id="e10" data-state="unselected"></td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">f</td>
+        <td data-id="f1" data-state="unselected"></td>
+        <td data-id="f2" data-state="unselected"></td>
+        <td data-id="f3" data-state="unselected"></td>
+        <td data-id="f4" data-state="unselected"></td>
+        <td data-id="f5" data-state="unselected"></td>
+        <td data-id="f6" data-state="unselected"></td>
+        <td data-id="f7" data-state="unselected"></td>
+        <td data-id="f8" data-state="unselected"></td>
+        <td data-id="f9" data-state="unselected"></td>
+        <td data-id="f10" data-state="unselected"></td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">g</td>
+        <td data-id="g1" data-state="unselected"></td>
+        <td data-id="g2" data-state="unselected"></td>
+        <td data-id="g3" data-state="unselected"></td>
+        <td data-id="g4" data-state="unselected"></td>
+        <td data-id="g5" data-state="unselected"></td>
+        <td data-id="g6" data-state="unselected"></td>
+        <td data-id="g7" data-state="unselected"></td>
+        <td data-id="g8" data-state="unselected"></td>
+        <td data-id="g9" data-state="unselected"></td>
+        <td data-id="g10" data-state="unselected"></td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">h</td>
+        <td data-id="h1" data-state="unselected"></td>
+        <td data-id="h2" data-state="unselected"></td>
+        <td data-id="h3" data-state="unselected"></td>
+        <td data-id="h4" data-state="unselected"></td>
+        <td data-id="h5" data-state="unselected"></td>
+        <td data-id="h6" data-state="unselected"></td>
+        <td data-id="h7" data-state="unselected"></td>
+        <td data-id="h8" data-state="unselected"></td>
+        <td data-id="h9" data-state="unselected"></td>
+        <td data-id="h10" data-state="unselected"></td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">i</td>
+        <td data-id="i1" data-state="unselected"></td>
+        <td data-id="i2" data-state="unselected"></td>
+        <td data-id="i3" data-state="unselected"></td>
+        <td data-id="i4" data-state="unselected"></td>
+        <td data-id="i5" data-state="unselected"></td>
+        <td data-id="i6" data-state="unselected"></td>
+        <td data-id="i7" data-state="unselected"></td>
+        <td data-id="i8" data-state="unselected"></td>
+        <td data-id="i9" data-state="unselected"></td>
+        <td data-id="i10" data-state="unselected"></td>
+      </tr>
+      <tr class="currentPlayer">
+        <td data-id="header">j</td>
+        <td data-id="j1" data-state="unselected"></td>
+        <td data-id="j2" data-state="unselected"></td>
+        <td data-id="j3" data-state="unselected"></td>
+        <td data-id="j4" data-state="unselected"></td>
+        <td data-id="j5" data-state="unselected"></td>
+        <td data-id="j6" data-state="unselected"></td>
+        <td data-id="j7" data-state="unselected"></td>
+        <td data-id="j8" data-state="unselected"></td>
+        <td data-id="j9" data-state="unselected"></td>
+        <td data-id="j10" data-state="unselected"></td>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+
+  // fire up communication with socket io
+  var socket = io();
+
+  // This gets and sets the person who logs in
+  var person = prompt("Please enter your name");
+  if (person !== null) {
+    document.getElementById("userName").innerHTML = "Hello " + person + "!";
+    socket.emit('playerJoined', person);
+  }
+
+  // update the ship board with other players shots
+  socket.on('shot', function(shotObj){
+    // Updates the Header UI for who took a shot and the cell location
+    if (shotObj.player !== person) {
+      document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
+      // gets the shot fired and updates the gameboard
+      // this is klugy, needs a better way...
+      var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
+      $(hitArr[1]).css("background-color", "red");
+    }
+    // else 
+    // {
+    //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
+    // }
+
+  });
+
+  </script>
+
+</body>
+</html>
