@@ -9,7 +9,7 @@ td {
 }
 
 table {
-  margin: 0 auto;
+  margin: 5px;
 }
 
 /*Classes*/
@@ -17,6 +17,17 @@ table {
   background: lightblue;
   text-align: middle;
   position-align: center;
+}
+
+.player, .opponent, .dashboard {
+  display: inline-block;
+}
+
+.dashboard {
+  background: blue;
+  width: 100px;
+  height: 300px;
+  margin: 10px;
 }
 
 /*IDs*/

@@ -5,6 +5,9 @@ can be used by friends, family or any of the other billions of people
 who use the Internet. The type of web application you create is your
 choice.
 
+## Battleship
+A JavaScript based take on the classic board game. 
+
 
 The objective of this project is:
 
@@ -111,3 +114,7 @@ We’ll also be looking at:
   your solution in a certain way?
 * Your ability to pick up new technologies.
 * Your ability to take full advantage of a language’s features.
+* We utilized JavaScript, jQuery,jQuery UI,Socket.IO, Node.js, Express, and Redis. 
+
+## Game Play:
+Each player in turn attemps to sink their opponent's fleet. To “hit” one of your opponent’s ships, you must click on the "Opponent" grid where you think one of their ships is located. Once a shot is called, the board will reveal if it is a “hit” or “miss.” If one of your ships gets hit,it will be marked on "Your Ships" by a red square.
