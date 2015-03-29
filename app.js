@@ -36,12 +36,15 @@ io.on('connection', function(socket){
 
   socket.on('playerJoined', function(player) {
     console.log(player);
-    // push player to redis
+    // push player to redis & designate socket owner
     client.LPUSH("playerList", player);
+    socket.nickname=player; 
   });
 
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    console.log(socket.nickname + " disconnected");
+    if (!socket.nickname) return;              
+    client.LREM("playerList",0,socket.nickname); //removes player from redis list
   });
 
 });
