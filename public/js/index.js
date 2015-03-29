@@ -19,7 +19,7 @@ $(document).ready(function() {
     $("td").mouseleave(function(){
       var cellState = $(this).data("state");
       var cellTable = $(this).closest("table").attr("class");
-      
+
       if (cellState === "unselected" && cellTable === "opponent") {
         $(this).css("background-color", "gray");  // if not selected change color back
       }
@@ -51,12 +51,14 @@ $(document).ready(function() {
     });
   }
 
+
   function navListeners() {
     $().click(function(event){
       event.preventDefault();
       
     });
   }
+
 
   function initialize() {
     // var selectedArr = []; // array of all shots
@@ -68,6 +70,27 @@ $(document).ready(function() {
     gamePlay();
   }
 
-  initialize();
+
+    // make ships draggable
+    $(function() {
+      $( "#draggableAircraftCarrier" ).draggable();
+    });
+    $(function() {
+      $( "#draggableBattleship" ).draggable();
+    });
+    $(function() {
+      $( "#draggableDestroyer" ).draggable();
+    });
+    $(function() {
+      $( "#draggableSubmarine" ).draggable();
+    });
+    $(function() {
+      $( "#draggablePtBoat" ).draggable();
+    });
+
+
+  }  
+
+  gamePlay();
 
 });

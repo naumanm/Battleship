@@ -17,29 +17,10 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
 
   <script src="/js/index.js"></script>
-  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-
-<!-- 
-  <link rel="stylesheet" href="../jquery-ui-1.11.4.custom/jquery-ui.min.css">
-  <script src="external/jquery/jquery.js"></script>
-  <script src="jquery-ui.min.js"></script> 
-
-
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>  
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <style>
-  #draggable { width: 150px; height: 150px; padding: 0.5em; }
-  </style>
-  <script>
-  $(function() {
-    $( "#draggable" ).draggable();
-  });
-  </script>
-
--->
-
 </head>
 <body>
   <nav class="navbar navbar-default">
@@ -61,34 +42,35 @@
   <div class="gameboard">
     <div class="dashboard">
       <div class="dashboardTitle">Ships</div>
-      <div class="aircraftCarrier">
+
+      <div id="draggableAircraftCarrier" class="ui-widget-content, aircraftCarrier">
         <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-      </div>
-      
-      <div class="battleship">
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-      </div>
-      
-      <div class="destroyer">
         <span class="notHit">O</span>
         <span class="hit">X</span>
         <span class="notHit">O</span>
-      </div>
-      
-      <div class="submarine">
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
         <span class="notHit">O</span>
       </div>
-      
-      <div class="ptBoat">
+
+      <div id="draggableBattleship" class="ui-widget-content, battleship">
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+      </div>
+
+      <div id="draggableDestroyer" class="ui-widget-content, destroyer">
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+      </div>
+
+      <div id="draggableSubmarine" class="ui-widget-content, submarine">
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+      </div>
+
+      <div id="draggablePtBoat" class="ui-widget-content, ptBoat">
         <span class="notHit">O</span>
         <span class="notHit">O</span>
       </div>
