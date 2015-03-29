@@ -48,10 +48,7 @@ io.on('connection', function(socket){
 
 // loop to check for players to start game
 // need to replace this with a form and be 
-// user driven
-
-setInterval(function(){checkTwoPlayers()}, 5000);
-
+// setInterval(function(){checkTwoPlayers()}, 5000);
 
 function checkTwoPlayers() {
   console.log("Start Game check");
