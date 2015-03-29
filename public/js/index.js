@@ -3,7 +3,7 @@ $(document).ready(function() {
   function gamePlay() {
 
     var socket = io();
-    // var selectedArr = []; // array of all shots
+    var selectedArr = []; // array of all shots
 
     // color change on hover
     $("td").mouseover(function(){
@@ -49,14 +49,22 @@ $(document).ready(function() {
         }
       }
     });
-  }  
+  }
+
+  function navListeners() {
+    $().click(function(event){
+      event.preventDefault();
+      
+    });
+  }
 
   function initialize() {
-    var selectedArr = []; // array of all shots
+    // var selectedArr = []; // array of all shots
 
     //clear REDIS tables
     //initialize all variables
     //establish new boat arrays
+    navListeners();
     gamePlay();
   }
 

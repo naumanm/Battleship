@@ -10,7 +10,6 @@ var express = require('express'),
     methodOverride = require("method-override"),
     bodyParser = require("body-parser");
 
-
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
  
@@ -20,6 +19,16 @@ app.use(express.static(__dirname + '/public'));
 // root route
 app.get('/', function(req, res){
   res.render("index.ejs");
+});
+
+// about us route
+app.get('/about', function(req, res){
+  res.render("about.ejs");
+});
+
+// game instructions route
+app.get('/instructions', function(req, res){
+  res.render("instructions.ejs");
 });
 
 // game communication

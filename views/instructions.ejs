@@ -17,38 +17,22 @@
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 </head>
 <body>
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <a class ="navbar-brand" href="javascript:void(0)">Team Pacific Fleet</a>
+
+      <ul class = "nav navbar-nav navbar-right">
+        <li><a href="/" target="new">Open A New Game</a></li>
+        <li><a>|</a></li>
+        <li><a href="/instructions" target="new">Game Instructions</a></li>
+        <li><a>|</a></li>
+        <li><a href="/about" target="new">About Us</a></li>
+      </ul>
+    </div>
+  </nav>
 
   
-  <script>
 
-  // fire up communication with socket io
-  var socket = io();
-
-  // This gets and sets the person who logs in
-  var person = prompt("Please enter your name");
-  if (person !== null) {
-    document.getElementById("userName").innerHTML = "Hello " + person + "!";
-    socket.emit('playerJoined', person);
-  }
-
-  // update the ship board with other players shots
-  socket.on('shot', function(shotObj){
-    // Updates the Header UI for who took a shot and the cell location
-    if (shotObj.player !== person) {
-      document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
-      // gets the shot fired and updates the gameboard
-      // this is klugy, needs a better way...
-      var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
-      $(hitArr[1]).css("background-color", "red");
-    }
-    // else 
-    // {
-    //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
-    // }
-
-  });
-
-  </script>
   <!-- ++++++++++++++++++ CDN Bootstrap +++++++++++++++++++ -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
