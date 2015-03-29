@@ -58,19 +58,19 @@ table {
 
 .aircraftCarrier {
   margin-top: 35px;
-  width: 125px;
+  width: 135px;
 }
 
 .battleship {
-  width: 100px;
+  width: 108px;
 }
 .destroyer,
 .submarine {
-  width: 75px;
+  width: 80px;
 }
 
 .ptBoat {
-  width: 50px;  
+  width: 53px;  
 }
 
 
