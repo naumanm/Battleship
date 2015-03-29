@@ -61,12 +61,39 @@
   <div class="gameboard">
     <div class="dashboard">
       <div class="dashboardTitle">Ships</div>
-      <div class="aircraftCarrier"></div>
-      <div class="battleship"></div>
-      <div class="destroyer"></div>
-      <div class="submarine"></div>
-      <div class="ptBoat"></div>
+      <div class="aircraftCarrier">
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+      </div>
+      
+      <div class="battleship">
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+      </div>
+      
+      <div class="destroyer">
+        <span class="notHit">O</span>
+        <span class="hit">X</span>
+        <span class="notHit">O</span>
+      </div>
+      
+      <div class="submarine">
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+      </div>
+      
+      <div class="ptBoat">
+        <span class="notHit">O</span>
+        <span class="notHit">O</span>
+      </div>
     </div>
+
     <table class="opponent">
       <tr><th colspan="11">Opponent</th></tr>
       <tr>
@@ -214,7 +241,7 @@
       </tr>
     </table>
     <table class="player">
-    <tr><th colspan="11">Your Ships</th></tr>
+      <tr><th colspan="11">Your Ships</th></tr>
       <tr>
         <td class="noColor" data-id="header"></td>
         <td data-id="header">1</td>
@@ -390,20 +417,20 @@
 
   });
 
-  </script>
+</script>
 
-  <!-- +++++++++++++ CDN Bootstrap JavaScript +++++++++++++ -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- +++++++++++++ CDN Bootstrap JavaScript +++++++++++++ -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
-  <!-- ++++++++++++++++++ LOCAL Bootstrap JS +++++++++++++++ -->
-  <script src="js/bootstrap.min.js"></script>
+<!-- ++++++++++++++++++ LOCAL Bootstrap JS +++++++++++++++ -->
+<script src="js/bootstrap.min.js"></script>
 
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+    <![endif]-->
 
-</body>
-</html>
+  </body>
+  </html>

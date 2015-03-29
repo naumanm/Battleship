@@ -33,6 +33,13 @@ table {
   width: 150px;
   height: 300px;
   margin: 10px;
+  color: white; /* color of the hits / misses */
+}
+
+.dashboard span {
+  margin-left: 9px;
+  position: relative;
+  top: 3px;
 }
 
 .aircraftCarrier,
@@ -54,23 +61,35 @@ table {
   text-align: center;
   width: 150;
   margin-left: 50px;
+  color: black;
 }
 
 .aircraftCarrier {
   margin-top: 35px;
-  width: 125px;
+  width: 110px;
 }
 
 .battleship {
-  width: 100px;
+  width: 90px;
 }
-.destroyer,
+
+.destroyer, 
 .submarine {
-  width: 75px;
+  width: 70px;
 }
 
 .ptBoat {
   width: 50px;  
+}
+
+.hit {
+  color: red;
+
+}
+
+.notHit {
+  color: white;
+  
 }
 
 
