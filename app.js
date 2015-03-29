@@ -36,8 +36,9 @@ io.on('connection', function(socket){
 
   socket.on('playerJoined', function(player) {
     console.log(player);
-    // push player to redis
+    // push player to redis & designate socket owner
     client.LPUSH("playerList", player);
+    socket.nickname=player; 
   });
 
   socket.on('disconnect', function(){
