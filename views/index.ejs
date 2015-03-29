@@ -7,13 +7,42 @@
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="/js/index.js"></script>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
+<!-- 
+  <link rel="stylesheet" href="../jquery-ui-1.11.4.custom/jquery-ui.min.css">
+  <script src="external/jquery/jquery.js"></script>
+  <script src="jquery-ui.min.js"></script> 
+
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+  #draggable { width: 150px; height: 150px; padding: 0.5em; }
+  </style>
+  <script>
+  $(function() {
+    $( "#draggable" ).draggable();
+  });
+  </script>
+
+-->
+
 </head>
 <body>
 
   <h3 id="userName">Player Name</h3>
   <h4 id="shotPlayer">Last Shot</h4>
   <div class="gameboard">
-    <div class="dashboard"></div>
+    <div class="dashboard">
+      <div class="dashboardTitle">Ships</div>
+      <div class="aircraftCarrier"></div>
+      <div class="battleship"></div>
+      <div class="destroyer"></div>
+      <div class="submarine"></div>
+      <div class="ptBoat"></div>
+    </div>
     <table class="opponent">
       <tr><th colspan="11">Opponent</th></tr>
       <tr>

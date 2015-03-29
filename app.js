@@ -36,21 +36,22 @@ io.on('connection', function(socket){
 
   socket.on('playerJoined', function(player) {
     console.log(player);
-    // push player to redis
+    // push player to redis & designate socket owner
     client.LPUSH("playerList", player);
+    socket.nickname=player; 
   });
 
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    console.log(socket.nickname + " disconnected");
+    if (!socket.nickname) return;              
+    client.LREM("playerList",0,socket.nickname); //removes player from redis list
   });
 
 });
 
 // loop to check for players to start game
 // need to replace this with a form and be 
-// user driven
-setInterval(function(){checkTwoPlayers()}, 5000);
-
+// setInterval(function(){checkTwoPlayers()}, 5000);
 
 function checkTwoPlayers() {
   console.log("Start Game check");
@@ -58,8 +59,8 @@ function checkTwoPlayers() {
   client.lrange('playerList', 0, -1, function(err, reply) {
       console.log(reply);
       if (reply.length === 2) {
-        startGame(reply)
-      };
+        startGame(reply);
+      }
   });
 }
 

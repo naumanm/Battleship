@@ -1,5 +1,9 @@
 /*HTML*/
 
+body {
+  font-family: arial;
+}
+
 td {
   width: 25px;
   height: 25px;
@@ -17,6 +21,7 @@ table {
   background: lightblue;
   text-align: middle;
   position-align: center;
+
 }
 
 .player, .opponent, .dashboard {
@@ -25,9 +30,48 @@ table {
 
 .dashboard {
   background: blue;
-  width: 100px;
+  width: 150px;
   height: 300px;
   margin: 10px;
 }
+
+.aircraftCarrier,
+.battleship,
+.destroyer,
+.submarine,
+.ptBoat,
+.dashboardTitle {
+  height: 25px;
+  margin: 5px;
+  background: green;
+}
+
+.dashboardTitle {
+  position: absolute;
+  background: cyan;
+  border-width: 3px;
+  border-color: black;
+  text-align: center;
+  width: 150;
+  margin-left: 50px;
+}
+
+.aircraftCarrier {
+  margin-top: 35px;
+  width: 125px;
+}
+
+.battleship {
+  width: 100px;
+}
+.destroyer,
+.submarine {
+  width: 75px;
+}
+
+.ptBoat {
+  width: 50px;  
+}
+
 
 /*IDs*/
