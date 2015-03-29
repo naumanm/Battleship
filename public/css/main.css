@@ -1,5 +1,9 @@
 /*HTML*/
 
+body {
+  font-family: arial;
+}
+
 td {
   width: 25px;
   height: 25px;
@@ -17,6 +21,7 @@ table {
   background: lightblue;
   text-align: middle;
   position-align: center;
+
 }
 
 .player, .opponent, .dashboard {
@@ -42,15 +47,17 @@ table {
 }
 
 .dashboardTitle {
-  background: blue;
+  position: absolute;
+  background: cyan;
   border-width: 3px;
   border-color: black;
   text-align: center;
   width: 150;
-  height: ;
+  margin-left: 50px;
 }
 
 .aircraftCarrier {
+  margin-top: 35px;
   width: 125px;
 }
 
