@@ -49,6 +49,26 @@ $(document).ready(function() {
         }
       }
     });
+
+
+    // make ships draggable
+    $(function() {
+      $( "#draggableAircraftCarrier" ).draggable();
+    });
+    $(function() {
+      $( "#draggableBattleship" ).draggable();
+    });
+    $(function() {
+      $( "#draggableDestroyer" ).draggable();
+    });
+    $(function() {
+      $( "#draggableSubmarine" ).draggable();
+    });
+    $(function() {
+      $( "#draggablePtBoat" ).draggable();
+    });
+
+
   }  
 
 
