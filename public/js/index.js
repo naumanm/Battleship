@@ -18,7 +18,9 @@ $(document).ready(function() {
     // revert color if not clicked
     $("td").mouseleave(function(){
       var cellState = $(this).data("state");
-      if (cellState === "unselected") {
+      var cellTable = $(this).closest("table").attr("class");
+      
+      if (cellState === "unselected" && cellTable === "opponent") {
         $(this).css("background-color", "gray");  // if not selected change color back
       }
     });
