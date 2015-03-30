@@ -37,14 +37,8 @@ app.get('/instructions', function(req, res){
 io.on('connection', function(socket){
   socket.join(roomNumber);
   console.log(roomNumber);
-
+  
   console.log('a user connected');
-
-  socket.on('shot', function(shotObj){
-    io.emit('shot', shotObj);
-    client.LPUSH("shotFired", shotObj);
-    console.log(shotObj);
-  });
 
   socket.on('playerJoined', function(player) {
     console.log(player);
@@ -56,6 +50,12 @@ io.on('connection', function(socket){
     // push player to redis & designate socket owner
     client.LPUSH("playerList", player);
     socket.nickname=player; 
+  });
+
+  socket.on('shot', function(shotObj){
+    io.emit('shot', shotObj);
+    client.LPUSH("shotFired", shotObj);
+    console.log(shotObj);
   });
 
   socket.on('disconnect', function(){
