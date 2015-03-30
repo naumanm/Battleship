@@ -88,12 +88,12 @@ $(document).ready(function(){
       // else 
       // {
       //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
+      // }
       });
     } // End of gamePlay function
 
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
-
   // draggable
   $(function() {
     $( "#draggableAircraftCarrier" ).draggable({ 
