@@ -65,16 +65,36 @@ $(document).ready(function() {
   }
 
 
-  // make ships draggable
+  // draggable
   $(function() {
-    $( "#draggableAircraftCarrier" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
-    $( "#draggableBattleship" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
-    $( "#draggableDestroyer" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
-    $( "#draggableSubmarine" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
-    $( "#draggablePtBoat" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
+    $( "#draggableAircraftCarrier" ).draggable({ 
+      snap: "#snaptarget", 
+      grid: [25, 25] });
+    $( "#draggableBattleship" ).draggable({ 
+      snap: "#snaptarget", 
+      grid: [25, 25] });
+    $( "#draggableDestroyer" ).draggable({ 
+      snap: "#snaptarget", 
+      grid: [25, 25] });
+    $( "#draggableSubmarine" ).draggable({ 
+      snap: "#snaptarget", 
+      grid: [25, 25] });
+    $( "#draggablePtBoat" ).draggable({ 
+      snap: "#snaptarget", 
+      grid: [25, 25] });
   });
 
-
+  // droppable
+  $( "#droppable" ).droppable({
+    accept: ".special",
+    drop: function( event, ui ) {
+      console.log("droppable event", event, "droppable ui", ui);
+      $( this )
+        // .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
+        .find( "p" )  // change this to appropriate notice element
+          .html( "Dropped!" ); // change this to trigger boat placement check
+    } 
+  });
 
   gamePlay();
 
