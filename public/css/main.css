@@ -70,6 +70,7 @@ table td {
 .ptBoat,
 .dashboardTitle {
   /*height: 25px;*/
+  vertical-align: text-top;
   margin: 1px;
   background: green;
 }
