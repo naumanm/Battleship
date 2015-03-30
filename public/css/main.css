@@ -6,9 +6,11 @@ body {
 
 /*  jQuery API doc for draggable
     https://jqueryui.com/draggable/#snap-to */
-#snaptarget {  
-  width: 250px;
-  height: 250px;
+#snaptarget {
+  padding: 0;
+
+  /*width: 250px;*/
+  /*height: 250px;*/
 }
 
 td {
@@ -48,11 +50,11 @@ table td {
 }
 
 .dashboard {
-  background: blue;
-  width: 150px;
-  height: 300px;
-  margin: 10px;
-  color: white; /* color of the hits / misses */
+  /*background: blue;*/
+  width: 200px;
+  height: 500px;
+  margin: 3px;
+  /*color: white;  color of the hits / misses */
 }
 
 .dashboard span {
@@ -67,8 +69,9 @@ table td {
 .submarine,
 .ptBoat,
 .dashboardTitle {
-  height: 25px;
-  margin: 5px;
+  /*height: 25px;*/
+  position: relative;
+  margin: 1px;
   background: green;
 }
 
@@ -83,7 +86,7 @@ table td {
   color: black;
 }
 
-.aircraftCarrier {
+/*.aircraftCarrier {
   margin-top: 35px;
   width: 124px;
 }
@@ -99,7 +102,7 @@ table td {
 
 .ptBoat {
   width: 49px;  
-}
+}*/
 
 .hit {
   color: red;
@@ -109,6 +112,18 @@ table td {
 .notHit {
   color: white;
   
+}
+
+.noLIDisk {
+  list-style-type: none;
+  list-style-position: outside;
+  position: relative;
+  left: -5px;
+}
+
+.snaptarget {
+  width: 250px;
+  height: 250px;
 }
 
 
