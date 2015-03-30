@@ -1,16 +1,32 @@
-$(document).ready(function() {
+$(document).ready(function(){
 
-  function initialize() {
-    // var selectedArr = []; // array of all shots
+  $('#playerSignIn').modal('show'); // shows the get player's name modal
 
-    //clear REDIS tables
-    //initialize all variables
-    //establish new boat arrays
-    navListeners();
-    gamePlay();
-  }
+  // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
+  var playerName = 
+    $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
+      var playerName = $('#personsName').val();
+      $( "#userName" ).text( "Hello " + playerName );
+    }).keyup();
 
-  function gamePlay() {
+  // listener for the form submit
+  $('form').submit(function(e){
+    e.preventDefault();
+    var playerName = document.getElementsByTagName("input")[0].value;
+// -------if ( SOME CHECK WITH REDIS ) { // don't need to check if playerName is null since the form prevents that.
+      
+      // document.getElementById("userName").innerHTML = "Hello " + playerName + "!";
+      socket.emit(playerName, ' Joined the game.');
+// -------}
+    return playerName;
+    // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
+    // 1) Player already connected to the game and refreshed.
+    // 2) Player started a new game (using a different player name)
+    // 3) New player but their entered name already exists with another player. I think the socet ID needs to be the "PK" of the player's data
+
+  }); // END listener for the form submit
+
+  function gamePlay(){
 
     var socket = io();
     var selectedArr = []; // array of all shots
@@ -54,11 +70,26 @@ $(document).ready(function() {
           shotObj.id = cellId;
           console.log('\nshotObj (player name - cell ID)' , shotObj);
           socket.emit('shot', shotObj);
-        }
-      }
+        } // END of (selectedArr.indexOf(cellId) === -1)
+      } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
     });  // end of select to take a shot
 
-  } // End of gamePlay function
+
+    // update the ship board with other players shots
+    socket.on('shot', function(shotObj){
+      // Updates the Header UI for who took a shot and the cell location
+      if (shotObj.player !== person) {
+        document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
+        // gets the shot fired and updates the gameboard
+        // this is klugy, needs a better way...
+        var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
+        $(hitArr[1]).css("background-color", "red");
+      }
+      // else 
+      // {
+      //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
+      // }
+    }); // End of gamePlay function
 
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
@@ -112,34 +143,28 @@ $(document).ready(function() {
     });
   });
 
+  // the below function keeps it DRY for changing the ship's img when DBL-clicked. Works with 
+  function setStyle(_this,offSize,orientation) {
+    var imgOrientation = (orientation === 'goVert') ? offSize : '0px;';  // sets the offset
+    var currentStyle = $(_this).attr('style'); // gets the inline style that the draggable creates. Using this to reset the "top: xpx;" value
+    var pos = currentStyle.indexOf("top: ")+ 5; // gets the position of the needed top: attribute
+    currentStyle = currentStyle.slice(0,pos); // removes the old value
+    currentStyle = currentStyle + imgOrientation; // adds the new value
+    $(_this).attr('style', currentStyle); // applies the new value
+  }
 
-  // // droppable
-  // $( "#droppable" ).droppable({
-  //   //accept: ".special",
-  //   drop: function( event, ui ) {
-  //     console.log("droppable event", event, "droppable ui", ui);
-  //     $( this )
-  //       // .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
-  //       .find( "p" )  // change this to appropriate notice element
-  //         .html( "Dropped!" ); // change this to trigger boat placement check
-  //   } 
-  // });
-
-
-  // Christian attempt at making the images of the ships rotate on the Your Ships grid
+  // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
         var _this = this;
         var orientation = ($(_this).attr('src') === '/images/wholeCarrier.png') ? 'goVert' : 'goHoriz'; // determines which orientation to set for the following executables
         setStyle(_this,'105px;',orientation);
-//            var imgOrientation = (orientation === 'goVert') ? '105px;' : '0px;';  // sets the offset
-//           var currentStyle = $(_this).attr('style'); // gets the inline style that the draggable creates. Using this to reset the "top: xpx;" value
-//          var pos = currentStyle.indexOf("top: ")+ 5; // gets the position of the needed top: attribute
-//         currentStyle = currentStyle.slice(0,pos); // removes the old value
-//        currentStyle = currentStyle + imgOrientation; // adds the new value
- //       $(_this).attr('style', currentStyle); // applies the new value
-        // console.log("new style",this);
-
+        // var imgOrientation = (orientation === 'goVert') ? '105px;' : '0px;';  // sets the offset
+        // var currentStyle = $(_this).attr('style'); // gets the inline style that the draggable creates. Using this to reset the "top: xpx;" value
+        // var pos = currentStyle.indexOf("top: ")+ 5; // gets the position of the needed top: attribute
+        // currentStyle = currentStyle.slice(0,pos); // removes the old value
+        // currentStyle = currentStyle + imgOrientation; // adds the new value
+        // $(_this).attr('style', currentStyle); // applies the new value
         var src = (orientation === 'goVert') ? '/images/wholeCarrierVert.png' : '/images/wholeCarrier.png'; // toggles between the two images
         $(this).attr('src', src);  // applies the new image
     }
@@ -184,9 +209,6 @@ $(document).ready(function() {
         $(this).attr('src', src);
     }
   });  // END rotate Patrol Boat image
-
-
-
 
   gamePlay();
 

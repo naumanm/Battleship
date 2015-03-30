@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Battleship</title>
-  <!-- +++++++++++++++++ CDN jQuery required by Bootstrap ++++ -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <!-- Christian commented this out -->
-  <!-- this is an older version <script src="https://code.jquery.com/jquery-1.10.2.js"></script> -->
+  <!-- +++++++++++++++++ CDN jQuery required by Bootstrap ++++
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+  <script src="/js/jquery-1.11.2.js"></script>
 
   <!-- +++++++++++++++++ CDN Bootstrap CSS +++++++++++++ -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -46,7 +45,7 @@
         <div class="modal-body">
           <form action="" name="person">
             <label for="person">Enter your game name:</label>
-            <input name="person" type="text" autofocus required placeholder="Your name...">
+            <input name="person" type="text" id="personsName" autofocus required placeholder="Your name...">
             <button type="button" class="btn btn-primary btn-sm">Submit</button>
           </form>
         </div><!-- /.modal-body -->
@@ -73,130 +72,89 @@
 
 
   <div class="gameboard">
-    <!-- Christian added the accordion structure. may only need two panels... currently three (ships, game status, player stats) -->
-    <div class="panel-group dashboard" id="accordion" role="tablist" aria-multiselectable="true">
+    
+    <h4>Place Your Ships To Start</h4>
+    <div>
+      <ul>
+        <li class="noLIDisk">
+          <img src="/images/wholeCarrier.png"
+               alt="Drag your Aircraft Carrier to Your Ships Board"
+               id="draggableAircraftCarrier"
+               class="ui-widget-content, aircraftCarrier"></li>
+          
+        <li class="noLIDisk">
+          <img src="/images/wholeBattleship.png"
+               alt="Drag your Battleship to Your Ships Board"
+               id="draggableBattleship"
+               class="ui-widget-content, battleship"></li>
+          
+        <li class="noLIDisk">
+          <img src="/images/wholeCruiser.png"
+               alt="Drag your Destroyer to Your Ships Board"
+               id="draggableDestroyer"
+               class="ui-widget-content, destroyer"></li>
+          
+        <li class="noLIDisk">
+          <img src="/images/wholeSub.png"
+               alt="Drag your Submarine to Your Ships Board"
+               id="draggableSubmarine"
+               class="ui-widget-content, submarine"></li>
+          
+        <li class="noLIDisk">
+          <img src="/images/wholePatrol.png"
+               alt="Drag your Patrol Boat to Your Ships Board"
+               id="draggablePtBoat"
+               class="ui-widget-content, ptBoat"></li>
+      </ul>
+    </div>
 
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingOne">
-          <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> <!-- class="dashboardTitle" -->
-              Place Your Ships To Start
-            </a>
-          </h4>
-        </div>
-        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-          <div class="panel-body">
-            <ul>
-              <li class="noLIDisk">
-                <img src="/images/wholeCarrier.png"
-                     alt="Drag your Aircraft Carrier to Your Ships Board"
-                     id="draggableAircraftCarrier"
-                     class="ui-widget-content, aircraftCarrier"></li>
-                
-              <li class="noLIDisk">
-                <img src="/images/wholeBattleship.png"
-                     alt="Drag your Battleship to Your Ships Board"
-                     id="draggableBattleship"
-                     class="ui-widget-content, battleship"></li>
-                
-              <li class="noLIDisk">
-                <img src="/images/wholeCruiser.png"
-                     alt="Drag your Destroyer to Your Ships Board"
-                     id="draggableDestroyer"
-                     class="ui-widget-content, destroyer"></li>
-                
-              <li class="noLIDisk">
-                <img src="/images/wholeSub.png"
-                     alt="Drag your Submarine to Your Ships Board"
-                     id="draggableSubmarine"
-                     class="ui-widget-content, submarine"></li>
-                
-              <li class="noLIDisk">
-                <img src="/images/wholePatrol.png"
-                     alt="Drag your Patrol Boat to Your Ships Board"
-                     id="draggablePtBoat"
-                     class="ui-widget-content, ptBoat"></li>
-            </ul>
+<!--     <h4>Game Status</h4>
+    <div>
+      <div class="aircraftCarrier">
+        <span class="notHit position1">O</span>
+        <span class="notHit position2">O</span>
+        <span class="hit position3">X</span>
+        <span class="notHit position4">O</span>
+        <span class="notHit position5">O</span>
+      </div>
 
-<!-- Christian added the images above. Kept this incase we need to revert for some reason.
-            <div id="draggableAircraftCarrier" class="ui-widget-content, aircraftCarrier"></div>
-            <div id="draggableBattleship" class="ui-widget-content, battleship"></div>
-            <div id="draggableDestroyer" class="ui-widget-content, destroyer"></div>
-            <div id="draggableSubmarine" class="ui-widget-content, submarine"></div>
-            <div id="draggablePtBoat" class="ui-widget-content, ptBoat"></div> -->
-          </div>
-        </div>
-      </div> <!-- END Ships accordian group -->
+      <div class="battleship">
+        <span class="notHit position1">O</span>
+        <span class="notHit position2">O</span>
+        <span class="notHit position3">O</span>
+        <span class="notHit position4">O</span>
+      </div>
 
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingTwo">
-          <h4 class="panel-title">
-            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> <!-- class="dashboardTitle" -->
-              Game Status
-            </a>
-          </h4>
-        </div>
-        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-          <div class="panel-body">
-            <div class="aircraftCarrier">
-              <span class="notHit position1">O</span>
-              <span class="notHit position2">O</span>
-              <span class="hit position3">X</span>
-              <span class="notHit position4">O</span>
-              <span class="notHit position5">O</span>
-            </div>
+      <div class="destroyer">
+        <span class="notHit position1">O</span>
+        <span class="notHit position2">O</span>
+        <span class="notHit position3">O</span>
+      </div>
 
-            <div class="battleship">
-              <span class="notHit position1">O</span>
-              <span class="notHit position2">O</span>
-              <span class="notHit position3">O</span>
-              <span class="notHit position4">O</span>
-            </div>
+      <div class="submarine">
+        <span class="notHit position1">O</span>
+        <span class="notHit position2">O</span>
+        <span class="notHit position3">O</span>
+      </div>
 
-            <div class="destroyer">
-              <span class="notHit position1">O</span>
-              <span class="notHit position2">O</span>
-              <span class="notHit position3">O</span>
-            </div>
+      <div class="ptBoat">
+        <span class="notHit position1">O</span>
+        <span class="notHit position2">O</span>
+      </div> -->
 
-            <div class="submarine">
-              <span class="notHit position1">O</span>
-              <span class="notHit position2">O</span>
-              <span class="notHit position3">O</span>
-            </div>
-
-            <div class="ptBoat">
-              <span class="notHit position1">O</span>
-              <span class="notHit position2">O</span>
-            </div>
-          </div>
-        </div>
-      </div> <!-- END Game Status accordian group -->
-
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="headingThree">
-          <h4 class="panel-title">
-            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-              Player Stats
-            </a>
-          </h4>
-        </div>
-        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-          <div class="panel-body">
-            <!-- Put stuff here about game stats?? Maybe some other data?? Otherwise take this accordion panel out! -->
-            <!-- Christian move the scripts to end of page -->
-            <div>Game ID: <span id="gameID"></span><!-- <script>gameObj.gameID</script> --></div>
-            <div>Game Length: <span id="gameLength"></span><!-- <script>date = new Date; date - gameObj.startTime</script> --></div>
-            <div>Name: <span id="playersName"></span><!-- <script>gameObj.playersName</script> --></div>
-            <div>Opponents Name: <span id="opponentsName"></span><!-- <script>gameObj.opponentsName</script> --></div>
-            <div>Won: <span id="gameWon"></span><!-- <script>gameObj.playerIDWon</script> --></div>
-            <div>Lost: <span id="gameLost"></span><!-- <script>gameObj.playerIDLost</script> --></div>
-          </div>
-        </div>
-      </div> <!-- END Game Stats (or some other info) accordian group -->
-
-    </div> <!-- END of #accordion .panel-group .dashboard -->
-
+    <h4>Player Stats</h4>
+    <div>
+      <!-- Put stuff here about game stats?? Maybe some other data?? Otherwise take this accordion panel out! -->
+      <!-- Christian move the scripts to end of page -->
+      <div>Game ID: <span id="gameID"></span><!-- <script>gameObj.gameID</script> --></div>
+      <div>Game Length: <span id="gameLength"></span><!-- <script>date = new Date; date - gameObj.startTime</script> --></div>
+      <div>Name: <span id="playersName"></span><!-- <script>gameObj.playersName</script> --></div>
+      <div>Opponents Name: <span id="opponentsName"></span><!-- <script>gameObj.opponentsName</script> --></div>
+      <div>Won: <span id="gameWon"></span><!-- <script>gameObj.playerIDWon</script> --></div>
+      <div>Lost: <span id="gameLost"></span><!-- <script>gameObj.playerIDLost</script> --></div>
+    </div>
+    
+    
     <!-- <span class="ui-widget-header"> -->
     <table class="player" id="snaptarget">
       <tr><th colspan="11">Your Ships</th></tr>
@@ -495,56 +453,6 @@
     <!-- </span> END of #droppable .ui-widget-header -->
   </div> <!-- END .gameboard -->
 
-  <script>
-    $(document).ready(function() {
-
-      var socket = io(); // fire up communication with socket io
-
-      // This gets and sets the person who logs in
-// $('#playerSignIn').modal('show') // shows the enter name modal
-      // listener for the form submit
-      $('#person').on('submit', function( e ){
-        // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
-        // 1) Player already connected to the game and refreshed.
-        // 2) Player started a new game (using a different player name)
-        // 3) New player but their entered name already exists with another player. I think the socet ID needs to be the "PK" of the player's data
-
-// -------if ( SOME CHECK WITH REDIS ) { // don't need to check if playerName is null since the form prevents that.
-          document.getElementById("userName").innerHTML = "Hello " + playerName + "!";
-          socket.emit('playerJoined', playerName);
-// -------}
-      });  // END listener for the form submit
-
-// Sunday Christian commented out since redirecting this feature to modal and client side js to capture the player's name, send the name to the /player route which will add it to REDIS. Then, experimenting with particular way to allow the game to continue without redirect or render.
-      // var person = prompt("Please enter your name");
-      // if (person !== null) {
-      //   document.getElementById("userName").innerHTML = "Hello " + person + "!";
-      //   socket.emit('playerJoined', person);
-      // }
-
-
-
-
-      // update the ship board with other players shots
-      socket.on('shot', function(shotObj){
-        // Updates the Header UI for who took a shot and the cell location
-        if (shotObj.player !== person) {
-          document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
-          // gets the shot fired and updates the gameboard
-          // this is klugy, needs a better way...
-          var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
-          $(hitArr[1]).css("background-color", "red");
-        }
-        // else 
-        // {
-        //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
-        // }
-
-      });  // END socket.on 'shot'
-
-    });  // END on document ready
-  </script>
-
   <!-- ++++++++++ CDN Bootstrap JavaScript   -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
@@ -561,9 +469,10 @@
   <!-- ++++++++++ CDN Socket IO ++++++++++++ -->
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
-  <!-- ++++++++++ CDN jQuery.js ++++++++++++ -->
+  <!-- ++++++++++ CDN jQuery.js ++++++++++++ 
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  -->
 
   <!-- ++++++++++ LOCAL client side .js ++++ -->
   <script src="/js/index.js"></script>
