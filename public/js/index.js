@@ -148,7 +148,7 @@ $(document).ready(function(){
 
   // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
-    'click': function() {
+    'dblclick': function() {
         var _this = this;
         var orientation = ($(_this).attr('src') === '/images/wholeCarrier.png') ? 'goVert' : 'goHoriz'; // determines which orientation to set for the following executables
         setStyle(_this,'105px;',orientation);
