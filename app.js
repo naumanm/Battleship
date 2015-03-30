@@ -11,14 +11,13 @@ var express = require('express'),
     roomNumber=1,
     playerPair=0,
     bodyParser = require("body-parser"),
-    waitingRoom =[],  //looks for a pair 
-    gameRooms=[];  //where we store all the rooms
-    // gameObj;  //logic for all the game...function/object instead?
+    waitingRoom =[], 
+    gameRooms=[]; 
 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
-// more middleware    Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
+// more middleware  Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method')); // probably not needed.
  
@@ -30,29 +29,13 @@ app.get('/', function(req, res){
   res.render("index.ejs");
 });
 
-// player's name route -will has questions
+// player's name route
 app.get('/player', function(req, res){
-  gameObj.socketID = "";  // Christian needs answer from Will===> need to know how to get the user's socket.io connection ID or IDs depending on how we're going to use this
-  //need to discuss game object handling, but to access a socket's unique id it's socket.id
-  gameObj.playerName = req.body.player;  
-  // Christian needs answer from ???
-  // need to determine who is connected with who in a game. handled by socketio connection event -will
-  // need to determine who is the first player in this game. handled by socketio connection event -will
- // gameObj.playerID = "??????"; HANDLED BY SOCKET.IO - will
- // gameObj.gameID = "??????";   HANDLED BY SOCKET.IO -will
-
-  client.HSETNX("playersName", gameObj.socketID, gameObj.playerName); // HSETNX sets value if key doesn't already exist.  Is this a valid approach? Or, WHAT DATA FORMAT SHOULD I USE???? I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?
-  client.HSETNX("gameIDs", gameObj.playerID, gameObj.gameID); // this is like a data dictionary. playerID may be their game's ID if they were the first player, or they get associated with the game's ID
-
-  client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); // Christian needs answer from Will===> Are the socket.io IDs unique? HSETNX sets the opponent player's ID only if this hash's key doesn't already exist otherwise, it is not set. AKA, no overwrite
-  //they are unique. need to discuss matchmaking or can i grab your code and run with it - will
-  // what if this route doesn't render or redirect? 
   res.redirect("/");  // redirects are to routes while renders are to views
-
   res.render("index.ejs"); // thinking not to redirect since modal will show again. need this to be ajaxified
 });
 
-// shot fired route  -
+// shot fired route 
 app.get('/shot/shotObj', function(req, res){
   // gameID is the first player's socket.io ID stored in hash "gameID"
   // gameID 
@@ -116,15 +99,17 @@ io.on('connection', function(socket){
   console.log('a user connected');
 
   socket.on('playerJoined', function(player) {
-    console.log(player);
+    socket.nickname=player;
+    client.HSETNX("playersName", socket.id, player);
+    client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
+    waitingRoom.push(socket.nickname);
     playerPair++;
-    client.LPUSH("playerList", player);
-    socket.nickname=player;  //used in conjunction with id to preserve uniqueness
-    waitingRoom.push(socket.id);
+    //assign a game, roomNumber, and reset queue when two players are in the waiting room
     if (playerPair===2){
-      //queue filled create a game?
+      client.HSETNX("opponent", socket.id, socket.id);
+      // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
       gameRooms.push(GameObj.new(waitingRoom[0],waitingRoom[1],roomNumber));
-      waitingRoom=[]; //empty the waiting room queue
+      waitingRoom=[];
       roomNumber++;
       playerPair=0;
     }
@@ -132,58 +117,45 @@ io.on('connection', function(socket){
 
   socket.on('shot', function(shotObj){
     io.emit('shot', shotObj);
-    client.LPUSH("shotFired", shotObj);
+    client.LPUSH("shotFired", shotObj); //needs to merge with shot html route
     console.log(shotObj);
   });
 
   socket.on('disconnect', function(){
     console.log(socket.nickname + " disconnected");
     if (!socket.nickname) return;              
-    client.LREM("playerList",0,socket.nickname); //removes player from redis list
   });
-
+  
 });
 
-// loop to check for players to start game
-// need to replace this with a form and be 
-// setInterval(function(){checkTwoPlayers()}, 5000);
-
-function checkTwoPlayers() {
-  console.log("Start Game check");
-
-  client.LRANGE('playerList', 0, -1, function(err, reply) {
-      console.log(reply);
-      if (reply.length === 2) {
-        startGame(reply);
-      }
-  });
+//game logic 
+function GameObj (player1,player2,player1name,player2name,player1fleet,player2fleet,id){
+  this.player1=player1;  //socket
+  this.player1name=player1name; //name
+  this.player1fleet=player1fleet;
+  this.player2=player2;
+  this.player2name=player2name;
+  this.player2fleet=player2fleet;
+  this.id=id;  //gameroom
+  gameOver=false;
+  while (gameOver===false){//hits and misses
+  }
+  //save results to database and then delete item from GameRoom array?
+  //need to reset game if they want to play again, how to put player(s) back into waiting queue
 }
 
-
-function startGame(playerList){
-  console.log("game started");
-
+GameObj.prototype.hitOrMiss = function(shotdata,shootingPlayer,targetPlayer) {
+  // if firing player hit's target player's ship
+  //search fleet location arrays
+  //if hit, see if ship sunk
+  //if sunk, see if fleet destroyed, aka game over and return winner
 }
-
-// when get to the point when there is a winner
-// use this function on each move to check if either player lost all of their ships
-//pseudo code
-//function (--==somePlayerObject==--=) {
-//  boatArray.each
-//}
-
 
 // load our server
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
 
-function GameObj (player1,player2,player1name,player2name,id){
-  this.player1=player1;  //socket
-  this.player1name=player1name; //name
-  this.player2=player2;
-  this.player2name=player2name;
-  this.id=id;
-}
+
 
 
