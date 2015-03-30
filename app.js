@@ -30,28 +30,29 @@ app.get('/', function(req, res){
   res.render("index.ejs");
 });
 
-// player's name route
+// player's name route -will has questions
 app.get('/player', function(req, res){
   gameObj.socketID = "";  // Christian needs answer from Will===> need to know how to get the user's socket.io connection ID or IDs depending on how we're going to use this
-  gameObj.playerName = req.body.player;
+  //need to discuss game object handling, but to access a socket's unique id it's socket.id
+  gameObj.playerName = req.body.player;  
   // Christian needs answer from ???
-  // need to determine who is connected with who in a game. 
-  // need to determine who is the first player in this game.
-  gameObj.playerID = "??????";
-  gameObj.gameID = "??????";
+  // need to determine who is connected with who in a game. handled by socketio connection event -will
+  // need to determine who is the first player in this game. handled by socketio connection event -will
+ // gameObj.playerID = "??????"; HANDLED BY SOCKET.IO - will
+ // gameObj.gameID = "??????";   HANDLED BY SOCKET.IO -will
 
   client.HSETNX("playersName", gameObj.socketID, gameObj.playerName); // HSETNX sets value if key doesn't already exist.  Is this a valid approach? Or, WHAT DATA FORMAT SHOULD I USE???? I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?
   client.HSETNX("gameIDs", gameObj.playerID, gameObj.gameID); // this is like a data dictionary. playerID may be their game's ID if they were the first player, or they get associated with the game's ID
 
-  client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); // Christian needs answer from Will===> Are the socket.io IDs unique? HSETNX sets the opponenet player's ID only if this hash's key doesn't already exist otherwise, it is not set. AKA, no overwrite
-
+  client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); // Christian needs answer from Will===> Are the socket.io IDs unique? HSETNX sets the opponent player's ID only if this hash's key doesn't already exist otherwise, it is not set. AKA, no overwrite
+  //they are unique. need to discuss matchmaking or can i grab your code and run with it - will
   // what if this route doesn't render or redirect? 
   res.redirect("/");  // redirects are to routes while renders are to views
 
   res.render("index.ejs"); // thinking not to redirect since modal will show again. need this to be ajaxified
 });
 
-// shot fired route
+// shot fired route  -
 app.get('/shot/shotObj', function(req, res){
   // gameID is the first player's socket.io ID stored in hash "gameID"
   // gameID 
@@ -59,12 +60,12 @@ app.get('/shot/shotObj', function(req, res){
     var gameID = client.HGET("gameIDs", gameObj.playerID); // This gets the game's ID from the data dictionary
 
     // check if shot is a hit or miss  should be game prototyped?
-    if( HEXISTS("opponenet", gameObj.playerID) ){
-      var opponentID = client.HGET("opponenet", gameObj.playerID); // this gets the opponenet player's ID from the opponent dictionary
+    if( HEXISTS("opponent", gameObj.playerID) ){
+      var opponentID = client.HGET("opponent", gameObj.playerID); // this gets the opponent player's ID from the opponent dictionary
 
       if( HEXISTS("ships", gameObj.opponentID) ){
-        var opponentsShips = client.HGETALL("ships"); // this gets the opponenet player's ship placements
-        if( opponentsShips.contains(shotObj.shot) ){ // Christian needs answer from Christian ===> syntax?? is the shot contained within the opponenetsShips array?
+        var opponentsShips = client.HGETALL("ships"); // this gets the opponent player's ship placements
+        if( opponentsShips.contains(shotObj.shot) ){ // Christian needs answer from Christian ===> syntax?? is the shot contained within the opponentsShips array?
           // shot is a hit
 
           if (1){ // Christian needs answer from ???===>HOW TO check if the ship is sunk!!
@@ -91,7 +92,7 @@ app.get('/shot/shotObj', function(req, res){
 
     } else {
       // no opponent found. what to do???
-    }// END if( HEXISTS("opponenet", playerID)
+    }// END if( HEXISTS("opponent", playerID)
 
     // render or redirect???
   }
@@ -178,9 +179,8 @@ http.listen(3000, function(){
 });
 
 function GameObj (player1,player2,player1name,player2name,id){
-  //in terms of gameObj, "player is referring to the player's socket"
-  this.player1=player1;
-  this.player1name=player1name;
+  this.player1=player1;  //socket
+  this.player1name=player1name; //name
   this.player2=player2;
   this.player2name=player2name;
   this.id=id;
