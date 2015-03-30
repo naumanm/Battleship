@@ -101,6 +101,7 @@ io.on('connection', function(socket){  //step #1 connection
   socket.on('playerJoined', function(player) {  //step # building a lobby
     socket.nickname=player;
     client.HSETNX("playersName", socket.id, player);
+    //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
     client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
     waitingRoom.push(socket.nickname);
     playerPair++;
@@ -115,13 +116,13 @@ io.on('connection', function(socket){  //step #1 connection
       playerPair=0;
     }
   });
-
-  socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
-    io.emit('shot', shotObj); 
-    //needs to merge with shot html route
-    //need to attach to the "game being played"
-    console.log(shotObj);
-  });
+  
+  //ORIGINAL SHOT FUNCTION KEEP THIS 
+  // socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+  //   io.emit('shot', shotObj); 
+  //   //needs to merge with shot html route
+  //   console.log(shotObj);
+  // });
 
   socket.on('disconnect', function(){
     console.log(socket.nickname + " disconnected");
@@ -134,30 +135,48 @@ io.on('connection', function(socket){  //step #1 connection
 function GameObj (player1,player2,player1name,player2name,id){  
   this.player1=player1;  //socket
   this.player1name=player1name; //name
-  //this.player1fleet=?; //not exactly sure how to handle this, depends on how data is passed
+  this.player1Fleet=[]; //not exactly sure how to handle this, depends on how data is passed
   //after set up of ships how to handle ship coordinates
   this.player2=player2;
   this.player2name=player2name;
-  //this.player2fleet=?//not exactly sure how to handle this, depends on how data is passed
+  this.player2Fleet=[];//not exactly sure how to handle this, depends on how data is passed
   //after set up of ships
   this.id=id;  //gameroom
   gameOver=false;
-  turnController=1; 
-}
+  turnController=1;
+  if (turnController%2===0)
+   {
+    player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+      io.emit('shot', shotObj); 
+      //need to add flash event for player click while not their turn
+      console.log("player 1 shot"+shotObj);
+      turnController++;
+    });
+    this.hitOrMiss(shotObj,this.player2Fleet);
+   }
+    else  //refactor into recursively switching firecontroller function
+   {
+    player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+     io.emit('shot', shotObj); 
+     //need to add flash event for player click while not their turn
+     console.log("player 1 shot"+shotObj);
+      turnController++;
+    });
+     this.hitOrMiss(shotObj,this.player1Fleet);
+   }
+  }
+
 //step 3(A) firing and turn switching
-GameObj.prototype.hitOrMiss = function(shotdata,shootingPlayer,targetPlayer) {
-  // if firing player hit's target player's ship
-  //search fleet location arrays
-  //switch turn on miss
-  //if sunk, see if fleet destroyed, aka game over and return winner
-}
+GameObj.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  //what is in shotObj
+ //this has to control what to listen to in the shot event on socket.io
+};
 
 //game controller
 GameObj.prototype.runGame = function(){
   while (this.gameOver===false){
-    this.hitOrMiss(this);
+    this.hitOrMiss();
   }
-}
+};
 
 // load our server
 http.listen(3000, function(){
