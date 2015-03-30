@@ -92,13 +92,13 @@ app.get('/instructions', function(req, res){
 });
 
 // game communication
-io.on('connection', function(socket){
+io.on('connection', function(socket){  //step #1 connection
   socket.join(roomNumber);
   console.log(roomNumber);
   
   console.log('a user connected');
 
-  socket.on('playerJoined', function(player) {
+  socket.on('playerJoined', function(player) {  //step # building a lobby
     socket.nickname=player;
     client.HSETNX("playersName", socket.id, player);
     client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
@@ -109,15 +109,17 @@ io.on('connection', function(socket){
       client.HSETNX("opponent", socket.id, socket.id);
       // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
       gameRooms.push(GameObj.new(waitingRoom[0],waitingRoom[1],roomNumber));
+     // gameRooms[length-1].runGame(); //starts the game DO NOT DELETE, CAN'T ACTIVATE YET
       waitingRoom=[];
       roomNumber++;
       playerPair=0;
     }
   });
 
-  socket.on('shot', function(shotObj){
-    io.emit('shot', shotObj);
-    client.LPUSH("shotFired", shotObj); //needs to merge with shot html route
+  socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+    io.emit('shot', shotObj); 
+    //needs to merge with shot html route
+    //need to attach to the "game being played"
     console.log(shotObj);
   });
 
@@ -128,27 +130,33 @@ io.on('connection', function(socket){
   
 });
 
-//game logic 
-function GameObj (player1,player2,player1name,player2name,player1fleet,player2fleet,id){
+//game logic step 2(A) building the board
+function GameObj (player1,player2,player1name,player2name,id){  
   this.player1=player1;  //socket
   this.player1name=player1name; //name
-  this.player1fleet=player1fleet;
+  this.player1fleet=player1fleet; //not exactly sure how to handle this, depends on how data is passed
+  //after set up of ships
   this.player2=player2;
   this.player2name=player2name;
-  this.player2fleet=player2fleet;
+  this.player2fleet=player2fleet;//not exactly sure how to handle this, depends on how data is passed
+  //after set up of ships
   this.id=id;  //gameroom
   gameOver=false;
-  while (gameOver===false){//hits and misses
-  }
-  //save results to database and then delete item from GameRoom array?
-  //need to reset game if they want to play again, how to put player(s) back into waiting queue
+  turnController=1; 
 }
-
+//step 3(A) firing and turn switching
 GameObj.prototype.hitOrMiss = function(shotdata,shootingPlayer,targetPlayer) {
   // if firing player hit's target player's ship
   //search fleet location arrays
   //if hit, see if ship sunk
   //if sunk, see if fleet destroyed, aka game over and return winner
+}
+
+//game controller
+GameObj.prototype.runGame = function(){
+  while (this.gameOver===false){
+    this.hitOrMiss(this);
+  }
 }
 
 // load our server
