@@ -66,19 +66,11 @@ $(document).ready(function() {
 
   // make ships draggable
   $(function() {
-    $( "#draggableAircraftCarrier" ).draggable();
-  });
-  $(function() {
-    $( "#draggableBattleship" ).draggable();
-  });
-  $(function() {
-    $( "#draggableDestroyer" ).draggable();
-  });
-  $(function() {
-    $( "#draggableSubmarine" ).draggable();
-  });
-  $(function() {
-    $( "#draggablePtBoat" ).draggable();
+    $( "#draggableAircraftCarrier" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
+    $( "#draggableBattleship" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
+    $( "#draggableDestroyer" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
+    $( "#draggableSubmarine" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
+    $( "#draggablePtBoat" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
   });
 
 

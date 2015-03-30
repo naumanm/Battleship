@@ -4,6 +4,13 @@ body {
   font-family: arial, sans-serif;
 }
 
+/*  jQuery API doc for draggable
+    https://jqueryui.com/draggable/#snap-to */
+#snaptarget {  
+  width: 250px;
+  height: 250px;
+}
+
 td {
   width: 25px;
   height: 25px;
@@ -78,20 +85,20 @@ table td {
 
 .aircraftCarrier {
   margin-top: 35px;
-  width: 135px;
+  width: 124px;
 }
 
 .battleship {
-  width: 115px;
+  width: 99px;
 }
 
 .destroyer, 
 .submarine {
-  width: 78px;
+  width: 74px;
 }
 
 .ptBoat {
-  width: 53px;  
+  width: 49px;  
 }
 
 .hit {
