@@ -1,7 +1,14 @@
 /*HTML*/
 
 body {
-  font-family: arial;
+  font-family: arial, sans-serif;
+}
+
+/*  jQuery API doc for draggable
+    https://jqueryui.com/draggable/#snap-to */
+#snaptarget {  
+  width: 250px;
+  height: 250px;
 }
 
 td {
@@ -9,11 +16,23 @@ td {
   height: 25px;
   color: white;
   background: gray;
-  text-align: middle;
+  text-align: center;
 }
 
 table {
   margin: 5px;
+}
+
+table td {
+  border: 1px solid black;
+}
+
+.colHead {
+  text-align: center;
+}
+
+.rowHead {
+  text-align: center;
 }
 
 /*Classes*/
@@ -33,6 +52,13 @@ table {
   width: 150px;
   height: 300px;
   margin: 10px;
+  color: white; /* color of the hits / misses */
+}
+
+.dashboard span {
+  margin-left: 9px;
+  position: relative;
+  top: 3px;
 }
 
 .aircraftCarrier,
@@ -52,25 +78,37 @@ table {
   border-width: 3px;
   border-color: black;
   text-align: center;
-  width: 150;
+  /*width: 150;*/
   margin-left: 50px;
+  color: black;
 }
 
 .aircraftCarrier {
   margin-top: 35px;
-  width: 135px;
+  width: 124px;
 }
 
 .battleship {
-  width: 108px;
+  width: 99px;
 }
-.destroyer,
+
+.destroyer, 
 .submarine {
-  width: 80px;
+  width: 74px;
 }
 
 .ptBoat {
-  width: 53px;  
+  width: 49px;  
+}
+
+.hit {
+  color: red;
+
+}
+
+.notHit {
+  color: white;
+  
 }
 
 

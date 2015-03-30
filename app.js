@@ -8,8 +8,9 @@ var express = require('express'),
     redis = require("redis"),
     client = redis.createClient(),
     methodOverride = require("method-override"),
+    roomNumber=1,
+    playerPair=0,
     bodyParser = require("body-parser");
-
 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
@@ -22,9 +23,20 @@ app.get('/', function(req, res){
   res.render("index.ejs");
 });
 
+// about us route
+app.get('/about', function(req, res){
+  res.render("about.ejs");
+});
+
+// game instructions route
+app.get('/instructions', function(req, res){
+  res.render("instructions.ejs");
+});
+
 // game communication
 io.on('connection', function(socket){
-  socket.join("Game");
+  socket.join(roomNumber);
+  console.log(roomNumber);
 
   console.log('a user connected');
 
@@ -36,6 +48,11 @@ io.on('connection', function(socket){
 
   socket.on('playerJoined', function(player) {
     console.log(player);
+    playerPair++;
+    if (playerPair===2){
+      roomNumber++;
+      playerPair=0;
+    }
     // push player to redis & designate socket owner
     client.LPUSH("playerList", player);
     socket.nickname=player; 
@@ -71,7 +88,11 @@ function startGame(playerList){
 }
 
 // when get to the point when there is a winner
-// use 
+// use this function on each move to check if either player lost all of their ships
+//pseudo code
+//function (--==somePlayerObject==--) {
+//  boatArray.each
+//}
 
 
 // load our server

@@ -13,17 +13,15 @@ $(document).ready(function() {
       if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
         $(this).css("background-color", "red");
       }
-    });  // end of color change on hover
+    });
 
     // revert color if not clicked
     $("td").mouseleave(function(){
       var cellState = $(this).data("state");
-      var cellTable = $(this).closest("table").attr("class");
-
-      if (cellState === "unselected" && cellTable === "opponent") {
+      if (cellState === "unselected") {
         $(this).css("background-color", "gray");  // if not selected change color back
       }
-    });  // end of revert color if not clicked
+    });
 
 
     // NEED logic in here to prevent the wrong person from shooting
@@ -45,36 +43,21 @@ $(document).ready(function() {
           var shotObj = {};
           shotObj.player = person;
           shotObj.id = cellId;
+          console.log ("shotObj ", shotObj);
+
           socket.emit('shot', shotObj);
         }
       }
-    });  // end of select to take a shot
-
-  } // End of gamePlay function
-
+    });
+  }  
 
   function initialize() {
-    // var selectedArr = []; // array of all shots
-
     //clear REDIS tables
     //initialize all variables
     //establish new boat arrays
-    navListeners();
     gamePlay();
   }
 
-
-  // make ships draggable
-  $(function() {
-    $( "#draggableAircraftCarrier" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
-    $( "#draggableBattleship" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
-    $( "#draggableDestroyer" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
-    $( "#draggableSubmarine" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
-    $( "#draggablePtBoat" ).draggable({ snap: "#snaptarget", grid: [25, 25] });
-  });
-
-
-
-  gamePlay();
+  initialize();
 
 });
