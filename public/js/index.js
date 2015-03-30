@@ -76,39 +76,54 @@ $(document).ready(function() {
   // draggable
   $(function() {
     $( "#draggableAircraftCarrier" ).draggable({ 
-      containment: "#snaptarget"
-      //grid: [25, 25] 
+      containment: "#snaptarget",
+      grid: [25, 25] 
       });
     $( "#draggableBattleship" ).draggable({ 
-      containment: "#snaptarget"
-      //grid: [25, 25] 
+      containment: "#snaptarget",
+      grid: [25, 25] 
       });
     $( "#draggableDestroyer" ).draggable({ 
-      containment: "#snaptarget"
-      //grid: [25, 25] 
+      containment: "#snaptarget",
+      grid: [25, 25]
       });
     $( "#draggableSubmarine" ).draggable({ 
-      containment: "#snaptarget"
-      //grid: [25, 25] 
+      containment: "#snaptarget",
+      grid: [25, 25] 
       });
     $( "#draggablePtBoat" ).draggable({ 
-      containment: "#snaptarget"
-      //grid: [25, 25] 
+      containment: "#snaptarget",
+      grid: [25, 25] 
       });
   });
 
-
-  // droppable
-  $( "#droppable" ).droppable({
-    accept: ".special",
-    drop: function( event, ui ) {
-      console.log("droppable event", event, "droppable ui", ui);
-      $( this )
-        // .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
-        .find( "p" )  // change this to appropriate notice element
-          .html( "Dropped!" ); // change this to trigger boat placement check
-    } 
+  $('.droppable').each(function() {
+    console.log("Dropped!");
+    var $td = $(this);
+    $td.droppable({
+      drop: function() {
+        $('.droppable').addClass('dropped').
+          css({
+              top: $td.offset().top,
+              left: $td.offset().left
+          });
+          //$('#grid').addClass('focus');
+      }
+    });
   });
+
+
+  // // droppable
+  // $( "#droppable" ).droppable({
+  //   //accept: ".special",
+  //   drop: function( event, ui ) {
+  //     console.log("droppable event", event, "droppable ui", ui);
+  //     $( this )
+  //       // .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
+  //       .find( "p" )  // change this to appropriate notice element
+  //         .html( "Dropped!" ); // change this to trigger boat placement check
+  //   } 
+  // });
 
 
   // Christian attempt at making the images of the ships rotate on the Your Ships grid

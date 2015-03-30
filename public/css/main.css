@@ -70,9 +70,13 @@ table td {
 .ptBoat,
 .dashboardTitle {
   /*height: 25px;*/
-  position: relative;
+  position: absolute;
   margin: 1px;
   background: green;
+  top: 0;
+  left: 0;  
+  margin-left: 11px;
+  margin-top: 8px;
 }
 
 .dashboardTitle {
