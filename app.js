@@ -125,20 +125,30 @@ io.on('connection', function(socket){
     console.log(socket.nickname + " disconnected");
     if (!socket.nickname) return;              
   });
-
+  
 });
 
-function GameObj (player1,player2,player1name,player2name,id){
+//game logic 
+function GameObj (player1,player2,player1name,player2name,player1fleet,player2fleet,id){
   this.player1=player1;  //socket
   this.player1name=player1name; //name
+  this.player1fleet=player1fleet;
   this.player2=player2;
   this.player2name=player2name;
-  this.id=id;
-  gameOver=false; 
+  this.player2fleet=player2fleet;
+  this.id=id;  //gameroom
+  gameOver=false;
+  while (gameOver===false){//hits and misses
+  }
+  //save results to database and then delete item from GameRoom array?
   //need to reset game if they want to play again, how to put player(s) back into waiting queue
-  //function (--==somePlayerObject==--=) {
-  //  boatArray.each
-  //}
+}
+
+GameObj.prototype.hitOrMiss = function(shotdata,shootingPlayer,targetPlayer) {
+  // if firing player hit's target player's ship
+  //search fleet location arrays
+  //if hit, see if ship sunk
+  //if sunk, see if fleet destroyed, aka game over and return winner
 }
 
 // load our server
