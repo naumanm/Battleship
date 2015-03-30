@@ -98,9 +98,9 @@ io.on('connection', function(socket){  //step #1 connection
   
   console.log('a user connected');
 
-  socket.on('playerJoined', function(player) {  //step # building a lobby
-    socket.nickname=player;
-    client.HSETNX("playersName", socket.id, player);
+  socket.on('playerName', function(playerName) {  //step # building a lobby
+    socket.nickname=playerName;
+    client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
     //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
     client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
     waitingRoom.push(socket.nickname);
