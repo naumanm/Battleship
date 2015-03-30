@@ -134,17 +134,6 @@ io.on('connection', function(socket){
 
 });
 
-function checkTwoPlayers() {
-  console.log("Start Game check");
-
-  client.LRANGE('playerList', 0, -1, function(err, reply) {
-      console.log(reply);
-      if (reply.length === 2) {
-        startGame(reply);
-      }
-  });
-}
-
 function GameObj (player1,player2,player1name,player2name,id){
   this.player1=player1;  //socket
   this.player1name=player1name; //name
