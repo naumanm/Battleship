@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+  var socket = io();
+
   $('#playerSignIn').modal('show'); // shows the get player's name modal
 
   // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
@@ -28,7 +30,6 @@ $(document).ready(function(){
 
   function gamePlay(){
 
-    var socket = io();
     var selectedArr = []; // array of all shots
 
     // color change on hover
@@ -192,5 +193,5 @@ $(document).ready(function(){
   });  // END rotate Patrol Boat image
 
   gamePlay();
-}
+
 });
