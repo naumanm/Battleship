@@ -38,15 +38,15 @@
   </nav>
 
   <!-- Christian added modal for getting player's name -->
-  <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"  id="plaerSignIn">
+  <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="false"  id="playerSignIn">
     <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
 
         <div class="modal-body">
           <form action="" name="person">
-            <label for="playerName">Enter your game name:</label>
-            <input name="playerName" type="text" autofocus required placeholder="Your name...">
+            <label for="person">Enter your game name:</label>
+            <input name="person" type="text" autofocus required placeholder="Your name...">
             <button type="button" class="btn btn-primary btn-sm">Submit</button>
           </form>
         </div><!-- /.modal-body -->
@@ -112,7 +112,7 @@
                      class="ui-widget-content, submarine"></li>
                 
               <li class="noLIDisk">
-                <img src="/images/wholeDest.png"
+                <img src="/images/wholePatrol.png"
                      alt="Drag your Patrol Boat to Your Ships Board"
                      id="draggablePtBoat"
                      class="ui-widget-content, ptBoat"></li>
@@ -489,23 +489,22 @@
   <script>
     $(document).ready(function() {
 
-      // fire up communication with socket io
-      var socket = io();
+      var socket = io(); // fire up communication with socket io
 
       // This gets and sets the person who logs in
-      // $('#plaerSignIn').modal('show') // shows the enter name modal
-      // listener for the stop timer button
+// $('#playerSignIn').modal('show') // shows the enter name modal
+      // listener for the form submit
       $('#person').on('submit', function( e ){
         // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
         // 1) Player already connected to the game and refreshed.
         // 2) Player started a new game (using a different player name)
         // 3) New player but their entered name already exists with another player. I think the socet ID needs to be the "PK" of the player's data
 
-//        if ( SOME CHECK WITH REDIS ) { // don't need to check if playerName is null since the form prevents that.
+// -------if ( SOME CHECK WITH REDIS ) { // don't need to check if playerName is null since the form prevents that.
           document.getElementById("userName").innerHTML = "Hello " + playerName + "!";
           socket.emit('playerJoined', playerName);
-//        }
-      });
+// -------}
+      });  // END listener for the form submit
 
 // Sunday Christian commented out since redirecting this feature to modal and client side js to capture the player's name, send the name to the /player route which will add it to REDIS. Then, experimenting with particular way to allow the game to continue without redirect or render.
       // var person = prompt("Please enter your name");
@@ -515,17 +514,70 @@
       // }
 
 
-      $(function() {
-        $( "#draggable" ).draggable();
+      // function() {
+        $( "#draggable" ).draggable();  // add here snap to the "Your Ships" grid? Is that possible?
         $( "#droppable" ).droppable({
           drop: function( event, ui ) {
+            console.log("droppable event", event, "droppable ui", ui);
             $( this )
-              .addClass( "ui-state-highlight" )
-              .find( "p" )
-                .html( "Dropped!" );
-          }
-        });
-      });
+              .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
+              .find( "p" )  // change this to appropriate notice element
+                .html( "Dropped!" ); // change this to trigger boat placement check
+          } // drop event callback
+        });  // END droppable
+      // }();  // END function draggable and droppable
+
+      // Christian attempt at making the images of the ships rotate on the Your Ships grid
+      $('#draggableAircraftCarrier').on({
+        'click': function() {
+            var orientation = ($(this).attr('src') === '/images/wholeCarrier.png') ? 'goVert' : 'goHoriz';
+            var src = (orientation === 'goVert') ? '/images/wholeCarrierVert.png' : '/images/wholeCarrier.png';
+            // var src = ($(this).attr('src') === 'goVert') ? '/images/wholeCarrierVert.png' : '/images/wholeCarrier.png';
+            $(this).attr('src', src);
+        }
+      });  // END rotate Carrier image
+
+      $('#draggableBattleship').on({
+        'click': function() {
+            var orientation = ($(this).attr('src') === '/images/wholeBattleship.png') ? 'goVert' : 'goHoriz';
+            var src = (orientation === 'goVert') ? '/images/wholeBattleshipVert.png' : '/images/wholeBattleship.png';
+            // var src = ($(this).attr('src') === 'goVert') ? '/images/wholeBattleshipVert.png' : '/images/wholeBattleship.png';
+            $(this).attr('src', src);
+        }
+      });  // END rotate Battleship image
+
+      $('#draggableDestroyer').on({
+        'click': function() {
+            var orientation = ($(this).attr('src') === '/images/wholeCruiser.png') ? 'goVert' : 'goHoriz';
+            var src = (orientation === 'goVert') ? '/images/wholeCruiserVert.png' : '/images/wholeCruiser.png';
+            // var src = ($(this).attr('src') === 'goVert') ? '/images/wholeCruiserVert.png' : '/images/wholeCruiser.png';
+            $(this).attr('src', src);
+        }
+      });  // END rotate Destroyer image
+
+      $('#draggableSubmarine').on({
+        'click': function() {
+            var orientation = ($(this).attr('src') === '/images/wholeSub.png') ? 'goVert' : 'goHoriz';
+            var src = (orientation === 'goVert') ? '/images/wholeSubVert.png' : '/images/wholeSub.png';
+            // var src = ($(this).attr('src') === 'goVert') ? '/images/wholeSubVert.png' : '/images/wholeSub.png';
+            $(this).attr('src', src);
+        }
+      });  // END rotate Submarine image
+
+      $('#draggablePtBoat').on({
+        'click': function() {
+            var orientation = ($(this).attr('src') === '/images/wholePatrol.png') ? 'goVert' : 'goHoriz';
+            var src = (orientation === 'goVert') ? '/images/wholePatrolVert.png' : '/images/wholePatrol.png';
+            // var src = ($(this).attr('src') === 'goVert') ? '/images/wholePatrolVert.png' : '/images/wholePatrol.png';
+            $(this).attr('src', src);
+        }
+      });  // END rotate Patrol Boat image
+
+
+
+
+
+
 
       // update the ship board with other players shots
       socket.on('shot', function(shotObj){
@@ -542,9 +594,9 @@
         //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
         // }
 
-      });
+      });  // END socket.on 'shot'
 
-    });
+    });  // END on document ready
   </script>
 
   <!-- ++++++++++ CDN Bootstrap JavaScript   -->

@@ -69,8 +69,8 @@ table td {
 .submarine,
 .ptBoat,
 .dashboardTitle {
-  height: 25px;
-  margin: 5px;
+  /*height: 25px;*/
+  margin: 1px;
   background: green;
 }
 
