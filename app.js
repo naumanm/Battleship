@@ -32,23 +32,22 @@ app.get('/', function(req, res){
 
 // player's name route -will has questions
 app.get('/player', function(req, res){
-  gameObj.socketID = "";  // Christian needs answer from Will===> need to know how to get the user's socket.io connection ID or IDs depending on how we're going to use this
+  // gameObj.socketID = "";  // Christian needs answer from Will===> need to know how to get the user's socket.io connection ID or IDs depending on how we're going to use this
   //need to discuss game object handling, but to access a socket's unique id it's socket.id
-  gameObj.playerName = req.body.player;  
+  // gameObj.playerName = req.body.player;  
   // Christian needs answer from ???
   // need to determine who is connected with who in a game. handled by socketio connection event -will
   // need to determine who is the first player in this game. handled by socketio connection event -will
- // gameObj.playerID = "??????"; HANDLED BY SOCKET.IO - will
- // gameObj.gameID = "??????";   HANDLED BY SOCKET.IO -will
+ // gameObj.playerID = "??????"; HANDLED in SOCKET.IO - will as socket.id, name is socket.nickname
+ // gameObj.gameID = "??????";   HANDLED in SOCKET.IO -will as RoomNumber
 
-  client.HSETNX("playersName", gameObj.socketID, gameObj.playerName); // HSETNX sets value if key doesn't already exist.  Is this a valid approach? Or, WHAT DATA FORMAT SHOULD I USE???? I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?
+ // client.HSETNX("playersName", gameObj.socketID, gameObj.playerName); //see socket io player joined// HSETNX sets value if key doesn't already exist.  Is this a valid approach? Or, WHAT DATA FORMAT SHOULD I USE???? I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?
   client.HSETNX("gameIDs", gameObj.playerID, gameObj.gameID); // this is like a data dictionary. playerID may be their game's ID if they were the first player, or they get associated with the game's ID
 
   client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); // Christian needs answer from Will===> Are the socket.io IDs unique? HSETNX sets the opponent player's ID only if this hash's key doesn't already exist otherwise, it is not set. AKA, no overwrite
   //they are unique. need to discuss matchmaking or can i grab your code and run with it - will
   // what if this route doesn't render or redirect? 
   res.redirect("/");  // redirects are to routes while renders are to views
-
   res.render("index.ejs"); // thinking not to redirect since modal will show again. need this to be ajaxified
 });
 
@@ -118,8 +117,8 @@ io.on('connection', function(socket){
   socket.on('playerJoined', function(player) {
     console.log(player);
     playerPair++;
-    client.LPUSH("playerList", player);
-    socket.nickname=player;  //used in conjunction with id to preserve uniqueness
+    socket.nickname=player;
+    client.HSETNX("playersName", socket.id, player);
     waitingRoom.push(socket.id);
     if (playerPair===2){
       //queue filled create a game?
@@ -139,7 +138,7 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log(socket.nickname + " disconnected");
     if (!socket.nickname) return;              
-    client.LREM("playerList",0,socket.nickname); //removes player from redis list
+    //client.LREM("playerList",0,socket.nickname); // has to be change dsince there is no 'playersList'
   });
 
 });
