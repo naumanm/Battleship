@@ -11,7 +11,9 @@ var express = require('express'),
     roomNumber=1,
     playerPair=0,
     bodyParser = require("body-parser"),
-    gameObj;
+    waitingRoom =[],  //looks for a pair 
+    gameRooms=[];  //where we store all the rooms
+    // gameObj;  //logic for all the game...function/object instead
 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
@@ -41,7 +43,7 @@ app.get('/player', function(req, res){
   client.HSETNX("playersName", gameObj.socketID, gameObj.playerName); // HSETNX sets value if key doesn't already exist.  Is this a valid approach? Or, WHAT DATA FORMAT SHOULD I USE???? I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?
   client.HSETNX("gameIDs", gameObj.playerID, gameObj.gameID); // this is like a data dictionary. playerID may be their game's ID if they were the first player, or they get associated with the game's ID
 
-  client.HSETNX("opponenet", gameObj.playerID, gameObj.opponentID); // Christian needs answer from Will===> Are the socket.io IDs unique? HSETNX sets the opponenet player's ID only if this hash's key doesn't already exist otherwise, it is not set. AKA, no overwrite
+  client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); // Christian needs answer from Will===> Are the socket.io IDs unique? HSETNX sets the opponenet player's ID only if this hash's key doesn't already exist otherwise, it is not set. AKA, no overwrite
 
   // what if this route doesn't render or redirect? 
   res.redirect("/");  // redirects are to routes while renders are to views
@@ -56,7 +58,7 @@ app.get('/shot/shotObj', function(req, res){
   if( HEXISTS("gameIDs", gameObj.playerID) && shotObj ){
     var gameID = client.HGET("gameIDs", gameObj.playerID); // This gets the game's ID from the data dictionary
 
-    // check if shot is a hit or miss
+    // check if shot is a hit or miss  should be game prototyped?
     if( HEXISTS("opponenet", gameObj.playerID) ){
       var opponentID = client.HGET("opponenet", gameObj.playerID); // this gets the opponenet player's ID from the opponent dictionary
 
@@ -115,13 +117,16 @@ io.on('connection', function(socket){
   socket.on('playerJoined', function(player) {
     console.log(player);
     playerPair++;
+    client.LPUSH("playerList", player);
+    socket.nickname=player; 
+    waitingRoom.push(socket.nickname);
     if (playerPair===2){
+      //queue filled create a game
+      gameRooms.push(GameObj.new(waitingRoom[0],waitingRoom[1]));
+      waitingRoom=[]; //empty the waiting room queue
       roomNumber++;
       playerPair=0;
     }
-    // push player to redis & designate socket owner
-    client.LPUSH("playerList", player);
-    socket.nickname=player; 
   });
 
   socket.on('shot', function(shotObj){
@@ -162,7 +167,7 @@ function startGame(playerList){
 // when get to the point when there is a winner
 // use this function on each move to check if either player lost all of their ships
 //pseudo code
-//function (--==somePlayerObject==--) {
+//function (--==somePlayerObject==--=) {
 //  boatArray.each
 //}
 
@@ -171,3 +176,8 @@ function startGame(playerList){
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
+
+function GameObj (player1,player2){
+  this.player1=player1;
+  this.player2=player2;
+}
