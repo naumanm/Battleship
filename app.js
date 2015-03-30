@@ -29,6 +29,20 @@ app.get('/', function(req, res){
   res.render("index.ejs");
 });
 
+// place ships route
+app.get('/place_ship', function(req, res){
+  if( player1ID ){
+    // set player 1's fleet to redis table
+    if( HEXISTS( player1 + "Fleet", session.id ) ){
+
+    }
+  } else if( player2ID ) {
+    // set player 2's fleet to redis table
+  }
+
+  res.render("index.ejs");
+});
+
 // player's name route
 app.get('/player', function(req, res){
   res.redirect("/");  // redirects are to routes while renders are to views

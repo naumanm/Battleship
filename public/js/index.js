@@ -89,8 +89,8 @@ $(document).ready(function(){
       // {
       //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
       // }
-    }); // End of gamePlay function
-
+    });
+  } // End of gamePlay function
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
   // draggable
@@ -192,5 +192,5 @@ $(document).ready(function(){
   });  // END rotate Patrol Boat image
 
   gamePlay();
-
+}
 });
