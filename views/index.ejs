@@ -184,6 +184,13 @@
         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="panel-body">
             <!-- Put stuff here about game stats?? Maybe some other data?? Otherwise take this accordion panel out! -->
+            <!-- Christian move the scripts to end of page -->
+            <div>Game ID: <span id="gameID"></span> <script>gameObj.gameID</script></div>
+            <div>Game Length: <span id="gameLength"></span>  <script>date = new Date; date - gameObj.startTime</script></div>
+            <div>Name: <span id="playersName"></span> <script>gameObj.playersName</script></div>
+            <div>Opponents Name: <span id="opponentsName"></span> <script>gameObj.opponentsName</script></div>
+            <div>Won: <span id="gameWon"></span> <script>gameObj.playerIDWon</script></div>
+            <div>Lost: <span id="gameLost"></span> <script>gameObj.playerIDLost</script></div>
           </div>
         </div>
       </div> <!-- END Game Stats (or some other info) accordian group -->
