@@ -41,58 +41,70 @@
   <h4 id="shotPlayer">Last Shot</h4>
   <div class="gameboard">
     <div class="dashboard">
-      <div class="dashboardTitle">Ships</div>
+      <span class="SOME-ID-OR-CLASS-THAT-JQUERY-NEEDS-FOR-ACCORDIAN-GROUP"> <!-- jQuery accordian group -->
+        <div class="dashboardTitle">Ships</div>
+        <div id="draggableAircraftCarrier" class="ui-widget-content, aircraftCarrier"></div>
+        <div id="draggableBattleship" class="ui-widget-content, battleship"></div>
+        <div id="draggableDestroyer" class="ui-widget-content, destroyer"></div>
+        <div id="draggableSubmarine" class="ui-widget-content, submarine"></div>
+        <div id="draggablePtBoat" class="ui-widget-content, ptBoat"></div>
+      </span> <!-- END Ships accordian group -->
 
-      <div id="draggableAircraftCarrier" class="ui-widget-content, aircraftCarrier">
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="hit">X</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-      </div>
+      <span class="SOME-ID-OR-CLASS-THAT-JQUERY-NEEDS-FOR-ACCORDIAN-GROUP"> <!-- jQuery accordian group -->
+        <div class="dashboardTitle">Game Status</div>
+        <div class="aircraftCarrier">
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+          <span class="hit">X</span>
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+        </div>
 
-      <div id="draggableBattleship" class="ui-widget-content, battleship">
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-      </div>
+        <div class="battleship">
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+        </div>
 
-      <div id="draggableDestroyer" class="ui-widget-content, destroyer">
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-      </div>
+        <div class="destroyer">
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+        </div>
 
-      <div id="draggableSubmarine" class="ui-widget-content, submarine">
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-      </div>
+        <div class="submarine">
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+        </div>
 
-      <div id="draggablePtBoat" class="ui-widget-content, ptBoat">
-        <span class="notHit">O</span>
-        <span class="notHit">O</span>
-      </div>
+        <div class="ptBoat">
+          <span class="notHit">O</span>
+          <span class="notHit">O</span>
+        </div>
+      </span> <!-- END Game Status accordian group -->
+
+
     </div>
 
     <table class="opponent">
       <tr><th colspan="11">Opponent</th></tr>
       <tr>
         <td class="noColor" data-id="header"></td>
-        <td data-id="header">1</td>
-        <td data-id="header">2</td>
-        <td data-id="header">3</td>
-        <td data-id="header">4</td>
-        <td data-id="header">5</td>
-        <td data-id="header">6</td>
-        <td data-id="header">7</td>
-        <td data-id="header">8</td>
-        <td data-id="header">9</td>
-        <td data-id="header">10</td>
+        <td data-id="header" class="colHead">1</td>
+        <td data-id="header" class="colHead">2</td>
+        <td data-id="header" class="colHead">3</td>
+        <td data-id="header" class="colHead">4</td>
+        <td data-id="header" class="colHead">5</td>
+        <td data-id="header" class="colHead">6</td>
+        <td data-id="header" class="colHead">7</td>
+        <td data-id="header" class="colHead">8</td>
+        <td data-id="header" class="colHead">9</td>
+        <td data-id="header" class="colHead">10</td>
       </tr>
       <tr>
-        <td data-id="header">a</td>
+        <td data-id="header" class="rowHead">a</td>
         <td data-id="a1" data-state="unselected"></td>
         <td data-id="a2" data-state="unselected"></td>
         <td data-id="a3" data-state="unselected"></td>
@@ -105,7 +117,7 @@
         <td data-id="a10" data-state="unselected"></td>
       </tr>
       <tr>
-        <td data-id="header">b</td>
+        <td data-id="header" class="rowHead">b</td>
         <td data-id="b1" data-state="unselected"></td>
         <td data-id="b2" data-state="unselected"></td>
         <td data-id="b3" data-state="unselected"></td>
@@ -118,7 +130,7 @@
         <td data-id="b10" data-state="unselected"></td>
       </tr>
       <tr>
-        <td data-id="header">c</td>
+        <td data-id="header" class="rowHead">c</td>
         <td data-id="c1" data-state="unselected"></td>
         <td data-id="c2" data-state="unselected"></td>
         <td data-id="c3" data-state="unselected"></td>
@@ -131,7 +143,7 @@
         <td data-id="c10" data-state="unselected"></td>
       </tr>
       <tr>
-        <td data-id="header">d</td>
+        <td data-id="header" class="rowHead">d</td>
         <td data-id="d1" data-state="unselected"></td>
         <td data-id="d2" data-state="unselected"></td>
         <td data-id="d3" data-state="unselected"></td>
@@ -144,7 +156,7 @@
         <td data-id="d10" data-state="unselected"></td>
       </tr>
       <tr>
-        <td data-id="header">e</td>
+        <td data-id="header" class="rowHead">e</td>
         <td data-id="e1" data-state="unselected"></td>
         <td data-id="e2" data-state="unselected"></td>
         <td data-id="e3" data-state="unselected"></td>
@@ -157,7 +169,7 @@
         <td data-id="e10" data-state="unselected"></td>
       </tr>
       <tr>
-        <td data-id="header">f</td>
+        <td data-id="header" class="rowHead">f</td>
         <td data-id="f1" data-state="unselected"></td>
         <td data-id="f2" data-state="unselected"></td>
         <td data-id="f3" data-state="unselected"></td>
@@ -170,7 +182,7 @@
         <td data-id="f10" data-state="unselected"></td>
       </tr>
       <tr>
-        <td data-id="header">g</td>
+        <td data-id="header" class="rowHead">g</td>
         <td data-id="g1" data-state="unselected"></td>
         <td data-id="g2" data-state="unselected"></td>
         <td data-id="g3" data-state="unselected"></td>
@@ -183,7 +195,7 @@
         <td data-id="g10" data-state="unselected"></td>
       </tr>
       <tr>
-        <td data-id="header">h</td>
+        <td data-id="header" class="rowHead">h</td>
         <td data-id="h1" data-state="unselected"></td>
         <td data-id="h2" data-state="unselected"></td>
         <td data-id="h3" data-state="unselected"></td>
@@ -196,7 +208,7 @@
         <td data-id="h10" data-state="unselected"></td>
       </tr>
       <tr>
-        <td data-id="header">i</td>
+        <td data-id="header" class="rowHead">i</td>
         <td data-id="i1" data-state="unselected"></td>
         <td data-id="i2" data-state="unselected"></td>
         <td data-id="i3" data-state="unselected"></td>
@@ -209,7 +221,7 @@
         <td data-id="i10" data-state="unselected"></td>
       </tr>
       <tr>
-        <td data-id="header">j</td>
+        <td data-id="header" class="rowHead">j</td>
         <td data-id="j1" data-state="unselected"></td>
         <td data-id="j2" data-state="unselected"></td>
         <td data-id="j3" data-state="unselected"></td>
@@ -226,19 +238,19 @@
       <tr><th colspan="11">Your Ships</th></tr>
       <tr>
         <td class="noColor" data-id="header"></td>
-        <td data-id="header">1</td>
-        <td data-id="header">2</td>
-        <td data-id="header">3</td>
-        <td data-id="header">4</td>
-        <td data-id="header">5</td>
-        <td data-id="header">6</td>
-        <td data-id="header">7</td>
-        <td data-id="header">8</td>
-        <td data-id="header">9</td>
-        <td data-id="header">10</td>
+        <td data-id="header" class="colHead">1</td>
+        <td data-id="header" class="colHead">2</td>
+        <td data-id="header" class="colHead">3</td>
+        <td data-id="header" class="colHead">4</td>
+        <td data-id="header" class="colHead">5</td>
+        <td data-id="header" class="colHead">6</td>
+        <td data-id="header" class="colHead">7</td>
+        <td data-id="header" class="colHead">8</td>
+        <td data-id="header" class="colHead">9</td>
+        <td data-id="header" class="colHead">10</td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">a</td>
+        <td data-id="header" class="rowHead">a</td>
         <td data-id="a1" data-state="unselected"></td>
         <td data-id="a2" data-state="unselected"></td>
         <td data-id="a3" data-state="unselected"></td>
@@ -251,7 +263,7 @@
         <td data-id="a10" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">b</td>
+        <td data-id="header" class="rowHead">b</td>
         <td data-id="b1" data-state="unselected"></td>
         <td data-id="b2" data-state="unselected"></td>
         <td data-id="b3" data-state="unselected"></td>
@@ -264,7 +276,7 @@
         <td data-id="b10" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">c</td>
+        <td data-id="header" class="rowHead">c</td>
         <td data-id="c1" data-state="unselected"></td>
         <td data-id="c2" data-state="unselected"></td>
         <td data-id="c3" data-state="unselected"></td>
@@ -277,7 +289,7 @@
         <td data-id="c10" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">d</td>
+        <td data-id="header" class="rowHead">d</td>
         <td data-id="d1" data-state="unselected"></td>
         <td data-id="d2" data-state="unselected"></td>
         <td data-id="d3" data-state="unselected"></td>
@@ -290,7 +302,7 @@
         <td data-id="d10" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">e</td>
+        <td data-id="header" class="rowHead">e</td>
         <td data-id="e1" data-state="unselected"></td>
         <td data-id="e2" data-state="unselected"></td>
         <td data-id="e3" data-state="unselected"></td>
@@ -303,7 +315,7 @@
         <td data-id="e10" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">f</td>
+        <td data-id="header" class="rowHead">f</td>
         <td data-id="f1" data-state="unselected"></td>
         <td data-id="f2" data-state="unselected"></td>
         <td data-id="f3" data-state="unselected"></td>
@@ -316,7 +328,7 @@
         <td data-id="f10" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">g</td>
+        <td data-id="header" class="rowHead">g</td>
         <td data-id="g1" data-state="unselected"></td>
         <td data-id="g2" data-state="unselected"></td>
         <td data-id="g3" data-state="unselected"></td>
@@ -329,7 +341,7 @@
         <td data-id="g10" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">h</td>
+        <td data-id="header" class="rowHead">h</td>
         <td data-id="h1" data-state="unselected"></td>
         <td data-id="h2" data-state="unselected"></td>
         <td data-id="h3" data-state="unselected"></td>
@@ -342,7 +354,7 @@
         <td data-id="h10" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">i</td>
+        <td data-id="header" class="rowHead">i</td>
         <td data-id="i1" data-state="unselected"></td>
         <td data-id="i2" data-state="unselected"></td>
         <td data-id="i3" data-state="unselected"></td>
@@ -355,7 +367,7 @@
         <td data-id="i10" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
-        <td data-id="header">j</td>
+        <td data-id="header" class="rowHead">j</td>
         <td data-id="j1" data-state="unselected"></td>
         <td data-id="j2" data-state="unselected"></td>
         <td data-id="j3" data-state="unselected"></td>

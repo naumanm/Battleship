@@ -43,6 +43,8 @@ $(document).ready(function() {
           var shotObj = {};
           shotObj.player = person;
           shotObj.id = cellId;
+          console.log ("shotObj ", shotObj);
+
           socket.emit('shot', shotObj);
         }
       }

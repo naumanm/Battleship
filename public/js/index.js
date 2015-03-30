@@ -13,7 +13,7 @@ $(document).ready(function() {
       if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
         $(this).css("background-color", "red");
       }
-    });
+    });  // end of color change on hover
 
     // revert color if not clicked
     $("td").mouseleave(function(){
@@ -23,7 +23,7 @@ $(document).ready(function() {
       if (cellState === "unselected" && cellTable === "opponent") {
         $(this).css("background-color", "gray");  // if not selected change color back
       }
-    });
+    });  // end of revert color if not clicked
 
 
     // NEED logic in here to prevent the wrong person from shooting
@@ -48,16 +48,9 @@ $(document).ready(function() {
           socket.emit('shot', shotObj);
         }
       }
-    });
-  }
+    });  // end of select to take a shot
 
-
-  function navListeners() {
-    $().click(function(event){
-      event.preventDefault();
-      
-    });
-  }
+  } // End of gamePlay function
 
 
   function initialize() {
@@ -71,25 +64,24 @@ $(document).ready(function() {
   }
 
 
-    // make ships draggable
-    $(function() {
-      $( "#draggableAircraftCarrier" ).draggable();
-    });
-    $(function() {
-      $( "#draggableBattleship" ).draggable();
-    });
-    $(function() {
-      $( "#draggableDestroyer" ).draggable();
-    });
-    $(function() {
-      $( "#draggableSubmarine" ).draggable();
-    });
-    $(function() {
-      $( "#draggablePtBoat" ).draggable();
-    });
+  // make ships draggable
+  $(function() {
+    $( "#draggableAircraftCarrier" ).draggable();
+  });
+  $(function() {
+    $( "#draggableBattleship" ).draggable();
+  });
+  $(function() {
+    $( "#draggableDestroyer" ).draggable();
+  });
+  $(function() {
+    $( "#draggableSubmarine" ).draggable();
+  });
+  $(function() {
+    $( "#draggablePtBoat" ).draggable();
+  });
 
 
-  }  
 
   gamePlay();
 

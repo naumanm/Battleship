@@ -1,7 +1,7 @@
 /*HTML*/
 
 body {
-  font-family: arial;
+  font-family: arial, sans-serif;
 }
 
 td {
@@ -9,11 +9,23 @@ td {
   height: 25px;
   color: white;
   background: gray;
-  text-align: middle;
+  text-align: center;
 }
 
 table {
   margin: 5px;
+}
+
+table td {
+  border: 1px solid black;
+}
+
+.colHead {
+  text-align: center;
+}
+
+.rowHead {
+  text-align: center;
 }
 
 /*Classes*/
@@ -59,23 +71,23 @@ table {
   border-width: 3px;
   border-color: black;
   text-align: center;
-  width: 150;
+  /*width: 150;*/
   margin-left: 50px;
   color: black;
 }
 
 .aircraftCarrier {
   margin-top: 35px;
-  width: 110px;
+  width: 135px;
 }
 
 .battleship {
-  width: 90px;
+  width: 115px;
 }
 
 .destroyer, 
 .submarine {
-  width: 70px;
+  width: 78px;
 }
 
 .ptBoat {
