@@ -89,7 +89,10 @@ $(document).ready(function(){
       // {
       //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
       // }
-    }); // End of gamePlay function
+      });  
+
+
+  } // End of gamePlay function
 
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
@@ -143,15 +146,6 @@ $(document).ready(function(){
     });
   });
 
-  // the below function keeps it DRY for changing the ship's img when DBL-clicked. Works with 
-  function setStyle(_this,offSize,orientation) {
-    var imgOrientation = (orientation === 'goVert') ? offSize : '0px;';  // sets the offset
-    var currentStyle = $(_this).attr('style'); // gets the inline style that the draggable creates. Using this to reset the "top: xpx;" value
-    var pos = currentStyle.indexOf("top: ")+ 5; // gets the position of the needed top: attribute
-    currentStyle = currentStyle.slice(0,pos); // removes the old value
-    currentStyle = currentStyle + imgOrientation; // adds the new value
-    $(_this).attr('style', currentStyle); // applies the new value
-  }
 
   // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
