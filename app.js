@@ -134,11 +134,11 @@ io.on('connection', function(socket){  //step #1 connection
 function GameObj (player1,player2,player1name,player2name,id){  
   this.player1=player1;  //socket
   this.player1name=player1name; //name
-  this.player1fleet=player1fleet; //not exactly sure how to handle this, depends on how data is passed
-  //after set up of ships
+  //this.player1fleet=?; //not exactly sure how to handle this, depends on how data is passed
+  //after set up of ships how to handle ship coordinates
   this.player2=player2;
   this.player2name=player2name;
-  this.player2fleet=player2fleet;//not exactly sure how to handle this, depends on how data is passed
+  //this.player2fleet=?//not exactly sure how to handle this, depends on how data is passed
   //after set up of ships
   this.id=id;  //gameroom
   gameOver=false;
@@ -148,7 +148,7 @@ function GameObj (player1,player2,player1name,player2name,id){
 GameObj.prototype.hitOrMiss = function(shotdata,shootingPlayer,targetPlayer) {
   // if firing player hit's target player's ship
   //search fleet location arrays
-  //if hit, see if ship sunk
+  //switch turn on miss
   //if sunk, see if fleet destroyed, aka game over and return winner
 }
 
