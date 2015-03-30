@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>Battleship</title>
-  <link type="text/css" rel="stylesheet" href="/css/main.css">
-
-  <!-- +++++++++++++++++ CDN jQuery for Bootstrap +++++++++++++++++++ -->
+  <!-- +++++++++++++++++ CDN jQuery required by Bootstrap ++++ -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <!-- THIS is an older version <script src="https://code.jquery.com/jquery-1.10.2.js"></script> -->
+  <!-- Christian commented this out -->
+  <!-- this is an older version <script src="https://code.jquery.com/jquery-1.10.2.js"></script> -->
 
-  <!-- +++++++++++++++++ CDN Bootstrap +++++++++++++++++++ -->
+  <!-- +++++++++++++++++ CDN Bootstrap CSS +++++++++++++ -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 
-  <!-- +++++++++++++++++ LOCAL Bootstrap ++++++++++++++++++ -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- +++++++++++++++++ LOCAL Bootstrap CSS +++++++++++ -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
 
-  <script src="/js/index.js"></script>
-  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>  
+  <!-- +++++++++++++++++ CDN jQuery CSS ++++++++++++++++ -->
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <!-- +++++++++++++++++ THE App's CSS +++++++++++++++++ -->
+  <link rel="stylesheet" href="/css/main.css">
+
 </head>
 <body>
   <nav class="navbar navbar-default">
@@ -37,56 +37,158 @@
     </div>
   </nav>
 
-  <h3 id="userName">Player Name</h3>
-  <h4 id="shotPlayer">Last Shot</h4>
+  <!-- Christian added modal for getting player's name -->
+  <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"  id="plaerSignIn">
+    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+
+        <div class="modal-body">
+          <form action="" name="person">
+            <label for="playerName">Enter your game name:</label>
+            <input name="playerName" type="text" autofocus required placeholder="Your name...">
+            <button type="button" class="btn btn-primary btn-sm">Submit</button>
+          </form>
+        </div><!-- /.modal-body -->
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <h4 id="userName">Player Name</h4>  <!-- Christian thinks these should go somewhere else on the page -->
+  <h4 id="shotPlayer">Last Shot</h4>  <!-- Christian thinks these should go somewhere else on the page -->
+  <!--Use these Bootstrap helper classes (text or background) for the game notifications
+      class="text-muted"     text is grey
+      class="text-primary"   text is blue
+      class="text-success"   text is green
+      class="text-info"      text is dark blue
+      class="text-warning"   text is orange
+      class="text-danger"    text is red
+
+      class="bg-primary"     BG is dark blue, white text
+      class="bg-success"     BG is mint green, white black
+      class="bg-info"        BG is light blue, white black
+      class="bg-warning"     BG is light yellow, white black
+      class="bg-danger"      BG is red, white black
+  -->
+
+
   <div class="gameboard">
-    <div class="dashboard">
-      <span class="SOME-ID-OR-CLASS-THAT-JQUERY-NEEDS-FOR-ACCORDIAN-GROUP"> <!-- jQuery accordian group -->
-        <div class="dashboardTitle">Ships</div>
-        <div id="draggableAircraftCarrier" class="ui-widget-content, aircraftCarrier"></div>
-        <div id="draggableBattleship" class="ui-widget-content, battleship"></div>
-        <div id="draggableDestroyer" class="ui-widget-content, destroyer"></div>
-        <div id="draggableSubmarine" class="ui-widget-content, submarine"></div>
-        <div id="draggablePtBoat" class="ui-widget-content, ptBoat"></div>
-      </span> <!-- END Ships accordian group -->
+    <!-- Christian added the accordion structure. may only need two panels... currently three (ships, game status, player stats) -->
+    <div class="panel-group dashboard" id="accordion" role="tablist" aria-multiselectable="true">
 
-      <span class="SOME-ID-OR-CLASS-THAT-JQUERY-NEEDS-FOR-ACCORDIAN-GROUP"> <!-- jQuery accordian group -->
-        <div class="dashboardTitle">Game Status</div>
-        <div class="aircraftCarrier">
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
-          <span class="hit">X</span>
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> <!-- class="dashboardTitle" -->
+              Place Your Ships To Start
+            </a>
+          </h4>
         </div>
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            <ul>
+              <li class="noLIDisk">
+                <img src="/images/wholeCarrier.png"
+                     alt="Drag your Aircraft Carrier to Your Ships Board"
+                     id="draggableAircraftCarrier"
+                     class="ui-widget-content, aircraftCarrier"></li>
+                
+              <li class="noLIDisk">
+                <img src="/images/wholeBattleship.png"
+                     alt="Drag your Battleship to Your Ships Board"
+                     id="draggableBattleship"
+                     class="ui-widget-content, battleship"></li>
+                
+              <li class="noLIDisk">
+                <img src="/images/wholeCruiser.png"
+                     alt="Drag your Destroyer to Your Ships Board"
+                     id="draggableDestroyer"
+                     class="ui-widget-content, destroyer"></li>
+                
+              <li class="noLIDisk">
+                <img src="/images/wholeSub.png"
+                     alt="Drag your Submarine to Your Ships Board"
+                     id="draggableSubmarine"
+                     class="ui-widget-content, submarine"></li>
+                
+              <li class="noLIDisk">
+                <img src="/images/wholeDest.png"
+                     alt="Drag your Patrol Boat to Your Ships Board"
+                     id="draggablePtBoat"
+                     class="ui-widget-content, ptBoat"></li>
+            </ul>
 
-        <div class="battleship">
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
+<!-- Christian added the images above. Kept this incase we need to revert for some reason.
+            <div id="draggableAircraftCarrier" class="ui-widget-content, aircraftCarrier"></div>
+            <div id="draggableBattleship" class="ui-widget-content, battleship"></div>
+            <div id="draggableDestroyer" class="ui-widget-content, destroyer"></div>
+            <div id="draggableSubmarine" class="ui-widget-content, submarine"></div>
+            <div id="draggablePtBoat" class="ui-widget-content, ptBoat"></div> -->
+          </div>
         </div>
+      </div> <!-- END Ships accordian group -->
 
-        <div class="destroyer">
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"> <!-- class="dashboardTitle" -->
+              Game Status
+            </a>
+          </h4>
         </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            <div class="aircraftCarrier">
+              <span class="notHit position1">O</span>
+              <span class="notHit position2">O</span>
+              <span class="hit position3">X</span>
+              <span class="notHit position4">O</span>
+              <span class="notHit position5">O</span>
+            </div>
 
-        <div class="submarine">
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
+            <div class="battleship">
+              <span class="notHit position1">O</span>
+              <span class="notHit position2">O</span>
+              <span class="notHit position3">O</span>
+              <span class="notHit position4">O</span>
+            </div>
+
+            <div class="destroyer">
+              <span class="notHit position1">O</span>
+              <span class="notHit position2">O</span>
+              <span class="notHit position3">O</span>
+            </div>
+
+            <div class="submarine">
+              <span class="notHit position1">O</span>
+              <span class="notHit position2">O</span>
+              <span class="notHit position3">O</span>
+            </div>
+
+            <div class="ptBoat">
+              <span class="notHit position1">O</span>
+              <span class="notHit position2">O</span>
+            </div>
+          </div>
         </div>
+      </div> <!-- END Game Status accordian group -->
 
-        <div class="ptBoat">
-          <span class="notHit">O</span>
-          <span class="notHit">O</span>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingThree">
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              Player Stats
+            </a>
+          </h4>
         </div>
-      </span> <!-- END Game Status accordian group -->
+        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            <!-- Put stuff here about game stats?? Maybe some other data?? Otherwise take this accordion panel out! -->
+          </div>
+        </div>
+      </div> <!-- END Game Stats (or some other info) accordian group -->
 
-
-    </div>
+    </div> <!-- END of #accordion .panel-group .dashboard -->
 
     <table class="opponent">
       <tr><th colspan="11">Opponent</th></tr>
@@ -233,198 +335,240 @@
         <td data-id="j9" data-state="unselected"></td>
         <td data-id="j10" data-state="unselected"></td>
       </tr>
-    </table>
-    <table class="player well" id="snaptarget">
-      <tr><th colspan="11">Your Ships</th></tr>
-      <tr>
-        <td class="noColor" data-id="header"></td>
-        <td data-id="header" class="colHead">1</td>
-        <td data-id="header" class="colHead">2</td>
-        <td data-id="header" class="colHead">3</td>
-        <td data-id="header" class="colHead">4</td>
-        <td data-id="header" class="colHead">5</td>
-        <td data-id="header" class="colHead">6</td>
-        <td data-id="header" class="colHead">7</td>
-        <td data-id="header" class="colHead">8</td>
-        <td data-id="header" class="colHead">9</td>
-        <td data-id="header" class="colHead">10</td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">a</td>
-        <td data-id="a1" data-state="unselected"></td>
-        <td data-id="a2" data-state="unselected"></td>
-        <td data-id="a3" data-state="unselected"></td>
-        <td data-id="a4" data-state="unselected"></td>
-        <td data-id="a5" data-state="unselected"></td>
-        <td data-id="a6" data-state="unselected"></td>
-        <td data-id="a7" data-state="unselected"></td>
-        <td data-id="a8" data-state="unselected"></td>
-        <td data-id="a9" data-state="unselected"></td>
-        <td data-id="a10" data-state="unselected"></td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">b</td>
-        <td data-id="b1" data-state="unselected"></td>
-        <td data-id="b2" data-state="unselected"></td>
-        <td data-id="b3" data-state="unselected"></td>
-        <td data-id="b4" data-state="unselected"></td>
-        <td data-id="b5" data-state="unselected"></td>
-        <td data-id="b6" data-state="unselected"></td>
-        <td data-id="b7" data-state="unselected"></td>
-        <td data-id="b8" data-state="unselected"></td>
-        <td data-id="b9" data-state="unselected"></td>
-        <td data-id="b10" data-state="unselected"></td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">c</td>
-        <td data-id="c1" data-state="unselected"></td>
-        <td data-id="c2" data-state="unselected"></td>
-        <td data-id="c3" data-state="unselected"></td>
-        <td data-id="c4" data-state="unselected"></td>
-        <td data-id="c5" data-state="unselected"></td>
-        <td data-id="c6" data-state="unselected"></td>
-        <td data-id="c7" data-state="unselected"></td>
-        <td data-id="c8" data-state="unselected"></td>
-        <td data-id="c9" data-state="unselected"></td>
-        <td data-id="c10" data-state="unselected"></td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">d</td>
-        <td data-id="d1" data-state="unselected"></td>
-        <td data-id="d2" data-state="unselected"></td>
-        <td data-id="d3" data-state="unselected"></td>
-        <td data-id="d4" data-state="unselected"></td>
-        <td data-id="d5" data-state="unselected"></td>
-        <td data-id="d6" data-state="unselected"></td>
-        <td data-id="d7" data-state="unselected"></td>
-        <td data-id="d8" data-state="unselected"></td>
-        <td data-id="d9" data-state="unselected"></td>
-        <td data-id="d10" data-state="unselected"></td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">e</td>
-        <td data-id="e1" data-state="unselected"></td>
-        <td data-id="e2" data-state="unselected"></td>
-        <td data-id="e3" data-state="unselected"></td>
-        <td data-id="e4" data-state="unselected"></td>
-        <td data-id="e5" data-state="unselected"></td>
-        <td data-id="e6" data-state="unselected"></td>
-        <td data-id="e7" data-state="unselected"></td>
-        <td data-id="e8" data-state="unselected"></td>
-        <td data-id="e9" data-state="unselected"></td>
-        <td data-id="e10" data-state="unselected"></td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">f</td>
-        <td data-id="f1" data-state="unselected"></td>
-        <td data-id="f2" data-state="unselected"></td>
-        <td data-id="f3" data-state="unselected"></td>
-        <td data-id="f4" data-state="unselected"></td>
-        <td data-id="f5" data-state="unselected"></td>
-        <td data-id="f6" data-state="unselected"></td>
-        <td data-id="f7" data-state="unselected"></td>
-        <td data-id="f8" data-state="unselected"></td>
-        <td data-id="f9" data-state="unselected"></td>
-        <td data-id="f10" data-state="unselected"></td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">g</td>
-        <td data-id="g1" data-state="unselected"></td>
-        <td data-id="g2" data-state="unselected"></td>
-        <td data-id="g3" data-state="unselected"></td>
-        <td data-id="g4" data-state="unselected"></td>
-        <td data-id="g5" data-state="unselected"></td>
-        <td data-id="g6" data-state="unselected"></td>
-        <td data-id="g7" data-state="unselected"></td>
-        <td data-id="g8" data-state="unselected"></td>
-        <td data-id="g9" data-state="unselected"></td>
-        <td data-id="g10" data-state="unselected"></td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">h</td>
-        <td data-id="h1" data-state="unselected"></td>
-        <td data-id="h2" data-state="unselected"></td>
-        <td data-id="h3" data-state="unselected"></td>
-        <td data-id="h4" data-state="unselected"></td>
-        <td data-id="h5" data-state="unselected"></td>
-        <td data-id="h6" data-state="unselected"></td>
-        <td data-id="h7" data-state="unselected"></td>
-        <td data-id="h8" data-state="unselected"></td>
-        <td data-id="h9" data-state="unselected"></td>
-        <td data-id="h10" data-state="unselected"></td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">i</td>
-        <td data-id="i1" data-state="unselected"></td>
-        <td data-id="i2" data-state="unselected"></td>
-        <td data-id="i3" data-state="unselected"></td>
-        <td data-id="i4" data-state="unselected"></td>
-        <td data-id="i5" data-state="unselected"></td>
-        <td data-id="i6" data-state="unselected"></td>
-        <td data-id="i7" data-state="unselected"></td>
-        <td data-id="i8" data-state="unselected"></td>
-        <td data-id="i9" data-state="unselected"></td>
-        <td data-id="i10" data-state="unselected"></td>
-      </tr>
-      <tr class="currentPlayer">
-        <td data-id="header" class="rowHead">j</td>
-        <td data-id="j1" data-state="unselected"></td>
-        <td data-id="j2" data-state="unselected"></td>
-        <td data-id="j3" data-state="unselected"></td>
-        <td data-id="j4" data-state="unselected"></td>
-        <td data-id="j5" data-state="unselected"></td>
-        <td data-id="j6" data-state="unselected"></td>
-        <td data-id="j7" data-state="unselected"></td>
-        <td data-id="j8" data-state="unselected"></td>
-        <td data-id="j9" data-state="unselected"></td>
-        <td data-id="j10" data-state="unselected"></td>
-      </tr>
-    </table>
-  </div>
+    </table> <!-- END .opponent -->
+    <!-- <span class="ui-widget-header"> -->
+      <table class="player" id="snaptarget droppable">
+        <tr><th colspan="11">Your Ships</th></tr>
+        <tr>
+          <td class="noColor" data-id="header"></td>
+          <td data-id="header" class="colHead">1</td>
+          <td data-id="header" class="colHead">2</td>
+          <td data-id="header" class="colHead">3</td>
+          <td data-id="header" class="colHead">4</td>
+          <td data-id="header" class="colHead">5</td>
+          <td data-id="header" class="colHead">6</td>
+          <td data-id="header" class="colHead">7</td>
+          <td data-id="header" class="colHead">8</td>
+          <td data-id="header" class="colHead">9</td>
+          <td data-id="header" class="colHead">10</td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">a</td>
+          <td data-id="a1" data-state="unselected"></td>
+          <td data-id="a2" data-state="unselected"></td>
+          <td data-id="a3" data-state="unselected"></td>
+          <td data-id="a4" data-state="unselected"></td>
+          <td data-id="a5" data-state="unselected"></td>
+          <td data-id="a6" data-state="unselected"></td>
+          <td data-id="a7" data-state="unselected"></td>
+          <td data-id="a8" data-state="unselected"></td>
+          <td data-id="a9" data-state="unselected"></td>
+          <td data-id="a10" data-state="unselected"></td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">b</td>
+          <td data-id="b1" data-state="unselected"></td>
+          <td data-id="b2" data-state="unselected"></td>
+          <td data-id="b3" data-state="unselected"></td>
+          <td data-id="b4" data-state="unselected"></td>
+          <td data-id="b5" data-state="unselected"></td>
+          <td data-id="b6" data-state="unselected"></td>
+          <td data-id="b7" data-state="unselected"></td>
+          <td data-id="b8" data-state="unselected"></td>
+          <td data-id="b9" data-state="unselected"></td>
+          <td data-id="b10" data-state="unselected"></td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">c</td>
+          <td data-id="c1" data-state="unselected"></td>
+          <td data-id="c2" data-state="unselected"></td>
+          <td data-id="c3" data-state="unselected"></td>
+          <td data-id="c4" data-state="unselected"></td>
+          <td data-id="c5" data-state="unselected"></td>
+          <td data-id="c6" data-state="unselected"></td>
+          <td data-id="c7" data-state="unselected"></td>
+          <td data-id="c8" data-state="unselected"></td>
+          <td data-id="c9" data-state="unselected"></td>
+          <td data-id="c10" data-state="unselected"></td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">d</td>
+          <td data-id="d1" data-state="unselected"></td>
+          <td data-id="d2" data-state="unselected"></td>
+          <td data-id="d3" data-state="unselected"></td>
+          <td data-id="d4" data-state="unselected"></td>
+          <td data-id="d5" data-state="unselected"></td>
+          <td data-id="d6" data-state="unselected"></td>
+          <td data-id="d7" data-state="unselected"></td>
+          <td data-id="d8" data-state="unselected"></td>
+          <td data-id="d9" data-state="unselected"></td>
+          <td data-id="d10" data-state="unselected"></td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">e</td>
+          <td data-id="e1" data-state="unselected"></td>
+          <td data-id="e2" data-state="unselected"></td>
+          <td data-id="e3" data-state="unselected"></td>
+          <td data-id="e4" data-state="unselected"></td>
+          <td data-id="e5" data-state="unselected"></td>
+          <td data-id="e6" data-state="unselected"></td>
+          <td data-id="e7" data-state="unselected"></td>
+          <td data-id="e8" data-state="unselected"></td>
+          <td data-id="e9" data-state="unselected"></td>
+          <td data-id="e10" data-state="unselected"></td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">f</td>
+          <td data-id="f1" data-state="unselected"></td>
+          <td data-id="f2" data-state="unselected"></td>
+          <td data-id="f3" data-state="unselected"></td>
+          <td data-id="f4" data-state="unselected"></td>
+          <td data-id="f5" data-state="unselected"></td>
+          <td data-id="f6" data-state="unselected"></td>
+          <td data-id="f7" data-state="unselected"></td>
+          <td data-id="f8" data-state="unselected"></td>
+          <td data-id="f9" data-state="unselected"></td>
+          <td data-id="f10" data-state="unselected"></td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">g</td>
+          <td data-id="g1" data-state="unselected"></td>
+          <td data-id="g2" data-state="unselected"></td>
+          <td data-id="g3" data-state="unselected"></td>
+          <td data-id="g4" data-state="unselected"></td>
+          <td data-id="g5" data-state="unselected"></td>
+          <td data-id="g6" data-state="unselected"></td>
+          <td data-id="g7" data-state="unselected"></td>
+          <td data-id="g8" data-state="unselected"></td>
+          <td data-id="g9" data-state="unselected"></td>
+          <td data-id="g10" data-state="unselected"></td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">h</td>
+          <td data-id="h1" data-state="unselected"></td>
+          <td data-id="h2" data-state="unselected"></td>
+          <td data-id="h3" data-state="unselected"></td>
+          <td data-id="h4" data-state="unselected"></td>
+          <td data-id="h5" data-state="unselected"></td>
+          <td data-id="h6" data-state="unselected"></td>
+          <td data-id="h7" data-state="unselected"></td>
+          <td data-id="h8" data-state="unselected"></td>
+          <td data-id="h9" data-state="unselected"></td>
+          <td data-id="h10" data-state="unselected"></td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">i</td>
+          <td data-id="i1" data-state="unselected"></td>
+          <td data-id="i2" data-state="unselected"></td>
+          <td data-id="i3" data-state="unselected"></td>
+          <td data-id="i4" data-state="unselected"></td>
+          <td data-id="i5" data-state="unselected"></td>
+          <td data-id="i6" data-state="unselected"></td>
+          <td data-id="i7" data-state="unselected"></td>
+          <td data-id="i8" data-state="unselected"></td>
+          <td data-id="i9" data-state="unselected"></td>
+          <td data-id="i10" data-state="unselected"></td>
+        </tr>
+        <tr class="currentPlayer">
+          <td data-id="header" class="rowHead">j</td>
+          <td data-id="j1" data-state="unselected"></td>
+          <td data-id="j2" data-state="unselected"></td>
+          <td data-id="j3" data-state="unselected"></td>
+          <td data-id="j4" data-state="unselected"></td>
+          <td data-id="j5" data-state="unselected"></td>
+          <td data-id="j6" data-state="unselected"></td>
+          <td data-id="j7" data-state="unselected"></td>
+          <td data-id="j8" data-state="unselected"></td>
+          <td data-id="j9" data-state="unselected"></td>
+          <td data-id="j10" data-state="unselected"></td>
+        </tr>
+      </table> <!-- END .player -->
+    <!-- </span> END of #droppable .ui-widget-header -->
+  </div> <!-- END .gameboard -->
 
   <script>
+    $(document).ready(function() {
 
-  // fire up communication with socket io
-  var socket = io();
+      // fire up communication with socket io
+      var socket = io();
 
-  // This gets and sets the person who logs in
-  var person = prompt("Please enter your name");
-  if (person !== null) {
-    document.getElementById("userName").innerHTML = "Hello " + person + "!";
-    socket.emit('playerJoined', person);
-  }
+      // This gets and sets the person who logs in
+      // $('#plaerSignIn').modal('show') // shows the enter name modal
+      // listener for the stop timer button
+      $('#person').on('submit', function( e ){
+        // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
+        // 1) Player already connected to the game and refreshed.
+        // 2) Player started a new game (using a different player name)
+        // 3) New player but their entered name already exists with another player. I think the socet ID needs to be the "PK" of the player's data
 
-  // update the ship board with other players shots
-  socket.on('shot', function(shotObj){
-    // Updates the Header UI for who took a shot and the cell location
-    if (shotObj.player !== person) {
-      document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
-      // gets the shot fired and updates the gameboard
-      // this is klugy, needs a better way...
-      var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
-      $(hitArr[1]).css("background-color", "red");
-    }
-    // else 
-    // {
-    //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
-    // }
+//        if ( SOME CHECK WITH REDIS ) { // don't need to check if playerName is null since the form prevents that.
+          document.getElementById("userName").innerHTML = "Hello " + playerName + "!";
+          socket.emit('playerJoined', playerName);
+//        }
+      });
 
-  });
+// Sunday Christian commented out since redirecting this feature to modal and client side js to capture the player's name, send the name to the /player route which will add it to REDIS. Then, experimenting with particular way to allow the game to continue without redirect or render.
+      // var person = prompt("Please enter your name");
+      // if (person !== null) {
+      //   document.getElementById("userName").innerHTML = "Hello " + person + "!";
+      //   socket.emit('playerJoined', person);
+      // }
 
-</script>
 
-<!-- +++++++++++++ CDN Bootstrap JavaScript +++++++++++++ -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+      $(function() {
+        $( "#draggable" ).draggable();
+        $( "#droppable" ).droppable({
+          drop: function( event, ui ) {
+            $( this )
+              .addClass( "ui-state-highlight" )
+              .find( "p" )
+                .html( "Dropped!" );
+          }
+        });
+      });
 
-<!-- ++++++++++++++++++ LOCAL Bootstrap JS +++++++++++++++ -->
-<script src="js/bootstrap.min.js"></script>
+      // update the ship board with other players shots
+      socket.on('shot', function(shotObj){
+        // Updates the Header UI for who took a shot and the cell location
+        if (shotObj.player !== person) {
+          document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
+          // gets the shot fired and updates the gameboard
+          // this is klugy, needs a better way...
+          var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
+          $(hitArr[1]).css("background-color", "red");
+        }
+        // else 
+        // {
+        //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
+        // }
 
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      });
+
+    });
+  </script>
+
+  <!-- ++++++++++ CDN Bootstrap JavaScript   -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+  <!-- ++++++++++ LOCAL Bootstrap JS +++++++ -->
+  <script src="js/bootstrap.min.js"></script>
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <![endif]-->
+
+  <!-- ++++++++++ CDN Socket IO ++++++++++++ -->
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
+  <!-- ++++++++++ CDN jQuery.js ++++++++++++ -->
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <!-- ++++++++++ LOCAL client side .js ++++ -->
+  <script src="/js/index.js"></script>
 
   </body>
   </html>

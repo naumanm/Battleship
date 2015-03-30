@@ -14,6 +14,10 @@ var express = require('express'),
 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
+
+// more middleware    Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride('_method')); // probably not needed.
  
 // location for static files
 app.use(express.static(__dirname + '/public'));
@@ -21,6 +25,17 @@ app.use(express.static(__dirname + '/public'));
 // root route
 app.get('/', function(req, res){
   res.render("index.ejs");
+});
+
+// player's name route
+app.get('/player', function(req, res){
+
+  client.LPUSH("player", req.body.player);
+
+  // what if this route doesn't render or redirect? 
+  res.redirect("/");  // redirects are to routes while renders are to views
+
+  res.render("index.ejs"); // thinking not to redirect since modal will show again. need this to be ajaxified
 });
 
 // about us route
