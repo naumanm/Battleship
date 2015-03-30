@@ -68,19 +68,19 @@ $(document).ready(function() {
   // draggable
   $(function() {
     $( "#draggableAircraftCarrier" ).draggable({ 
-      snap: "#snaptarget", 
+      containment: "#snaptarget",
       grid: [25, 25] });
     $( "#draggableBattleship" ).draggable({ 
-      snap: "#snaptarget", 
+      containment: "#snaptarget",
       grid: [25, 25] });
     $( "#draggableDestroyer" ).draggable({ 
-      snap: "#snaptarget", 
+      containment: "#snaptarget",
       grid: [25, 25] });
     $( "#draggableSubmarine" ).draggable({ 
-      snap: "#snaptarget", 
+      containment: "#snaptarget",
       grid: [25, 25] });
     $( "#draggablePtBoat" ).draggable({ 
-      snap: "#snaptarget", 
+      containment: "#snaptarget",
       grid: [25, 25] });
   });
 
