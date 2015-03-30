@@ -38,13 +38,14 @@ $(document).ready(function() {
       var cellState = $(this).data("state");
       var cellTable = $(this).closest("table").attr("class");
       if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
-        $(this).css("background-color", "blue");
+        $(this).css("background-color", "blue"); // add the hit/miss animation here?
         $(this).data("state", "miss");
         if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
           selectedArr.push(cellId); // push the selected cell into the selectedArr
           var shotObj = {};
           shotObj.player = person;
           shotObj.id = cellId;
+          console.log('\nshotObj (player name - cell ID)' , shotObj);
           socket.emit('shot', shotObj);
         }
       }
