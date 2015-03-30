@@ -13,7 +13,7 @@ var express = require('express'),
     bodyParser = require("body-parser"),
     waitingRoom =[],  //looks for a pair 
     gameRooms=[];  //where we store all the rooms
-    // gameObj;  //logic for all the game...function/object instead
+    // gameObj;  //logic for all the game...function/object instead?
 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
@@ -35,7 +35,7 @@ app.get('/player', function(req, res){
   gameObj.socketID = "";  // Christian needs answer from Will===> need to know how to get the user's socket.io connection ID or IDs depending on how we're going to use this
   gameObj.playerName = req.body.player;
   // Christian needs answer from ???
-  // need to determine who is connected with who in a game.
+  // need to determine who is connected with who in a game. 
   // need to determine who is the first player in this game.
   gameObj.playerID = "??????";
   gameObj.gameID = "??????";
@@ -118,11 +118,11 @@ io.on('connection', function(socket){
     console.log(player);
     playerPair++;
     client.LPUSH("playerList", player);
-    socket.nickname=player; 
-    waitingRoom.push(socket.nickname);
+    socket.nickname=player;  //used in conjunction with id to preserve uniqueness
+    waitingRoom.push(socket.id);
     if (playerPair===2){
-      //queue filled create a game
-      gameRooms.push(GameObj.new(waitingRoom[0],waitingRoom[1]));
+      //queue filled create a game?
+      gameRooms.push(GameObj.new(waitingRoom[0],waitingRoom[1],roomNumber));
       waitingRoom=[]; //empty the waiting room queue
       roomNumber++;
       playerPair=0;
@@ -177,7 +177,13 @@ http.listen(3000, function(){
   console.log('listening on *:3000');
 });
 
-function GameObj (player1,player2){
+function GameObj (player1,player2,player1name,player2name,id){
+  //in terms of gameObj, "player is referring to the player's socket"
   this.player1=player1;
+  this.player1name=player1name;
   this.player2=player2;
+  this.player2name=player2name;
+  this.id=id;
 }
+
+
