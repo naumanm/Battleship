@@ -33,10 +33,9 @@ app.get('/', function(req, res){
 app.get('/player', function(req, res){
   //removed variables that were already handled by socketIO on connection
   //need to discuss matchmaking, we can set up game id for an actual pair, vs attaching player 1 to game id
-  client.HSETNX("gameIDs", gameObj.playerID, gameObj.gameID); // this is like a data dictionary. playerID may be their game's ID if they were the first player, or they get associated with the game's ID
-  client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); // Christian needs answer from Will===> Are the socket.io IDs unique? HSETNX sets the opponent player's ID only if this hash's key doesn't already exist otherwise, it is not set. AKA, no overwrite
+  //client.HSETNX("gameIDs", gameObj.playerID, gameObj.gameID); // this is like a data dictionary. playerID may be their game's ID if they were the first player, or they get associated with the game's ID
+  //client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); // Christian needs answer from Will===> Are the socket.io IDs unique? HSETNX sets the opponent player's ID only if this hash's key doesn't already exist otherwise, it is not set. AKA, no overwrite
   //they are unique. need to discuss matchmaking or can i grab your code and run with it - will
-
   // what if this route doesn't render or redirect? 
   res.redirect("/");  // redirects are to routes while renders are to views
   res.render("index.ejs"); // thinking not to redirect since modal will show again. need this to be ajaxified
@@ -108,10 +107,13 @@ io.on('connection', function(socket){
   socket.on('playerJoined', function(player) {
     socket.nickname=player;
     client.HSETNX("playersName", socket.id, player);
+    client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
     waitingRoom.push(socket.nickname);
     playerPair++;
     //assign a game, roomNumber, and reset queue when two players are in the waiting room
     if (playerPair===2){
+      client.HSETNX("opponent", socket.id, socket.id);
+      // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
       gameRooms.push(GameObj.new(waitingRoom[0],waitingRoom[1],roomNumber));
       waitingRoom=[];
       roomNumber++;
