@@ -10,7 +10,8 @@ var express = require('express'),
     methodOverride = require("method-override"),
     roomNumber=1,
     playerPair=0,
-    bodyParser = require("body-parser");
+    bodyParser = require("body-parser"),
+    gameObj;
 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
@@ -29,13 +30,69 @@ app.get('/', function(req, res){
 
 // player's name route
 app.get('/player', function(req, res){
+  gameObj.socketID = "";  // Christian needs answer from Will===> need to know how to get the user's socket.io connection ID or IDs depending on how we're going to use this
+  gameObj.playerName = req.body.player;
+  // Christian needs answer from ???
+  // need to determine who is connected with who in a game.
+  // need to determine who is the first player in this game.
+  gameObj.playerID = "??????";
+  gameObj.gameID = "??????";
 
-  client.LPUSH("player", req.body.player);
+  client.HSETNX("playersName", gameObj.socketID, gameObj.playerName); // HSETNX sets value if key doesn't already exist.  Is this a valid approach? Or, WHAT DATA FORMAT SHOULD I USE???? I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?
+  client.HSETNX("gameIDs", gameObj.playerID, gameObj.gameID); // this is like a data dictionary. playerID may be their game's ID if they were the first player, or they get associated with the game's ID
+
+  client.HSETNX("opponenet", gameObj.playerID, gameObj.opponentID); // Christian needs answer from Will===> Are the socket.io IDs unique? HSETNX sets the opponenet player's ID only if this hash's key doesn't already exist otherwise, it is not set. AKA, no overwrite
 
   // what if this route doesn't render or redirect? 
   res.redirect("/");  // redirects are to routes while renders are to views
 
   res.render("index.ejs"); // thinking not to redirect since modal will show again. need this to be ajaxified
+});
+
+// shot fired route
+app.get('/shot/shotObj', function(req, res){
+  // gameID is the first player's socket.io ID stored in hash "gameID"
+  // gameID 
+  if( HEXISTS("gameIDs", gameObj.playerID) && shotObj ){
+    var gameID = client.HGET("gameIDs", gameObj.playerID); // This gets the game's ID from the data dictionary
+
+    // check if shot is a hit or miss
+    if( HEXISTS("opponenet", gameObj.playerID) ){
+      var opponentID = client.HGET("opponenet", gameObj.playerID); // this gets the opponenet player's ID from the opponent dictionary
+
+      if( HEXISTS("ships", gameObj.opponentID) ){
+        var opponentsShips = client.HGETALL("ships"); // this gets the opponenet player's ship placements
+        if( opponentsShips.contains(shotObj.shot) ){ // Christian needs answer from Christian ===> syntax?? is the shot contained within the opponenetsShips array?
+          // shot is a hit
+
+          if (1){ // Christian needs answer from ???===>HOW TO check if the ship is sunk!!
+            // the ship is sunk
+            // flash message ship sunk
+            // do something
+
+          } else {
+            // ship hit but NOT sunk!
+            // flash message a hit
+            // do something
+          } // END if ship sunk
+
+        } else {
+          // shot is a miss
+          // do something
+        } // END if shot hit
+
+        client.RPUSH(gameID, gameObj.playerID, shotObj ); // WHAT DATA FORMAT SHOULD I USE???? Here, RPUSH adds the info to the end otherwise, LPUSH I would have to reverse the shotObj with playerID. I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?  
+        gameObj.currentPlayerID = ( gameObj.currentPlayerID === gameObj.gameID ) ? gameObj.player1ID : gameObj.player2ID;
+      } else {
+        // no opponent ships found??? what to do
+      } // END if( opponentsShips.contains(shotObj.shot) 
+
+    } else {
+      // no opponent found. what to do???
+    }// END if( HEXISTS("opponenet", playerID)
+
+    // render or redirect???
+  }
 });
 
 // about us route
@@ -88,7 +145,7 @@ io.on('connection', function(socket){
 function checkTwoPlayers() {
   console.log("Start Game check");
 
-  client.lrange('playerList', 0, -1, function(err, reply) {
+  client.LRANGE('playerList', 0, -1, function(err, reply) {
       console.log(reply);
       if (reply.length === 2) {
         startGame(reply);
