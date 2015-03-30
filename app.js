@@ -170,19 +170,20 @@ function startGame(playerList){
 //function (--==somePlayerObject==--=) {
 //  boatArray.each
 //}
-
-
-// load our server
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});
-
 function GameObj (player1,player2,player1name,player2name,id){
   this.player1=player1;  //socket
   this.player1name=player1name; //name
   this.player2=player2;
   this.player2name=player2name;
   this.id=id;
+  gameOver=false;
 }
+
+// load our server
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
+
+
 
 
