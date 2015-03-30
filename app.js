@@ -8,6 +8,8 @@ var express = require('express'),
     redis = require("redis"),
     client = redis.createClient(),
     methodOverride = require("method-override"),
+    roomNumber=1,
+    playerPair=0,
     bodyParser = require("body-parser");
 
 // allows us to use ejs instead of html
@@ -33,7 +35,8 @@ app.get('/instructions', function(req, res){
 
 // game communication
 io.on('connection', function(socket){
-  socket.join("Game");
+  socket.join(roomNumber);
+  console.log(roomNumber);
 
   console.log('a user connected');
 
@@ -45,6 +48,11 @@ io.on('connection', function(socket){
 
   socket.on('playerJoined', function(player) {
     console.log(player);
+    playerPair++;
+    if (playerPair===2){
+      roomNumber++;
+      playerPair=0;
+    }
     // push player to redis & designate socket owner
     client.LPUSH("playerList", player);
     socket.nickname=player; 
