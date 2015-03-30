@@ -88,15 +88,44 @@ $(document).ready(function(){
       // else 
       // {
       //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
-      // }
-      });  
-
-
-  } // End of gamePlay function
+      });
+    } // End of gamePlay function
 
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
 
+  // draggable
+  $(function() {
+    $( "#draggableAircraftCarrier" ).draggable({ 
+      containment: "#snaptarget",
+      grid: [25, 25] });
+    $( "#draggableBattleship" ).draggable({ 
+      containment: "#snaptarget",
+      grid: [25, 25] });
+    $( "#draggableDestroyer" ).draggable({ 
+      containment: "#snaptarget",
+      grid: [25, 25] });
+    $( "#draggableSubmarine" ).draggable({ 
+      containment: "#snaptarget",
+      grid: [25, 25] });
+    $( "#draggablePtBoat" ).draggable({ 
+      containment: "#snaptarget",
+      grid: [25, 25] });
+  });
+
+  // droppable
+  $( "#droppable" ).droppable({
+    accept: ".special",
+    drop: function( event, ui ) {
+      console.log("droppable event", event, "droppable ui", ui);
+      $( this )
+        // .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
+        .find( "p" )  // change this to appropriate notice element
+          .html( "Dropped!" ); // change this to trigger boat placement check
+    } 
+  });
+
+  // the below function keeps it DRY for changing the ship's img when DBL-clicked. Works with 
   function setStyle(_this,offSize,orientation) {
     var imgOrientation = (orientation === 'goVert') ? offSize : '0px;';  // sets the offset
     var currentStyle = $(_this).attr('style'); // gets the inline style that the draggable creates. Using this to reset the "top: xpx;" value
@@ -106,50 +135,9 @@ $(document).ready(function(){
     $(_this).attr('style', currentStyle); // applies the new value
   }
 
-
-  // draggable
-  $(function() {
-    $( "#draggableAircraftCarrier" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25] 
-      });
-    $( "#draggableBattleship" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25] 
-      });
-    $( "#draggableDestroyer" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25]
-      });
-    $( "#draggableSubmarine" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25] 
-      });
-    $( "#draggablePtBoat" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25] 
-      });
-  });
-
-  $('.droppable').each(function() {
-    console.log("Dropped!");
-    var $td = $(this);
-    $td.droppable({
-      drop: function() {
-        $('.droppable').addClass('dropped').
-          css({
-              top: $td.offset().top,
-              left: $td.offset().left
-          });
-          //$('#grid').addClass('focus');
-      }
-    });
-  });
-
-
   // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
-    'dblclick': function() {
+    'click': function() {
         var _this = this;
         var orientation = ($(_this).attr('src') === '/images/wholeCarrier.png') ? 'goVert' : 'goHoriz'; // determines which orientation to set for the following executables
         setStyle(_this,'105px;',orientation);
@@ -165,7 +153,7 @@ $(document).ready(function(){
   });  // END rotate Carrier image
 
   $('#draggableBattleship').on({
-    'dblclick': function() {
+    'click': function() {
         var _this = this;
         var orientation = ($(this).attr('src') === '/images/wholeBattleship.png') ? 'goVert' : 'goHoriz';
         setStyle(_this,'57px;',orientation);
@@ -175,7 +163,7 @@ $(document).ready(function(){
   });  // END rotate Battleship image
 
   $('#draggableDestroyer').on({
-    'dblclick': function() {
+    'click': function() {
         var _this = this;
         var orientation = ($(this).attr('src') === '/images/wholeCruiser.png') ? 'goVert' : 'goHoriz';
         setStyle(_this,'45px;',orientation);
@@ -185,7 +173,7 @@ $(document).ready(function(){
   });  // END rotate Destroyer image
 
   $('#draggableSubmarine').on({
-    'dblclick': function() {
+    'click': function() {
         var _this = this;
         var orientation = ($(this).attr('src') === '/images/wholeSub.png') ? 'goVert' : 'goHoriz';
         setStyle(_this,'25px;',orientation);
@@ -195,7 +183,7 @@ $(document).ready(function(){
   });  // END rotate Submarine image
 
   $('#draggablePtBoat').on({
-    'dblclick': function() {
+    'click': function() {
         var _this = this;
         var orientation = ($(this).attr('src') === '/images/wholePatrol.png') ? 'goVert' : 'goHoriz';
         setStyle(_this,'20px;',orientation);
