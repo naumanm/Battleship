@@ -198,7 +198,7 @@
     </div> <!-- END of #accordion .panel-group .dashboard -->
 
     <!-- <span class="ui-widget-header"> -->
-    <table class="player" id="snaptarget droppable">
+    <table class="player" id="snaptarget">
       <tr><th colspan="11">Your Ships</th></tr>
       <tr>
         <td class="noColor" data-id="header"></td>
@@ -215,16 +215,16 @@
       </tr>
       <tr class="currentPlayer">
         <td data-id="header" class="rowHead">a</td>
-        <td data-id="a1" data-state="unselected"></td>
-        <td data-id="a2" data-state="unselected"></td>
-        <td data-id="a3" data-state="unselected"></td>
-        <td data-id="a4" data-state="unselected"></td>
-        <td data-id="a5" data-state="unselected"></td>
-        <td data-id="a6" data-state="unselected"></td>
-        <td data-id="a7" data-state="unselected"></td>
-        <td data-id="a8" data-state="unselected"></td>
-        <td data-id="a9" data-state="unselected"></td>
-        <td data-id="a10" data-state="unselected"></td>
+        <td data-id="a1 droppable" data-state="unselected"></td>
+        <td data-id="a2 droppable" data-state="unselected"></td>
+        <td data-id="a3 droppable" data-state="unselected"></td>
+        <td data-id="a4 droppable" data-state="unselected"></td>
+        <td data-id="a5 droppable" data-state="unselected"></td>
+        <td data-id="a6 droppable" data-state="unselected"></td>
+        <td data-id="a7 droppable" data-state="unselected"></td>
+        <td data-id="a8 droppable" data-state="unselected"></td>
+        <td data-id="a9 droppable" data-state="unselected"></td>
+        <td data-id="a10 droppable" data-state="unselected"></td>
       </tr>
       <tr class="currentPlayer">
         <td data-id="header" class="rowHead">b</td>
@@ -522,21 +522,6 @@
       //   socket.emit('playerJoined', person);
       // }
 
-
-      // function() {
-        $( "#draggable" ).draggable();  // add here snap to the "Your Ships" grid? Is that possible?
-
-        // seems to work with or without this... this code copied from https://jqueryui.com/droppable/  what is this doing exactly???? 
-        $( "#droppable" ).droppable({
-          drop: function( event, ui ) {
-            console.log("droppable event", event, "droppable ui", ui);
-            $( this )
-              .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
-              .find( "p" )  // change this to appropriate notice element
-                .html( "Dropped!" ); // change this to trigger boat placement check
-          } // drop event callback
-        });  // END droppable
-      // }();  // END function draggable and droppable
 
       function setStyle(_this,offSize,orientation) {
         var imgOrientation = (orientation === 'goVert') ? offSize : '0px;';  // sets the offset
