@@ -132,13 +132,11 @@ io.on('connection', function(socket){  //step #1 connection
 });
 
 //game logic step 2(A) building the board
-function GameObj (player1,player2,player1name,player2name,id){  
+function GameObj (player1,player2,id){  
   this.player1=player1;  //socket
-  this.player1name=player1name; //name
   this.player1Fleet=[]; //not exactly sure how to handle this, depends on how data is passed
   //after set up of ships how to handle ship coordinates
   this.player2=player2;
-  this.player2name=player2name;
   this.player2Fleet=[];//not exactly sure how to handle this, depends on how data is passed
   //after set up of ships
   this.id=id;  //gameroom
