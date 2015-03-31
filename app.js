@@ -87,11 +87,9 @@ io.on('connection', function(socket){  //step #1 connection
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId){  
   this.player1=player1;
-  console.log(player1 + "player 1");
   this.player2=player2;
-  console.log(player2 +"player2");
   this.gameId=gameId;  //gameroom
-  console.log(gameId + "game id");
+  console.log(gameId + " game id");
   gameOver=false;
   //dummy data
   var player1Fleet=new Fleet(player1,["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
@@ -121,19 +119,19 @@ function Game (player1,player2,gameId){
       console.log("player 1 shot"+shotObj);
       turnController++;
       console.log("move# "+ turnController);
+      this.hitOrMiss(shotObj,this.player2Fleet);
     });
-    this.hitOrMiss(shotObj,this.player2Fleet);
    }
     else
    {
-    player2 .socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+    player2.socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
      io.emit('shot', shotObj); 
      //need to add flash event for player click while not their turn
      console.log("player 1 shot"+shotObj);
      turnController++;
      console.log("move# "+ turnController);
-    });
      this.hitOrMiss(shotObj,this.player1Fleet);
+    });
    }
   }
 
