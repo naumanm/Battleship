@@ -29,20 +29,6 @@ app.get('/', function(req, res){
   res.render("index.ejs");
 });
 
-// place ships route
-app.get('/place_ship', function(req, res){
-  if( player1ID ){
-    // set player 1's fleet to redis table
-    if( HEXISTS( player1 + "Fleet", session.id ) ){
-
-    }
-  } else if( player2ID ) {
-    // set player 2's fleet to redis table
-  }
-
-  res.render("index.ejs");
-});
-
 // player's name route
 app.get('/player', function(req, res){
   res.redirect("/");  // redirects are to routes while renders are to views
@@ -105,7 +91,7 @@ app.get('/instructions', function(req, res){
   res.render("instructions.ejs");
 });
 
-// game communication
+// game communication. ALL game emit events need to be handled within this block
 io.on('connection', function(socket){  //step #1 connection
   socket.join(roomNumber);
   console.log(roomNumber);
@@ -113,6 +99,7 @@ io.on('connection', function(socket){  //step #1 connection
   console.log('a user connected');
 
   socket.on('playerName', function(playerName) {  //step # building a lobby
+    console.log('The user\'s game name is', playerName);
     socket.nickname=playerName;
     client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
     //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
@@ -131,6 +118,28 @@ io.on('connection', function(socket){  //step #1 connection
     }
   });
   
+  // 'place_ship' emit event
+  player1.on('place_ship',function(placedShipObj){
+    console.log("placedShipObj", placedShipObj);
+    carrier=[]; //get this from client end hard code test
+    battle=[];
+    sub=[];
+    pt =[];
+
+    var player1Fleet = newFleet(carrier,battle,sub,pt); 
+
+    if( player1ID ){
+      // set player 1's fleet to redis table
+      if( HEXISTS( player1 + "Fleet", session.id ) ){
+
+      }
+    } else if( player2ID ) {
+      // set player 2's fleet to redis table
+    }
+
+    res.render("index.ejs");
+  });
+
   //ORIGINAL SHOT FUNCTION KEEP THIS 
   // socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
   //   io.emit('shot', shotObj); 
@@ -143,7 +152,7 @@ io.on('connection', function(socket){  //step #1 connection
     if (!socket.nickname) return;              
   });
   
-});
+}); // END of io connection. All game emits need to occure within this block
 
 //game logic step 2(A) building the board
 function GameObj (player1,player2,id){  

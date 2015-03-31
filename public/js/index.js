@@ -14,14 +14,13 @@ $(document).ready(function(){
   // listener for the form submit
   $('form').submit(function(e){
     e.preventDefault();
-    var playerName = document.getElementsByTagName("input")[0].value;
- $('#playerSignIn').modal('hide'); // shows the get player's name modal
+    var playerName = document.getElementsByTagName("input")[0].value; // wasn't working using same code from above function like like 10 (  var playerName = $('#personsName').val();  )
+
+    $('#playerSignIn').modal('hide'); // shows the get player's name modal
     console.log("playerName", playerName);
-// -------if ( SOME CHECK WITH REDIS ) { // don't need to check if playerName is null since the form prevents that.
-      
-      // document.getElementById("userName").innerHTML = "Hello " + playerName + "!";
-      socket.emit(playerName, ' Joined the game.');
-// -------}
+
+    socket.emit('playerName', playerName);
+
     return playerName;
     // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
     // 1) Player already connected to the game and refreshed.
@@ -128,9 +127,19 @@ $(document).ready(function(){
   $( ".droppable" ).droppable({
     drop: function( event, ui ) {
       var targetElem = $(this).data("id");
-      console.log(ui.draggable.attr('id'));
-      console.log(targetElem);
+      var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
+
+      // remove "draggable" from the passed ship's name
+      placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable'
+      console.log( placedShip ); // this is the ship that was placed
+
+      console.log( targetElem ); // this is the grid location the ship was placed
+
       // need to emit targetElem back to server for ship location
+      var placedShipObj = {};
+      placedShipObj.name = placedShip;
+      placedShipObj.location = targetElem;
+      socket.emit('place_ship', placedShipObj);
     } 
   });
 
