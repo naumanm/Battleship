@@ -49,52 +49,6 @@ app.get('/player', function(req, res){
   res.render("index.ejs"); // thinking not to redirect since modal will show again. need this to be ajaxified
 });
 
-// shot fired route 
-app.get('/shot/shotObj', function(req, res){
-  // gameID is the first player's socket.io ID stored in hash "gameID"
-  // gameID 
-  if( HEXISTS("gameIDs", gameObj.playerID) && shotObj ){
-    var gameID = client.HGET("gameIDs", gameObj.playerID); // This gets the game's ID from the data dictionary
-
-    // check if shot is a hit or miss  should be game prototyped?
-    if( HEXISTS("opponent", gameObj.playerID) ){
-      var opponentID = client.HGET("opponent", gameObj.playerID); // this gets the opponent player's ID from the opponent dictionary
-
-      if( HEXISTS("ships", gameObj.opponentID) ){
-        var opponentsShips = client.HGETALL("ships"); // this gets the opponent player's ship placements
-        if( opponentsShips.contains(shotObj.shot) ){ // Christian needs answer from Christian ===> syntax?? is the shot contained within the opponentsShips array?
-          // shot is a hit
-
-          if (1){ // Christian needs answer from ???===>HOW TO check if the ship is sunk!!
-            // the ship is sunk
-            // flash message ship sunk
-            // do something
-
-          } else {
-            // ship hit but NOT sunk!
-            // flash message a hit
-            // do something
-          } // END if ship sunk
-
-        } else {
-          // shot is a miss
-          // do something
-        } // END if shot hit
-
-        client.RPUSH(gameID, gameObj.playerID, shotObj ); // WHAT DATA FORMAT SHOULD I USE???? Here, RPUSH adds the info to the end otherwise, LPUSH I would have to reverse the shotObj with playerID. I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?  
-        gameObj.currentPlayerID = ( gameObj.currentPlayerID === gameObj.gameID ) ? gameObj.player1ID : gameObj.player2ID;
-      } else {
-        // no opponent ships found??? what to do
-      } // END if( opponentsShips.contains(shotObj.shot) 
-
-    } else {
-      // no opponent found. what to do???
-    }// END if( HEXISTS("opponent", playerID)
-
-    // render or redirect???
-  }
-});
-
 // about us route
 app.get('/about', function(req, res){
   res.render("about.ejs");
@@ -153,14 +107,14 @@ function Game (player1,player2,gameId){
   this.gameId=gameId;  //gameroom
   gameOver=false;
   player1.on('fleetReady',function(data){
-     carrier=[];
+     carrier=[]; //get this from client end
      battle=[];
      sub=[];
      pt =[];
      var player1Fleet = newFleet(carrier,battle,sub,pt); 
    });
   player2.on('fleetReady',function(data){
-     carrier=[];
+     carrier=[]; //get this from client end
      battle=[];
      sub=[];
      pt =[];
@@ -208,8 +162,6 @@ Game.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {
    });
 }
       
-
-
 //game controller
 Game.prototype.runGame = function(){
   while (this.gameOver===false){
