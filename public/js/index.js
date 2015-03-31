@@ -125,9 +125,10 @@ $(document).ready(function(){
   });
 
   // droppable
-  $( "#droppable" ).droppable({
-    accept: ".special",
+  $( ".droppable" ).droppable({
     drop: function( event, ui ) {
+      var targetElem = $(this).attr("id");
+      console.log(targetElem);
       console.log("droppable event", event, "droppable ui", ui);
       $( this )
         // .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
