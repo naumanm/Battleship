@@ -117,14 +117,11 @@ $(document).ready(function(){
   });
 
   // droppable
-  $( "#droppable" ).droppable({
-    accept: ".special",
+  $( ".droppable" ).droppable({
     drop: function( event, ui ) {
-      console.log("droppable event", event, "droppable ui", ui);
-      $( this )
-        // .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
-        .find( "p" )  // change this to appropriate notice element
-          .html( "Dropped!" ); // change this to trigger boat placement check
+      var targetElem = $(this).data("id");
+      console.log(targetElem);
+      // need to emit targetElem back to server for ship location
     } 
   });
 
