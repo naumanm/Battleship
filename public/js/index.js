@@ -95,22 +95,25 @@ $(document).ready(function(){
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
   // draggable
-  $(function() {
-    $( "#draggableAircraftCarrier" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25] });
-    $( "#draggableBattleship" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25] });
-    $( "#draggableDestroyer" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25] });
-    $( "#draggableSubmarine" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25] });
-    $( "#draggablePtBoat" ).draggable({ 
-      containment: "#snaptarget",
-      grid: [25, 25] });
+  $( "#draggableAircraftCarrier" ).draggable({ 
+    containment: "#snaptarget",
+    grid: [25, 25] 
+  });
+  $( "#draggableBattleship" ).draggable({ 
+    containment: "#snaptarget",
+    grid: [25, 25] 
+  });
+  $( "#draggableDestroyer" ).draggable({ 
+    containment: "#snaptarget",
+    grid: [25, 25] 
+  });
+  $( "#draggableSubmarine" ).draggable({ 
+    containment: "#snaptarget",
+    grid: [25, 25] 
+  });
+  $( "#draggablePtBoat" ).draggable({ 
+    containment: "#snaptarget",
+    grid: [25, 25] 
   });
 
   // droppable
@@ -137,7 +140,7 @@ $(document).ready(function(){
 
   // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
-    'click': function() {
+    'dblclick': function() {
         var _this = this;
         var orientation = ($(_this).attr('src') === '/images/wholeCarrier.png') ? 'goVert' : 'goHoriz'; // determines which orientation to set for the following executables
         setStyle(_this,'105px;',orientation);
@@ -153,7 +156,7 @@ $(document).ready(function(){
   });  // END rotate Carrier image
 
   $('#draggableBattleship').on({
-    'click': function() {
+    'dblclick': function() {
         var _this = this;
         var orientation = ($(this).attr('src') === '/images/wholeBattleship.png') ? 'goVert' : 'goHoriz';
         setStyle(_this,'57px;',orientation);
@@ -163,7 +166,7 @@ $(document).ready(function(){
   });  // END rotate Battleship image
 
   $('#draggableDestroyer').on({
-    'click': function() {
+    'dblclick': function() {
         var _this = this;
         var orientation = ($(this).attr('src') === '/images/wholeCruiser.png') ? 'goVert' : 'goHoriz';
         setStyle(_this,'45px;',orientation);
@@ -173,7 +176,7 @@ $(document).ready(function(){
   });  // END rotate Destroyer image
 
   $('#draggableSubmarine').on({
-    'click': function() {
+    'dblclick': function() {
         var _this = this;
         var orientation = ($(this).attr('src') === '/images/wholeSub.png') ? 'goVert' : 'goHoriz';
         setStyle(_this,'25px;',orientation);
@@ -183,7 +186,7 @@ $(document).ready(function(){
   });  // END rotate Submarine image
 
   $('#draggablePtBoat').on({
-    'click': function() {
+    'dblclick': function() {
         var _this = this;
         var orientation = ($(this).attr('src') === '/images/wholePatrol.png') ? 'goVert' : 'goHoriz';
         setStyle(_this,'20px;',orientation);

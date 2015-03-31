@@ -72,41 +72,42 @@
 
 
   <div class="gameboard">
-    
-    <h4>Place Your Ships To Start</h4>
-    <div>
-      <ul>
-        <li class="noLIDisk">
-          <img src="/images/wholeCarrier.png"
-               alt="Drag your Aircraft Carrier to Your Ships Board"
-               id="draggableAircraftCarrier"
-               class="ui-widget-content, aircraftCarrier"></li>
-          
-        <li class="noLIDisk">
-          <img src="/images/wholeBattleship.png"
-               alt="Drag your Battleship to Your Ships Board"
-               id="draggableBattleship"
-               class="ui-widget-content, battleship"></li>
-          
-        <li class="noLIDisk">
-          <img src="/images/wholeCruiser.png"
-               alt="Drag your Destroyer to Your Ships Board"
-               id="draggableDestroyer"
-               class="ui-widget-content, destroyer"></li>
-          
-        <li class="noLIDisk">
-          <img src="/images/wholeSub.png"
-               alt="Drag your Submarine to Your Ships Board"
-               id="draggableSubmarine"
-               class="ui-widget-content, submarine"></li>
-          
-        <li class="noLIDisk">
-          <img src="/images/wholePatrol.png"
-               alt="Drag your Patrol Boat to Your Ships Board"
-               id="draggablePtBoat"
-               class="ui-widget-content, ptBoat"></li>
-      </ul>
-    </div>
+    <span id="placeShips">
+      <h4>Place Your Ships To Start</h4>
+      <div>
+        <ul>
+          <li class="noLIDisk">
+            <img src="/images/wholeCarrier.png"
+                 alt="Drag your Aircraft Carrier to Your Ships Board"
+                 id="draggableAircraftCarrier"
+                 class="ui-widget-content, aircraftCarrier"></li>
+            
+          <li class="noLIDisk">
+            <img src="/images/wholeBattleship.png"
+                 alt="Drag your Battleship to Your Ships Board"
+                 id="draggableBattleship"
+                 class="ui-widget-content, battleship"></li>
+            
+          <li class="noLIDisk">
+            <img src="/images/wholeCruiser.png"
+                 alt="Drag your Destroyer to Your Ships Board"
+                 id="draggableDestroyer"
+                 class="ui-widget-content, destroyer"></li>
+            
+          <li class="noLIDisk">
+            <img src="/images/wholeSub.png"
+                 alt="Drag your Submarine to Your Ships Board"
+                 id="draggableSubmarine"
+                 class="ui-widget-content, submarine"></li>
+            
+          <li class="noLIDisk">
+            <img src="/images/wholePatrol.png"
+                 alt="Drag your Patrol Boat to Your Ships Board"
+                 id="draggablePtBoat"
+                 class="ui-widget-content, ptBoat"></li>
+        </ul>
+      </div>
+    </span>
 
 <!--     <h4>Game Status</h4>
     <div>
@@ -469,10 +470,10 @@
   <!-- ++++++++++ CDN Socket IO ++++++++++++ -->
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
-  <!-- ++++++++++ CDN jQuery.js ++++++++++++ 
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  ++++++++++ CDN jQuery.js ++++++++++++ 
+  <!-- <script src="//code.jquery.com/jquery-1.10.2.js"></script> -->
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  -->
+ 
 
   <!-- ++++++++++ LOCAL client side .js ++++ -->
   <script src="/js/index.js"></script>
