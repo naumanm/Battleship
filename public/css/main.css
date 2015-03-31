@@ -1,4 +1,4 @@
-/*HTML*/
+HTML*/
 
 body {
   font-family: arial, sans-serif;
@@ -19,14 +19,18 @@ td {
   color: white;
   background: gray;
   text-align: center;
+  /* only right and bottom so as not to double up on the borders per table cell */
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 table {
   margin: 5px;
 }
 
-table td {
-  border: 1px solid black;
+table td { /* only right and bottom so as not to double up on the borders per table cell */
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 .colHead {
@@ -51,7 +55,7 @@ table td {
 
 .dashboard {
   /*background: blue;*/
-  width: 200px;
+  width: 400px;
   height: 500px;
   margin: 3px;
   /*color: white;  color of the hits / misses */
@@ -71,12 +75,10 @@ table td {
 .dashboardTitle {
   /*height: 25px;*/
   position: absolute;
-  margin: 1px;
+  /*margin: 1px;*/
   background: green;
   top: 0;
   left: 0;  
-  margin-left: 11px;
-  margin-top: 8px;
 }
 
 .dashboardTitle {
@@ -90,27 +92,16 @@ table td {
   color: black;
 }
 
-.aircraftCarrier {
-  /*margin-top: 35px;*/
-  /*width: 124px;*/
-  left: 70px;
-}
+/* These left: settings on the ships are for the starting location of the ships to look nice in a row prior to placing them on the board */
+.aircraftCarrier { left: 240px; top: 8px; }
 
-.battleship {
-  /*width: 99px;*/
-  left: 220px;
-}
+.battleship { left: 370px; top: 8px; }
 
-.destroyer, 
-.submarine {
-  /*width: 74px;*/
-  left: 350px;
-}
+.destroyer { left: 475px; top: 8px; }
 
-.ptBoat {
-  /*width: 49px;  */
-  left: 440px;
-}
+.submarine { left: 555px; top: 8px; }
+
+.ptBoat { left: 635px; top: 8px; }
 
 .hit {
   /*color: red;*/
@@ -137,9 +128,25 @@ table td {
 }
 
 #placeShips {
-  padding: 4px 8px;
+  padding: 8px 8px;
   border: 1px solid black;
-  width: 400px;
+  width: 700px;
+  position: relative;
 }
 
-/*IDs*/
+#placeShips h4 {
+  display: inline;
+}
+
+#stats {
+  margin-top: 15px;
+  padding: 4px 8px;
+  border: 1px solid black;
+  width: 234px;
+}
+
+#stats h4 {
+  display: inline;
+}
+
+/*IDs

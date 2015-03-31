@@ -2,36 +2,30 @@
 
 // setup env
 var express = require('express'),
-    app = express(),
-    http = require('http').Server(app),
-    io = require('socket.io')(http),
-    redis = require("redis"),
-    client = redis.createClient(),
-    methodOverride = require("method-override"),
-    roomNumber=1,
-    playerPair=0,
-    bodyParser = require("body-parser"),
-    waitingRoom =[], 
-    gameRooms=[]; 
+app = express(),
+http = require('http').Server(app),
+io = require('socket.io')(http),
+redis = require("redis"),
+client = redis.createClient(),
+methodOverride = require("method-override"),
+roomNumber=1,
+playerPair=0,
+bodyParser = require("body-parser"),
+waitingRoom =[], 
+gameRooms=[]; 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
 // more middleware  Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method')); // probably not needed.
- 
+
 // location for static files
 app.use(express.static(__dirname + '/public'));
 
 // root route
 app.get('/', function(req, res){
   res.render("index.ejs");
-});
-
-// player's name route
-app.get('/player', function(req, res){
-  res.redirect("/");  // redirects are to routes while renders are to views
-  res.render("index.ejs"); // thinking not to redirect since modal will show again. need this to be ajaxified
 });
 
 // about us route
@@ -76,11 +70,11 @@ io.on('connection', function(socket){  //step #1 connection
   //   console.log(shotObj);
   // });
 
-  socket.on('disconnect', function(){
-    console.log(socket.id + " disconnected");
+socket.on('disconnect', function(){
+  console.log(socket.id + " disconnected");
     //if (!socket.nickname) return;              
   });
-  
+
 });  
 
 //game logic step 2(A) building the board
@@ -110,10 +104,10 @@ function Game (player1,player2,gameId){
   //    pt =[];
   //    var player2Fleet = newFleet(carrier,battle,sub,pt); 
   //  }); 
-  turnController=1;
-  console.log("move# " + turnController);
-  if (!turnController%2===0)
-   {
+turnController=1;
+console.log("move# " + turnController);
+if (!turnController%2===0)
+{
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       io.emit('shot', shotObj); 
       //need to add flash event for player click while not their turn
@@ -122,9 +116,9 @@ function Game (player1,player2,gameId){
       console.log("move# "+ turnController);
       this.hitOrMiss(shotObj,this.player2Fleet);
     });
-   }
-    else
-   {
+  }
+  else
+  {
     player2.socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
      io.emit('shot', shotObj); 
      //need to add flash event for player click while not their turn
@@ -132,27 +126,27 @@ function Game (player1,player2,gameId){
      turnController++;
      console.log("move# "+ turnController);
      this.hitOrMiss(shotObj,this.player1Fleet);
-    });
-   }
+   });
   }
+}
 
 //step 3(A) firing and turn switching
 Game.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  
   //is there a hit
   targetPlayerFleet.formation.forEach(ship,function(shotobj){
-     if(ship.indexOf(shotObj)===true){
-       ship.pop(shotObj); //removes from ship's working "length"
-       console.log("hit detected at"+shotObj); //add broadcasting capability
-        if (ship===[]){
-          console.log("ship sunk"); //add broadcasting capability
-          targetPlayerFleet.shipcount--;
-            if (targetPlayerFleet.shipcount===0){
-              console.log("gameOver");
-              return;
-            }
+    if(ship.indexOf(shotObj)===true){
+      ship.pop(shotObj); //removes from ship's working "length"
+      console.log("hit detected at"+shotObj); //add broadcasting capability
+      if (ship===[]){
+        console.log("ship sunk"); //add broadcasting capability
+        targetPlayerFleet.shipcount--;
+        if (targetPlayerFleet.shipcount===0){
+          console.log("gameOver");
+          return;
         }
-     }
-   });
+      }
+    }
+  });
 };
 
 function Fleet (owner,carrier,battleship,submarine,ptboat){
@@ -168,7 +162,3 @@ function Fleet (owner,carrier,battleship,submarine,ptboat){
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
-
-
-
-
