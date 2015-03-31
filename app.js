@@ -12,8 +12,8 @@ var express = require('express'),
     playerPair=0,
     bodyParser = require("body-parser"),
     waitingRoom =[], 
-    gameRooms=[]; 
-
+    gameRooms=[], 
+    drydock=[]; 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
@@ -117,18 +117,19 @@ io.on('connection', function(socket){  //step #1 connection
     client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
     //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
     client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
-    waitingRoom.push(socket.id); //need to save in session as value with nickname as key for reconnect?
+    waitingRoom.push(Player.new()); //need to save in session as value with nickname as key for reconnect?
     playerPair++;
     //assign a game, roomNumber, and reset queue when two players are in the waiting room
     if (playerPair===2){
       client.HSETNX("opponent", socket.id, socket.id);
       // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
-      gameRooms.push(GameObj.new(waitingRoom[0],waitingRoom[1],roomNumber));
+      gameRooms.push(Game.new(waitingRoom[0],waitingRoom[1],roomNumber));
      // gameRooms[length-1].runGame(); //starts the game DO NOT DELETE, CAN'T ACTIVATE YET
       waitingRoom=[];
       roomNumber++;
       playerPair=0;
     }
+
   });
   
   //ORIGINAL SHOT FUNCTION KEEP THIS 
@@ -146,15 +147,25 @@ io.on('connection', function(socket){  //step #1 connection
 });
 
 //game logic step 2(A) building the board
-function Game (player1,player2,player1Name,player2Name,gameId){  
-  this.player1=player1;  //socket
-  this.player1Fleet=[]; //not exactly sure how to handle this, depends on how data is passed
-  //after set up of ships how to handle ship coordinates
+function Game (player1,player2,gameId){  
+  this.player1=player1;
   this.player2=player2;
-  this.player2Fleet=[];//not exactly sure how to handle this, depends on how data is passed
-  //after set up of ships
   this.gameId=gameId;  //gameroom
   gameOver=false;
+  player1.on('fleetReady',function(data){
+     carrier=[];
+     battle=[];
+     sub=[];
+     pt =[];
+     var player1Fleet = newFleet(carrier,battle,sub,pt); 
+   });
+  player2.on('fleetReady',function(data){
+     carrier=[];
+     battle=[];
+     sub=[];
+     pt =[];
+     var player2Fleet = newFleet(carrier,battle,sub,pt); 
+   }); 
   turnController=1;
   if (turnController%2===0)
    {
@@ -179,7 +190,8 @@ function Game (player1,player2,player1Name,player2Name,gameId){
   }
 
 //step 3(A) firing and turn switching
-Game.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  //what is in shotObj
+Game.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  
+ //what is in shotObj
  //this has to control what to listen to in the shot event on socket.io
 }
 
@@ -190,9 +202,13 @@ Game.prototype.runGame = function(){
   }
 }
 
-function Ship (location){
- this.location=[]
-}
+function Fleet (owner,carrier,battleship,submarine,ptboat){
+  this.owner=owner; //socket who placed ship
+  this.carrier=carrier;
+  this.battleship=battleship;
+  this.submarine=submarine;
+  this.ptboat=ptboat;
+} 
 
 // load our server
 http.listen(3000, function(){
