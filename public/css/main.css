@@ -4,15 +4,6 @@ body {
   font-family: arial, sans-serif;
 }
 
-/*  jQuery API doc for draggable
-    https://jqueryui.com/draggable/#snap-to */
-#snaptarget {
-  padding: 0;
-
-  /*width: 250px;*/
-  /*height: 250px;*/
-}
-
 td {
   width: 25px;
   height: 25px;
@@ -69,14 +60,7 @@ table td {
 .submarine,
 .ptBoat,
 .dashboardTitle {
-  /*height: 25px;*/
   position: absolute;
-  margin: 1px;
-  background: green;
-  top: 0;
-  left: 0;  
-  margin-left: 11px;
-  margin-top: 8px;
 }
 
 .dashboardTitle {
@@ -91,9 +75,9 @@ table td {
 }
 
 .aircraftCarrier {
-  /*margin-top: 35px;*/
-  /*width: 124px;*/
-  left: 70px;
+  width: 125px;
+  height: 25px;
+  color: blue;
 }
 
 .battleship {
