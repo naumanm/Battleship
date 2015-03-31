@@ -2,7 +2,7 @@ $(document).ready(function(){
 
   var socket = io();
 
-  $('#playerSignIn').modal('show'); // shows the get player's name modal
+ $('#playerSignIn').modal('show'); // shows the get player's name modal
 
   // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
   var playerName = 
@@ -29,6 +29,7 @@ $(document).ready(function(){
   }); // END listener for the form submit
 
   function gamePlay(){
+
 
     var selectedArr = []; // array of all shots
 
@@ -90,11 +91,16 @@ $(document).ready(function(){
       // {
       //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
       // }
-    });
-  } // End of gamePlay function
+      });
+
+
+
+    } // End of gamePlay function
+
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
   // draggable
+
   $( "#draggableAircraftCarrier" ).draggable({ 
     containment: "#snaptarget",
     grid: [25, 25] 
@@ -113,13 +119,14 @@ $(document).ready(function(){
   });
   $( "#draggablePtBoat" ).draggable({ 
     containment: "#snaptarget",
-    grid: [25, 25] 
+    grid: [25, 25],
   });
 
   // droppable
   $( ".droppable" ).droppable({
     drop: function( event, ui ) {
       var targetElem = $(this).data("id");
+      console.log(ui.draggable.attr('id'));
       console.log(targetElem);
       // need to emit targetElem back to server for ship location
     } 
