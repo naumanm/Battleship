@@ -106,6 +106,7 @@ $(document).ready(function(){
     containment: "#snaptarget",
     grid: [25, 25] 
   });
+
   $( "#draggableBattleship" ).draggable({ 
     containment: "#snaptarget",
     grid: [25, 25] 
@@ -143,72 +144,75 @@ $(document).ready(function(){
     } 
   });
 
-  // the below function keeps it DRY for changing the ship's img when DBL-clicked. Works with 
-  function setStyle(_this,offSize,orientation) {
-    var imgOrientation = (orientation === 'goVert') ? offSize : '0px;';  // sets the offset
-    var currentStyle = $(_this).attr('style'); // gets the inline style that the draggable creates. Using this to reset the "top: xpx;" value
-    var pos = currentStyle.indexOf("top: ")+ 5; // gets the position of the needed top: attribute
-    currentStyle = currentStyle.slice(0,pos); // removes the old value
-    currentStyle = currentStyle + imgOrientation; // adds the new value
-    $(_this).attr('style', currentStyle); // applies the new value
-  }
+
+  // ship rotation
+
+  var aircraftCarrierRotation = 0;
+  var battleshipRotation = 0;
+  var destroyerRotation = 0;
+  var submarineRotation = 0;
+  var ptBoatRotation = 0;
 
   // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
-        var _this = this;
-        var orientation = ($(_this).attr('src') === '/images/wholeCarrier.png') ? 'goVert' : 'goHoriz'; // determines which orientation to set for the following executables
-        setStyle(_this,'105px;',orientation);
-        // var imgOrientation = (orientation === 'goVert') ? '105px;' : '0px;';  // sets the offset
-        // var currentStyle = $(_this).attr('style'); // gets the inline style that the draggable creates. Using this to reset the "top: xpx;" value
-        // var pos = currentStyle.indexOf("top: ")+ 5; // gets the position of the needed top: attribute
-        // currentStyle = currentStyle.slice(0,pos); // removes the old value
-        // currentStyle = currentStyle + imgOrientation; // adds the new value
-        // $(_this).attr('style', currentStyle); // applies the new value
-        var src = (orientation === 'goVert') ? '/images/wholeCarrierVert.png' : '/images/wholeCarrier.png'; // toggles between the two images
-        $(this).attr('src', src);  // applies the new image
+      if (aircraftCarrierRotation === 0) {
+        aircraftCarrierRotation +=90;
+      }
+      else {
+        aircraftCarrierRotation = 0;
+      }
+      $(this).rotate({ animateTo:aircraftCarrierRotation});
     }
-  });  // END rotate Carrier image
+  });
 
   $('#draggableBattleship').on({
     'dblclick': function() {
-        var _this = this;
-        var orientation = ($(this).attr('src') === '/images/wholeBattleship.png') ? 'goVert' : 'goHoriz';
-        setStyle(_this,'57px;',orientation);
-        var src = (orientation === 'goVert') ? '/images/wholeBattleshipVert.png' : '/images/wholeBattleship.png';
-        $(this).attr('src', src);
+      if (battleshipRotation === 0) {
+        battleshipRotation +=90;
+      }
+      else {
+        battleshipRotation = 0;
+      }
+      $(this).rotate({ animateTo:battleshipRotation});
     }
-  });  // END rotate Battleship image
+  });
 
   $('#draggableDestroyer').on({
     'dblclick': function() {
-        var _this = this;
-        var orientation = ($(this).attr('src') === '/images/wholeCruiser.png') ? 'goVert' : 'goHoriz';
-        setStyle(_this,'45px;',orientation);
-        var src = (orientation === 'goVert') ? '/images/wholeCruiserVert.png' : '/images/wholeCruiser.png';
-        $(this).attr('src', src);
+      if (destroyerRotation === 0) {
+        destroyerRotation +=90;
+      }
+      else {
+        destroyerRotation = 0;
+      }
+      $(this).rotate({ animateTo:destroyerRotation});
     }
-  });  // END rotate Destroyer image
+  });
 
   $('#draggableSubmarine').on({
     'dblclick': function() {
-        var _this = this;
-        var orientation = ($(this).attr('src') === '/images/wholeSub.png') ? 'goVert' : 'goHoriz';
-        setStyle(_this,'25px;',orientation);
-        var src = (orientation === 'goVert') ? '/images/wholeSubVert.png' : '/images/wholeSub.png';
-        $(this).attr('src', src);
+      if (submarineRotation === 0) {
+        submarineRotation +=90;
+      }
+      else {
+        submarineRotation = 0;
+      }
+      $(this).rotate({ animateTo:submarineRotation});
     }
-  });  // END rotate Submarine image
+  });
 
   $('#draggablePtBoat').on({
     'dblclick': function() {
-        var _this = this;
-        var orientation = ($(this).attr('src') === '/images/wholePatrol.png') ? 'goVert' : 'goHoriz';
-        setStyle(_this,'20px;',orientation);
-        var src = (orientation === 'goVert') ? '/images/wholePatrolVert.png' : '/images/wholePatrol.png';
-        $(this).attr('src', src);
+      if (ptBoatRotation === 0) {
+        ptBoatRotation +=90;
+      }
+      else {
+        ptBoatRotation = 0;
+      }
+      $(this).rotate({ animateTo:ptBoatRotation});
     }
-  });  // END rotate Patrol Boat image
+  });
 
   gamePlay();
 
