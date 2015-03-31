@@ -71,8 +71,8 @@ io.on('connection', function(socket){  //step #1 connection
 
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId){  
-  io.emit('shot', "Game Has Begun!"); //use the shot space
-  //need to lock downship movement on client side
+  //NEED TO EMIT TO BOTH THAT GAME HAS STARTED AND NEED TO LOCK DOWN DRAGABLE
+
   this.player1=player1;
   this.player2=player2;
   this.gameId=gameId;  //gameroom
@@ -139,7 +139,7 @@ function hitOrMiss(shotObj,ship,fleet){
     if (ship.indexOf(shotObj)!==-1){
       if(ship.length===1){ //last hit sinks ship
         fleet.shipcount--;
-        io.emit('shot', ship+"sunk at"+shotObj);
+        io.emit(ship+"sunk at"+shotObj);
         console.log(ship+" sunk at "+shotObj);
         if(fleet.shipcount===0)
         {
@@ -148,8 +148,8 @@ function hitOrMiss(shotObj,ship,fleet){
       }
       hitFinder=ship.indexOf(shotObj);
       ship.splice(hitFinder,1); //removes from ship's working "length"
-      io.emit('shot',"Hit detected at "+shotObj);
-      console.log("hit detected at "+ shotObj);
+      io.emit("Hit detected at "+shotObj);
+      console.log("hit detected at "+ shotObj); 
       console.log(ship);
     }
   }
