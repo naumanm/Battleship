@@ -127,9 +127,9 @@ $(document).ready(function(){
   // droppable
   $( ".droppable" ).droppable({
     drop: function( event, ui ) {
-      var targetElem = $(this).attr("id");
+      var targetElem = $(this).data("id");
       console.log(targetElem);
-      console.log("droppable event", event, "droppable ui", ui);
+      //console.log("droppable event", event, "droppable ui", ui);
       $( this )
         // .addClass( "ui-state-highlight" )  // change this. it is leftover from copied example
         .find( "p" )  // change this to appropriate notice element
