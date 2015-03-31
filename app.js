@@ -48,7 +48,6 @@ app.get('/instructions', function(req, res){
 io.on('connection', function(socket){  //step #1 connection
   socket.join(roomNumber);
   console.log(roomNumber);
-  
   console.log(socket.id + " connected");
 
   //socket.on('playerName', function(playerName) {  //step # building a lobby
@@ -57,7 +56,7 @@ io.on('connection', function(socket){  //step #1 connection
     //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
     //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
     //client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
-    waitingRoom.push(socket.id); //need to save in session as value with nickname as key for reconnect?
+    waitingRoom.push(socket); //need to save in session as value with nickname as key for reconnect?
     playerPair++;
     //assign a game, roomNumber, and reset queue when two players are in the waiting room
     if (playerPair===2){
@@ -114,7 +113,7 @@ function Game (player1,player2,gameId){
   //  }); 
   turnController=1;
   console.log("move# " + turnController);
-  if (turnController%2===0)
+  if (!turnController%2===0)
    {
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       io.emit('shot', shotObj); 
@@ -125,9 +124,9 @@ function Game (player1,player2,gameId){
     });
     this.hitOrMiss(shotObj,this.player2Fleet);
    }
-    else  //refactor into recursively switching firecontroller function
+    else
    {
-    player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+    player2 .socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
      io.emit('shot', shotObj); 
      //need to add flash event for player click while not their turn
      console.log("player 1 shot"+shotObj);
