@@ -52,7 +52,7 @@ io.on('connection', function(socket){  //step #1 connection
 
   //socket.on('playerName', function(playerName) {  //step # building a lobby
     console.log(socket.id);//change to player name once modal is working correctly
-    socket.nickname=playerName;
+   // socket.nickname=playerName;
     //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
     //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
     //client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
@@ -67,30 +67,7 @@ io.on('connection', function(socket){  //step #1 connection
       roomNumber++;
       playerPair=0;
     }
-
   //});
-  
-  // 'place_ship' emit event
-  player1.on('place_ship',function(placedShipObj){
-    console.log("placedShipObj", placedShipObj);
-    carrier=[]; //get this from client end hard code test
-    battle=[];
-    sub=[];
-    pt =[];
-
-    var player1Fleet = newFleet(carrier,battle,sub,pt); 
-
-    if( player1ID ){
-      // set player 1's fleet to redis table
-      if( HEXISTS( player1 + "Fleet", session.id ) ){
-
-      }
-    } else if( player2ID ) {
-      // set player 2's fleet to redis table
-    }
-
-    res.render("index.ejs");
-  });
 
   //ORIGINAL SHOT FUNCTION KEEP THIS 
   // socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
@@ -104,7 +81,7 @@ io.on('connection', function(socket){  //step #1 connection
     //if (!socket.nickname) return;              
   });
   
-}); // END of io connection. All game emits need to occure within this block
+});  
 
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId){  
@@ -117,14 +94,16 @@ function Game (player1,player2,gameId){
   var player1Fleet=new Fleet(player1,["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
   var player2Fleet=new Fleet(player2,["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
   //keep this for live play, seeding dummy test fire data
-  // player1.on('fleetReady',function(data){
-  //    carrier=[]; //get this from client end hard code test
+  // player1.on('place_ship',function(data){
+  //console.log("placedShipObj", placedShipObj);    
+  //    carrier=[]; 
   //    battle=[];
   //    sub=[];
   //    pt =[];
   //    var player1Fleet = newFleet(carrier,battle,sub,pt); 
   //  });
-  // player2.on('fleetReady',function(data){
+  // player2.on('place_ship',function(data){
+  // console.log("placedShipObj", placedShipObj);   
   //    carrier=[]; //get this from client end hard code test
   //    battle=[];
   //    sub=[];
