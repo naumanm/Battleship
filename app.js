@@ -191,38 +191,24 @@ function Game (player1,player2,gameId){
 
 //step 3(A) firing and turn switching
 Game.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  
-    // check if shot is a hit or miss  should be game prototyped?
-    if( HEXISTS("opponent", gameObj.playerID) ){
-      var opponentID = client.HGET("opponent", gameObj.playerID); // this gets the opponent player's ID from the opponent dictionary
-
-      if( HEXISTS("ships", gameObj.opponentID) ){
-        var opponentsShips = client.HGETALL("ships"); // this gets the opponent player's ship placements
-        if( opponentsShips.contains(shotObj.shot) ){ // Christian needs answer from Christian ===> syntax?? is the shot contained within the opponentsShips array?
-          // shot is a hit
-          if (1){ // Christian needs answer from ???===>HOW TO check if the ship is sunk!!
-            // the ship is sunk
-            // flash message ship sunk
-            // do something
-          } else {
-            // ship hit but NOT sunk!
-            // flash message a hit
-            // do something
-          } // END if ship sunk
-        } else {
-          // shot is a miss
-          // do something
-        } // END if shot hit
-        client.RPUSH(gameID, gameObj.playerID, shotObj ); // WHAT DATA FORMAT SHOULD I USE???? Here, RPUSH adds the info to the end otherwise, LPUSH I would have to reverse the shotObj with playerID. I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?  
-        gameObj.currentPlayerID = ( gameObj.currentPlayerID === gameObj.gameID ) ? gameObj.player1ID : gameObj.player2ID;
-      } else {
-        // no opponent ships found??? what to do
-      } // END if( opponentsShips.contains(shotObj.shot) 
-    } else {
-      // no opponent found. what to do???
-    }// END if( HEXISTS("opponent", playerID)
-    // render or redirect???
-  }
+  //is there a hit
+  targetPlayerFleet.formation.forEach(ship,function(shotobj){
+     if(ship.indexOf(shotObj)===true){
+       ship.pop(shotObj); //removes from ship's working "length"
+       console.log("hit detected at"+shotObj); //add broadcasting capability
+        if (ship===[]){
+          console.log("ship sunk"); //add broadcasting capability
+          targetPlayerFleet.shipcount--;
+            if (targetPlayerFleet.shipcount===0){
+              console.log("gameOver");
+              return;
+            }
+        }
+     }
+   });
 }
+      
+
 
 //game controller
 Game.prototype.runGame = function(){
@@ -237,7 +223,6 @@ function Fleet (owner,carrier,battleship,submarine,ptboat){
   this.battleship=battleship;
   this.submarine=submarine;
   this.ptboat=ptboat;
-  this.formation=[this.carrier,this.battleship,this.submarine,this.ptboat]
   this.shipcount=4;
 } 
 
