@@ -13,7 +13,6 @@ var express = require('express'),
     bodyParser = require("body-parser"),
     waitingRoom =[], 
     gameRooms=[]; 
-
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
@@ -35,52 +34,6 @@ app.get('/player', function(req, res){
   res.render("index.ejs"); // thinking not to redirect since modal will show again. need this to be ajaxified
 });
 
-// shot fired route 
-app.get('/shot/shotObj', function(req, res){
-  // gameID is the first player's socket.io ID stored in hash "gameID"
-  // gameID 
-  if( HEXISTS("gameIDs", gameObj.playerID) && shotObj ){
-    var gameID = client.HGET("gameIDs", gameObj.playerID); // This gets the game's ID from the data dictionary
-
-    // check if shot is a hit or miss  should be game prototyped?
-    if( HEXISTS("opponent", gameObj.playerID) ){
-      var opponentID = client.HGET("opponent", gameObj.playerID); // this gets the opponent player's ID from the opponent dictionary
-
-      if( HEXISTS("ships", gameObj.opponentID) ){
-        var opponentsShips = client.HGETALL("ships"); // this gets the opponent player's ship placements
-        if( opponentsShips.contains(shotObj.shot) ){ // Christian needs answer from Christian ===> syntax?? is the shot contained within the opponentsShips array?
-          // shot is a hit
-
-          if (1){ // Christian needs answer from ???===>HOW TO check if the ship is sunk!!
-            // the ship is sunk
-            // flash message ship sunk
-            // do something
-
-          } else {
-            // ship hit but NOT sunk!
-            // flash message a hit
-            // do something
-          } // END if ship sunk
-
-        } else {
-          // shot is a miss
-          // do something
-        } // END if shot hit
-
-        client.RPUSH(gameID, gameObj.playerID, shotObj ); // WHAT DATA FORMAT SHOULD I USE???? Here, RPUSH adds the info to the end otherwise, LPUSH I would have to reverse the shotObj with playerID. I think I need to consider the socket.io ID as the list's key for the data, then I should use SET?  
-        gameObj.currentPlayerID = ( gameObj.currentPlayerID === gameObj.gameID ) ? gameObj.player1ID : gameObj.player2ID;
-      } else {
-        // no opponent ships found??? what to do
-      } // END if( opponentsShips.contains(shotObj.shot) 
-
-    } else {
-      // no opponent found. what to do???
-    }// END if( HEXISTS("opponent", playerID)
-
-    // render or redirect???
-  }
-});
-
 // about us route
 app.get('/about', function(req, res){
   res.render("about.ejs");
@@ -95,28 +48,27 @@ app.get('/instructions', function(req, res){
 io.on('connection', function(socket){  //step #1 connection
   socket.join(roomNumber);
   console.log(roomNumber);
-  
-  console.log('a user connected');
+  console.log(socket.id + " connected");
 
-  socket.on('playerName', function(playerName) {  //step # building a lobby
-    console.log('The user\'s game name is', playerName);
+  //socket.on('playerName', function(playerName) {  //step # building a lobby
+    console.log(socket.id);//change to player name once modal is working correctly
     socket.nickname=playerName;
-    client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
+    //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
     //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
-    client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
-    waitingRoom.push(socket.nickname);
+    //client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
+    waitingRoom.push(socket); //need to save in session as value with nickname as key for reconnect?
     playerPair++;
     //assign a game, roomNumber, and reset queue when two players are in the waiting room
     if (playerPair===2){
-      client.HSETNX("opponent", socket.id, socket.id);
+      //client.HSETNX("opponent", socket.id, socket.id);
       // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
-      gameRooms.push(GameObj.new(waitingRoom[0],waitingRoom[1],roomNumber));
-     // gameRooms[length-1].runGame(); //starts the game DO NOT DELETE, CAN'T ACTIVATE YET
+      gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber));
       waitingRoom=[];
       roomNumber++;
       playerPair=0;
     }
-  });
+
+  //});
   
   // 'place_ship' emit event
   player1.on('place_ship',function(placedShipObj){
@@ -148,56 +100,90 @@ io.on('connection', function(socket){  //step #1 connection
   // });
 
   socket.on('disconnect', function(){
-    console.log(socket.nickname + " disconnected");
-    if (!socket.nickname) return;              
+    console.log(socket.id + " disconnected");
+    //if (!socket.nickname) return;              
   });
   
 }); // END of io connection. All game emits need to occure within this block
 
 //game logic step 2(A) building the board
-function GameObj (player1,player2,id){  
-  this.player1=player1;  //socket
-  this.player1Fleet=[]; //not exactly sure how to handle this, depends on how data is passed
-  //after set up of ships how to handle ship coordinates
+function Game (player1,player2,gameId){  
+  this.player1=player1;
   this.player2=player2;
-  this.player2Fleet=[];//not exactly sure how to handle this, depends on how data is passed
-  //after set up of ships
-  this.id=id;  //gameroom
+  this.gameId=gameId;  //gameroom
+  console.log(gameId + " game id");
   gameOver=false;
+  //dummy data
+  var player1Fleet=new Fleet(player1,["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
+  var player2Fleet=new Fleet(player2,["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
+  //keep this for live play, seeding dummy test fire data
+  // player1.on('fleetReady',function(data){
+  //    carrier=[]; //get this from client end hard code test
+  //    battle=[];
+  //    sub=[];
+  //    pt =[];
+  //    var player1Fleet = newFleet(carrier,battle,sub,pt); 
+  //  });
+  // player2.on('fleetReady',function(data){
+  //    carrier=[]; //get this from client end hard code test
+  //    battle=[];
+  //    sub=[];
+  //    pt =[];
+  //    var player2Fleet = newFleet(carrier,battle,sub,pt); 
+  //  }); 
   turnController=1;
-  if (turnController%2===0)
+  console.log("move# " + turnController);
+  if (!turnController%2===0)
    {
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       io.emit('shot', shotObj); 
       //need to add flash event for player click while not their turn
       console.log("player 1 shot"+shotObj);
       turnController++;
+      console.log("move# "+ turnController);
+      this.hitOrMiss(shotObj,this.player2Fleet);
     });
-    this.hitOrMiss(shotObj,this.player2Fleet);
    }
-    else  //refactor into recursively switching firecontroller function
+    else
    {
-    player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+    player2.socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
      io.emit('shot', shotObj); 
      //need to add flash event for player click while not their turn
      console.log("player 1 shot"+shotObj);
-      turnController++;
-    });
+     turnController++;
+     console.log("move# "+ turnController);
      this.hitOrMiss(shotObj,this.player1Fleet);
+    });
    }
   }
 
 //step 3(A) firing and turn switching
-GameObj.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  //what is in shotObj
- //this has to control what to listen to in the shot event on socket.io
+Game.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  
+  //is there a hit
+  targetPlayerFleet.formation.forEach(ship,function(shotobj){
+     if(ship.indexOf(shotObj)===true){
+       ship.pop(shotObj); //removes from ship's working "length"
+       console.log("hit detected at"+shotObj); //add broadcasting capability
+        if (ship===[]){
+          console.log("ship sunk"); //add broadcasting capability
+          targetPlayerFleet.shipcount--;
+            if (targetPlayerFleet.shipcount===0){
+              console.log("gameOver");
+              return;
+            }
+        }
+     }
+   });
 };
 
-//game controller
-GameObj.prototype.runGame = function(){
-  while (this.gameOver===false){
-    this.hitOrMiss();
-  }
-};
+function Fleet (owner,carrier,battleship,submarine,ptboat){
+  this.owner=owner; //socket who placed ship
+  this.carrier=carrier;
+  this.battleship=battleship;
+  this.submarine=submarine;
+  this.ptboat=ptboat;
+  this.shipcount=4;
+} 
 
 // load our server
 http.listen(3000, function(){
