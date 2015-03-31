@@ -117,7 +117,7 @@ io.on('connection', function(socket){  //step #1 connection
     client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
     //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
     client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
-    waitingRoom.push(socket.nickname);
+    waitingRoom.push(socket.id); //need to save in session as value with nickname as key for reconnect?
     playerPair++;
     //assign a game, roomNumber, and reset queue when two players are in the waiting room
     if (playerPair===2){
@@ -146,14 +146,14 @@ io.on('connection', function(socket){  //step #1 connection
 });
 
 //game logic step 2(A) building the board
-function GameObj (player1,player2,id){  
+function Game (player1,player2,player1Name,player2Name,gameId){  
   this.player1=player1;  //socket
   this.player1Fleet=[]; //not exactly sure how to handle this, depends on how data is passed
   //after set up of ships how to handle ship coordinates
   this.player2=player2;
   this.player2Fleet=[];//not exactly sure how to handle this, depends on how data is passed
   //after set up of ships
-  this.id=id;  //gameroom
+  this.gameId=gameId;  //gameroom
   gameOver=false;
   turnController=1;
   if (turnController%2===0)
@@ -179,16 +179,20 @@ function GameObj (player1,player2,id){
   }
 
 //step 3(A) firing and turn switching
-GameObj.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  //what is in shotObj
+Game.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  //what is in shotObj
  //this has to control what to listen to in the shot event on socket.io
-};
+}
 
 //game controller
-GameObj.prototype.runGame = function(){
+Game.prototype.runGame = function(){
   while (this.gameOver===false){
     this.hitOrMiss();
   }
-};
+}
+
+function Ship (location){
+ this.location=[]
+}
 
 // load our server
 http.listen(3000, function(){
