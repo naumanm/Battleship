@@ -15,6 +15,8 @@ $(document).ready(function(){
   $('form').submit(function(e){
     e.preventDefault();
     var playerName = document.getElementsByTagName("input")[0].value;
+ $('#playerSignIn').modal('hide'); // shows the get player's name modal
+    console.log("playerName", playerName);
 // -------if ( SOME CHECK WITH REDIS ) { // don't need to check if playerName is null since the form prevents that.
       
       // document.getElementById("userName").innerHTML = "Hello " + playerName + "!";
@@ -68,7 +70,7 @@ $(document).ready(function(){
         if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
           selectedArr.push(cellId); // push the selected cell into the selectedArr
           var shotObj = {};
-          shotObj.player = person;
+          shotObj.player = $('#personsName').val(); //person;
           shotObj.id = cellId;
           console.log('\nshotObj (player name - cell ID)' , shotObj);
           socket.emit('shot', shotObj);
