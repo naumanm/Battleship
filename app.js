@@ -169,23 +169,24 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
 // socket.on('game_status', function(game_status){
   // gameOver = true;
 // });
-  
   this.player1=player1;
   this.player2=player2;
   this.player1Fleet=player1Fleet;
   this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
-  console.log(gameId + " game id");
-  //FIX THIS
-  console.log("game start emitter needed on server, and on socket needed on client side");
   gameOver=false;
-  var hitFinder;
-  var turnController=1;
-  if (!turnController%2===0) // Christian asks shouldn't this be turnController%2 != 0 ?
-   {
-    console.log("move# "+ turnController);
-    player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
-      console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
+  readyToPlay=false;
+  console.log(gameId + " game id");
+  console.log("matchmaking complete, watiing for player ready and ship lockdown");
+  
+  if(readyToPlay===true){
+    var hitFinder=false;
+    var turnController=1;
+    if (turnController%2 !==0) 
+    {
+      console.log("move# "+ turnController);
+      player1.on('shot', function(shotObj){  
+      console.log(shotObj.id); 
       io.emit('shot', shotObj);
       //need to add flash event for player click while not their turn
       //need to disable other person's ability to shoot when not their turn
@@ -195,13 +196,13 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
-     turnController++;
-    }); 
-  }
-  else
-  {
-   console.log("move# "+ turnController);
-    player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+      turnController++;
+      }); 
+    }
+    else
+    {
+      console.log("move# "+ turnController);
+      player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
       io.emit('shot', shotObj); 
       //need to add flash event for player click while not their turn
@@ -212,9 +213,10 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
-     turnController++;
-    });  
-  }
+      turnController++;
+     });  
+    }
+   } 
 }
 
 function hitOrMiss(shotObj,ship,fleet){  
