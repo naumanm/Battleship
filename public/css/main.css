@@ -52,7 +52,7 @@ td {
   text-align: center;
 }
 
-.gameboard {
+.gameboard, .noColor {
   background: lightblue;
   text-align: middle;
   position-align: center;
