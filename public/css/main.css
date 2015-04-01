@@ -124,12 +124,8 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 #placeShips {
   padding: 8px 8px;
   border: 1px solid black;
-  width: 700px;
+  width: 760px;
   position: relative;
-}
-
-#placeShips h4 {
-  display: inline;
 }
 
 #stats {
@@ -139,9 +135,6 @@ table td { /* only right and bottom so as not to double up on the borders per ta
   width: 234px;
 }
 
-#stats h4 {
-  display: inline;
-}
 
 #draggableTest {
   width: 25px;

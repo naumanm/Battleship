@@ -171,71 +171,61 @@ $( ".droppable" ).droppable({
   // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
-      if (aircraftCarrierRotation === 0) {
-        aircraftCarrierRotation +=90;
+      if( !gameStarted ){
+        if (aircraftCarrierRotation === 0) {aircraftCarrierRotation +=90;}
+        else {aircraftCarrierRotation = 0;}
+        $(this).rotate({ animateTo:aircraftCarrierRotation});
+        socket.emit('aircraftCarrierRotation', aircraftCarrierRotation);
+        console.log('aircraftCarrierRotation ' + aircraftCarrierRotation);
       }
-      else {
-        aircraftCarrierRotation = 0;
-      }
-      $(this).rotate({ animateTo:aircraftCarrierRotation});
-      socket.emit('aircraftCarrierRotation', aircraftCarrierRotation);
-      console.log('aircraftCarrierRotation ' + aircraftCarrierRotation);
     }
   });
 
   $('#draggableBattleship').on({
     'dblclick': function() {
-      if (battleshipRotation === 0) {
-        battleshipRotation +=90;
+      if( !gameStarted ){
+        if (battleshipRotation === 0) {battleshipRotation +=90;}
+        else {battleshipRotation = 0;}
+        $(this).rotate({ animateTo:battleshipRotation});
+        socket.emit('battleshipRotation', battleshipRotation);
+        console.log('battleshipRotation ' + battleshipRotation);
       }
-      else {
-        battleshipRotation = 0;
-      }
-      $(this).rotate({ animateTo:battleshipRotation});
-      socket.emit('battleshipRotation', battleshipRotation);
-      console.log('battleshipRotation ' + battleshipRotation);
     }
   });
 
   $('#draggableDestroyer').on({
     'dblclick': function() {
-      if (destroyerRotation === 0) {
-        destroyerRotation +=90;
+      if( !gameStarted ){
+        if (destroyerRotation === 0) {destroyerRotation +=90;}
+        else {destroyerRotation = 0;}
+        $(this).rotate({ animateTo:destroyerRotation});
+        socket.emit('destroyerRotation', destroyerRotation);
+        console.log('destroyerRotation ' + destroyerRotation);
       }
-      else {
-        destroyerRotation = 0;
-      }
-      $(this).rotate({ animateTo:destroyerRotation});
-      socket.emit('destroyerRotation', destroyerRotation);
-      console.log('destroyerRotation ' + destroyerRotation);
     }
   });
 
   $('#draggableSubmarine').on({
     'dblclick': function() {
-      if (submarineRotation === 0) {
-        submarineRotation +=90;
+      if( !gameStarted ){
+        if (submarineRotation === 0) {submarineRotation +=90;}
+        else {submarineRotation = 0;}
+        $(this).rotate({ animateTo:submarineRotation});
+        socket.emit('submarineRotation', submarineRotation);
+        console.log('submarineRotation ' + submarineRotation);
       }
-      else {
-        submarineRotation = 0;
-      }
-      $(this).rotate({ animateTo:submarineRotation});
-      socket.emit('submarineRotation', submarineRotation);
-      console.log('submarineRotation ' + submarineRotation);
     }
   });
 
   $('#draggablePtBoat').on({
     'dblclick': function() {
-      if (ptBoatRotation === 0) {
-        ptBoatRotation +=90;
+      if( !gameStarted ){
+        if (ptBoatRotation === 0) {ptBoatRotation +=90;}
+        else {ptBoatRotation = 0;}
+        $(this).rotate({ animateTo:ptBoatRotation});
+        socket.emit('ptBoatRotation', ptBoatRotation);
+        console.log('ptBoatRotation ' + ptBoatRotation);
       }
-      else {
-        ptBoatRotation = 0;
-      }
-      $(this).rotate({ animateTo:ptBoatRotation});
-      socket.emit('ptBoatRotation', ptBoatRotation);
-      console.log('ptBoatRotation ' + ptBoatRotation);
     }
   });
 
