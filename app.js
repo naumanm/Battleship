@@ -10,9 +10,9 @@ redis = require("redis"),
 url = require('url'),
 redisURL = url.parse(process.env.REDISCLOUD_URL),
 client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-client.auth(redisURL.auth.split(":")[1]),
+client.auth(redisURL.auth.split(":")[1]);
 // client = redis.createClient(),
-methodOverride = require("method-override"),
+var methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
@@ -56,6 +56,7 @@ io.on('connection', function(socket){  //step #1 connection
 
   //ship placement befor game launch handler for horizontal based ships
   socket.on('place_ship', function(placedShipObj){
+    var name=placedShipObj.name;
     var firstLocation = placedShipObj.location.charAt(0);
     var secondLocation = placedShipObj.location.charAt(1);
     if (name==="AircraftCarrier"){
@@ -67,7 +68,7 @@ io.on('connection', function(socket){  //step #1 connection
           carrier.push(newloc);
         }
    //  } 
-      if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+      if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
         drydockA[0]=carrier;
        }
         else{
@@ -83,7 +84,7 @@ io.on('connection', function(socket){  //step #1 connection
           battleship.push(newloc);
         }
       // } 
-       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
         drydockA[1]=battleship;
        }
         else{
@@ -99,7 +100,7 @@ io.on('connection', function(socket){  //step #1 connection
           submarine.push(newloc);
         }
      //}
-       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
         drydockA[2]=submarine;
        }
         else{
@@ -115,7 +116,7 @@ io.on('connection', function(socket){  //step #1 connection
           destroyer.push(newloc);
         }
       //}  
-       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
         drydockA[3]=destroyer;
        }
         else{
@@ -129,11 +130,11 @@ io.on('connection', function(socket){  //step #1 connection
        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
        ptboat.push(newloc);
     // }
-       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
         drydockA[4]=ptboat;
        }
         else{
-          drydockB[4]=ptboat;
+        drydockB[4]=ptboat;
        } 
     }
   });
@@ -179,10 +180,27 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
   gameOver=false;
+  readyCount=0;
   readyToPlay=false;
   console.log(gameId + " game id");
   console.log("matchmaking complete, watiing for player ready and ship lockdown");
+  console.log(player1Fleet);
+  console.log(player2Fleet);
   turnResult=false;
+  
+  player1.on("game_status",function(){
+    readyCount++;
+    console.log("player1 is ready");
+  });
+
+  player2.on("game_status", function(){
+    readyCount++;
+    console.log("player2 is ready");
+  });
+
+  if (readyCount===2){
+    readyToPlay=true;
+  }
 
   if(readyToPlay===true){
     console.log("Player 1 Start!");
@@ -234,6 +252,7 @@ function hitOrMiss(shotObj,ship,fleet){
     if (ship.indexOf(shotObj)!==-1){
       if(ship.length===1){ //last hit sinks ship
         fleet.shipcount--;
+        io.emit('shot',ship+" Sunk");
       }
       hitFinder=ship.indexOf(shotObj);
       ship.splice(hitFinder,1); //removes from ship's working "length"
