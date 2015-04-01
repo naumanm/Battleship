@@ -24,6 +24,11 @@ table td { /* only right and bottom so as not to double up on the borders per ta
   border-bottom: 1px solid black;
 }
 
+#readyToPlay {
+  position: relative;
+  left: 520px;
+}
+
 .colHead {
   text-align: center;
 }

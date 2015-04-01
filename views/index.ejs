@@ -60,7 +60,7 @@
   </div><!-- /.modal -->
 
   <h4 id="userName">Player Name</h4>  <!-- Christian thinks these should go somewhere else on the page -->
-  <h4 id="shotPlayer">Last Shot</h4>  <!-- Christian thinks these should go somewhere else on the page -->
+  <h4 id="shotPlayer"></h4>  <!-- Christian thinks these should go somewhere else on the page -->
   <!--Use these Bootstrap helper classes (text or background) for the game notifications
       class="text-muted"     text is grey
       class="text-primary"   text is blue
@@ -82,27 +82,30 @@
       <img src="/images/wholeCarrier.png"
            alt="Drag your Aircraft Carrier to Your Ships Board"
            id="draggableAircraftCarrier"
-           class="ui-widget-content, aircraftCarrier"></li>
+           class="ui-widget-content, aircraftCarrier, ship"></li>
       
       <img src="/images/wholeBattleship.png"
            alt="Drag your Battleship to Your Ships Board"
            id="draggableBattleship"
-           class="ui-widget-content, battleship"></li>
+           class="ui-widget-content, battleship, ship"></li>
       
       <img src="/images/wholeCruiser.png"
            alt="Drag your Destroyer to Your Ships Board"
            id="draggableDestroyer"
-           class="ui-widget-content, destroyer"></li>
+           class="ui-widget-content, destroyer, ship"></li>
       
       <img src="/images/wholeSub.png"
            alt="Drag your Submarine to Your Ships Board"
            id="draggableSubmarine"
-           class="ui-widget-content, submarine"></li>
+           class="ui-widget-content, submarine, ship"></li>
       
       <img src="/images/wholePatrol.png"
            alt="Drag your Patrol Boat to Your Ships Board"
            id="draggablePtBoat"
-           class="ui-widget-content, ptBoat"></li>
+           class="ui-widget-content, ptBoat, ship"></li>
+
+      <!-- <input id="readyToPlay" class="btn btn-success" type="submit" value="Ready To Play"> -->
+      <button id="readyToPlay" class="btn btn-success" value="Ready To Play">Ready To Play</button> <!-- jQuery UI is overridding Bootstrap's styling -->
     </div> <!-- END #placeShips -->
     
     <!-- <span class="ui-widget-header"> -->
@@ -400,7 +403,6 @@
       </tr>
     </table> <!-- END .opponent -->
 
-    <!-- </span> END of #droppable .ui-widget-header -->
   </div> <!-- END .gameboard -->
 
   <!-- ++++++++++ CDN Bootstrap JavaScript   -->
