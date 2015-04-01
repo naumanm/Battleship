@@ -109,11 +109,11 @@ td {
 }
 
 .hor {
-  transform: rotate(90deg);
+  transform: rotate(0deg);
 }
 
 .ver {
-  transform: rotate(0deg);
+  transform: rotate(90deg);
 }
 
 /*

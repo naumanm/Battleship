@@ -196,13 +196,7 @@ $( ".droppable" ).droppable({
     // checks if valid drop. if not, it corrects to closest valid grid space
     checkShipPlacement( placedShipObj );
 
-//    socket.emit('place_ship', gameObj[ placedShip ] );  // Christian thinks we should emit the gameObj[ placedShip ] object which contains all ship info (name, grid, orientation)
-//    therefore, the next lines are invalid
     socket.emit('place_ship', placedShipObj);
-
-    socket.emit('shipLocation', placedShipObj.cell);
-    socket.emit('shipName', placedShip);
-// ===== TAKE ABOVE LINES OUT??? SEE REASON IN COMMENT ABOVE =======
 
   } // END of drop definition
 }); // END of droppable
@@ -212,18 +206,16 @@ $( ".droppable" ).droppable({
     'dblclick': function() {
       if( !gameStarted ){
         if ( gameObj.AircraftCarrier.rotation === 0 ) {
-          gameObj.AircraftCarrier.rotation = 90;
-          $('#draggableAircraftCarrier').addClass('ver');
           $('#draggableAircraftCarrier').removeClass('hor');
-
-          gameObj.AircraftCarrier.rotation = 90;  
+          $('#draggableAircraftCarrier').addClass('ver');
+          gameObj.AircraftCarrier.rotation = 90;
 
         } else {
-          gameObj.AircraftCarrier.rotation = 0;
-          $('#draggableAircraftCarrier').addClass('hor');
           $('#draggableAircraftCarrier').removeClass('ver');
+          $('#draggableAircraftCarrier').addClass('hor');
+          gameObj.AircraftCarrier.rotation = 0;
         }
-        socket.emit('AircraftCarrier Rotation', gameObj.AircraftCarrier.rotation );
+        socket.emit('place_ship', gameObj );
         console.log('AircraftCarrier Rotation', gameObj.AircraftCarrier.rotation );
       }
      }//,
@@ -241,16 +233,16 @@ $( ".droppable" ).droppable({
     'dblclick': function() {
       if( !gameStarted ){
         if ( gameObj.Battleship.rotation === 0 ) {
-          gameObj.Battleship.rotation = 90;
-          $('#draggableBattleship').addClass('ver');
           $('#draggableBattleship').removeClass('hor');
+          $('#draggableBattleship').addClass('ver');
+          gameObj.Battleship.rotation = 90;
         } else {
-          gameObj.Battleship.rotation = 0;
-          $('#draggableBattleship').addClass('hor');
           $('#draggableBattleship').removeClass('ver');
+          $('#draggableBattleship').addClass('hor');
+          gameObj.Battleship.rotation = 0;
         }
         // $(this).rotate({ animateTo:battleshipRotation});
-        socket.emit('Battleship Rotation', gameObj.Battleship.rotation );
+        socket.emit('place_ship', gameObj );
         console.log('Battleship Rotation', gameObj.Battleship.rotation );
       }
     }
@@ -260,15 +252,15 @@ $( ".droppable" ).droppable({
     'dblclick': function() {
       if( !gameStarted ){
         if ( gameObj.Destroyer.rotation === 0 ) {
-          gameObj.Destroyer.rotation = 90;
-          $('#draggableDestroyer').addClass('ver');
           $('#draggableDestroyer').removeClass('hor');
+          $('#draggableDestroyer').addClass('ver');
+          gameObj.Destroyer.rotation = 90;
         } else {
-          gameObj.Destroyer.rotation = 0;
-          $('#draggableDestroyer').addClass('hor');
           $('#draggableDestroyer').removeClass('ver');
+          $('#draggableDestroyer').addClass('hor');
+          gameObj.Destroyer.rotation = 0;
         }
-        socket.emit('Destroyer Rotation', gameObj.Destroyer.rotation );
+        socket.emit('place_ship', gameObj );
         console.log('Destroyer Rotation', gameObj.Destroyer.rotation );
       }
     }
@@ -278,15 +270,15 @@ $( ".droppable" ).droppable({
     'dblclick': function() {
       if( !gameStarted ){
         if ( gameObj.Submarine.rotation === 0 ) {
-          gameObj.Submarine.rotation = 90;
-          $('#draggableSubmarine').addClass('ver');
           $('#draggableSubmarine').removeClass('hor');
+          $('#draggableSubmarine').addClass('ver');
+          gameObj.Submarine.rotation = 90;
         } else {
-          gameObj.Submarine.rotation = 0;
-          $('#draggableSubmarine').addClass('hor');
           $('#draggableSubmarine').removeClass('ver');
+          $('#draggableSubmarine').addClass('hor');
+          gameObj.Submarine.rotation = 0;
         }
-        socket.emit('Submarine Rotation', gameObj.Submarine.rotation );
+        socket.emit('place_ship', gameObj );
         console.log('Submarine Rotation', gameObj.Submarine.rotation );
       }
     }
@@ -296,15 +288,15 @@ $( ".droppable" ).droppable({
     'dblclick': function() {
       if( !gameStarted ){
         if ( gameObj.PtBoat.rotation === 0 ) {
-          gameObj.PtBoat.rotation = 90;
-          $('#draggablePtBoat').addClass('ver');
           $('#draggablePtBoat').removeClass('hor');
+          $('#draggablePtBoat').addClass('ver');
+          gameObj.PtBoat.rotation = 90;
         } else {
-          gameObj.PtBoat.rotation = 0;
-          $('#draggablePtBoat').addClass('hor');
           $('#draggablePtBoat').removeClass('ver');
+          $('#draggablePtBoat').addClass('hor');
+          gameObj.PtBoat.rotation = 0;
         }
-        socket.emit('PtBoat Rotation', gameObj.PtBoat.rotation );
+        socket.emit('place_ship', gameObj );
         console.log('PtBoat Rotation', gameObj.PtBoat.rotation );
       }
     }
@@ -317,11 +309,11 @@ $( ".droppable" ).droppable({
     placedOrientation = placedShipObj.rotation;
     console.log("placedShip",placedShip,"placedLocation",placedLocation,"placedOrientation",placedOrientation);
 
-    var vGrid = placedLocation.substr(0, 1); //check the 1st char of the grid location
-    var hGrid = placedLocation.substr(1, 1); //check the 2nd char of the grid location
-// console.log("vGrid", vGrid, "hGrid", hGrid);
+    var placedHGrid = placedLocation.substr(1, 1).toString(); //check the 2nd char of the grid location
+    var placedVGrid = placedLocation.substr(0, 1).toString(); //check the 1st char of the grid location
+// console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
 
-    validHGrid = { // use with rotation === 0
+    var validHGrid = { // use with rotation === 0
       "AircraftCarrier": [1,2,3,4,5,6],
       "Battleship": [1,2,3,4,5,6,7],
       "Destroyer": [1,2,3,4,5,6,7,8],
@@ -329,7 +321,7 @@ $( ".droppable" ).droppable({
       "PtBoat": [1,2,3,4,5,6,7,8,9],
     };
 
-    validVGrid = { // use with rotation === 90
+    var validVGrid = { // use with rotation === 90
       "AircraftCarrier": ["a","b","c","d","e","f"],
       "Battleship": ["a","b","c","d","e","f","g"],
       "Destroyer": ["a","b","c","d","e","f","g","h"],
@@ -339,16 +331,16 @@ $( ".droppable" ).droppable({
 
     if( placedOrientation === 0 ){ // use validHGrid
       //do something using validHGrid
-      var validH = validHGrid[ placedShip.toString() ].indexOf( placedLocation );
+      var validH = validHGrid[ placedShip ].indexOf( placedHGrid ); // .toString()
       if ( validH == -1 ) {
-        //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+        console.log("not valid Horiz placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
       }
 
     } else { // use validVGrid
       //do something using validVGrid
-      var validV = validVGrid[ ship_name.toString() ].indexOf( ship_grid );
+      var validV = validVGrid[ placedShip ].indexOf( placedVGrid );
       if ( validV == -1 ) {
-        //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+        console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
       }
 
     } // END of if(placedOrientation === "Horizontal", ship_grid){
