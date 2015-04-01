@@ -101,12 +101,13 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   turnResult=false;
   
   player1.on('place_ship', function(placedShipObj){
+    console.log(placedShipObj);
     var name=placedShipObj.name;
-    var firstLocation = placedShipObj.location.charAt(0);
-    var secondLocation = placedShipObj.location.charAt(1);
+    var firstLocation = placedShipObj.cell.charAt(0);
+    var secondLocation = placedShipObj.cell.charAt(1);
     if (name==="AircraftCarrier"){
       //if (placedShipObj.rotation===0){
-        var carrier =[placedShipObj.location];
+        var carrier =[placedShipObj.cell];
         for (var i = 0; i < 5; i++) {
           secondLocation++; //increments the location of the 2nd letter of the coordinate
           newloc=firstLocation+secondLocation; //concat as a string thanks javascript
@@ -116,7 +117,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
         drydockA[0]=carrier;
     }
     if (name==="Battleship"){
-       var battleship =[placedShipObj.location];
+       var battleship =[placedShipObj.cell];
        //if (placedShipObj.rotation===0){
         for (var h = 0; h < 4; h++) {
           secondLocation++; //increments the location of the 2nd letter of the coordinate
@@ -127,7 +128,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
         drydockA[1]=battleship;
     }
     if (name==="Submarine"){
-      var submarine =[placedShipObj.location];
+      var submarine =[placedShipObj.cell];
        //if (placedShipObj.rotation===0){
         for (var j = 0; j < 2; j++) {
           secondLocation++; //increments the location of the 2nd letter of the coordinate
@@ -138,7 +139,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
         drydockA[2]=submarine;
     }
     if (name==="Destroyer"){
-       var destroyer =[placedShipObj.location];
+       var destroyer =[placedShipObj.cell];
        //if (placedShipObj.rotation===0){
         for (var k = 0; k < 2; k++) {
           secondLocation++; //increments the location of the 2nd letter of the coordinate
@@ -150,7 +151,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     }
     if (name==="PtBoat"){
        //if (placedShipObj.rotation===0){
-       var ptboat =[placedShipObj.location];
+       var ptboat =[placedShipObj.cell];
        secondLocation++; //increments the location of the 2nd letter of the coordinate
        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
        ptboat.push(newloc);
@@ -161,11 +162,11 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
    //refactor into a function, along with some of the items within.
   player2.on('place_ship', function(placedShipObj){
     var name=placedShipObj.name;
-    var firstLocation = placedShipObj.location.charAt(0);
-    var secondLocation = placedShipObj.location.charAt(1);
+    var firstLocation = placedShipObj.cell.charAt(0);
+    var secondLocation = placedShipObj.cell.charAt(1);
     if (name==="AircraftCarrier"){
       //if (placedShipObj.rotation===0){
-        var carrier =[placedShipObj.location];
+        var carrier =[placedShipObj.cell];
         for (var i = 0; i < 5; i++) {
           secondLocation++; //increments the location of the 2nd letter of the coordinate
           newloc=firstLocation+secondLocation; //concat as a string thanks javascript
@@ -175,7 +176,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
         drydockB[0]=carrier;
     }
     if (name==="Battleship"){
-       var battleship =[placedShipObj.location];
+       var battleship =[placedShipObj.cell];
        //if (placedShipObj.rotation===0){
         for (var h = 0; h < 4; h++) {
           secondLocation++; //increments the location of the 2nd letter of the coordinate
@@ -186,7 +187,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
         drydockB[1]=battleship;
     }
     if (name==="Submarine"){
-      var submarine =[placedShipObj.location];
+      var submarine =[placedShipObj.cell];
        //if (placedShipObj.rotation===0){
         for (var j = 0; j < 2; j++) {
           secondLocation++; //increments the location of the 2nd letter of the coordinate
@@ -197,7 +198,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
         drydockB[2]=submarine;
     }
     if (name==="Destroyer"){
-       var destroyer =[placedShipObj.location];
+       var destroyer =[placedShipObj.cell];
        //if (placedShipObj.rotation===0){
         for (var k = 0; k < 2; k++) {
           secondLocation++; //increments the location of the 2nd letter of the coordinate
@@ -209,7 +210,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     }
     if (name==="PtBoat"){
        //if (placedShipObj.rotation===0){
-       var ptboat =[placedShipObj.location];
+       var ptboat =[placedShipObj.cell];
        secondLocation++; //increments the location of the 2nd letter of the coordinate
        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
        ptboat.push(newloc);
