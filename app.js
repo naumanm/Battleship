@@ -234,8 +234,8 @@ function LetterChanges(str) {
     });
 }
 
-
+//app.set('port', (process.env.PORT || 5000))
 // load our server
-http.listen(80, function(){
+http.listen((process.env.PORT || 3000), function(){
   console.log('listening on *:3000');
 });
