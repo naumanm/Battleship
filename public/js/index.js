@@ -96,7 +96,7 @@ var aircraftCarrier = {
 
 // *******************UN-COMMENT ONCE DONE WITH TESTING**************************
 //TEMPORARY DISABLE SINCE IT'S SO ANNOYING WHILE TESTING
-  var nameEmpty = function(a){
+  var isNameEmpty = function(a){
   // $('#playerSignIn').modal('show'); // shows the get player's name modal
   }();
 
