@@ -141,11 +141,13 @@ socket.on('disconnect', function(){
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
   //NEED TO EMIT TO BOTH THAT GAME HAS STARTED AND NEED TO LOCK DOWN DRAGABLE
+  
   //game_status is true if player clicked "Ready To Play" button
   //game_status is false if player clicked "Surrender" button
   socket.on('game_status', function(game_status){
     gameOver = true;
   });
+  
   this.player1=player1;
   this.player2=player2;
   this.player1Fleet=player1Fleet;
