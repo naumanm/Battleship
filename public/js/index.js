@@ -196,31 +196,41 @@ var aircraftCarrier = {
     grid: [25, 25]
   });
 
+  // function to consolidate and emit ship object 
+  function emitShip(shipObj) {
+    socket.emit('shipObj', shipObj);
+    console.log("emitting " + shipObj);
+  }
+
+
 $( ".droppable" ).droppable({
   drop: function( event, ui ) {
     var targetElem = $(this).data("id");
     var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
-
     // remove "draggable" from the passed ship's name
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable'
-    console.log( placedShip ); // this is the ship that was placed
 
+    if (placedShip === "AircraftCarrier") {
+      aircraftCarrier.cellID = targetElem;
+      emitShip(aircraftCarrier);
+    }
+    if (placedShip === "Battleship") {
+      battleship.cellID = targetElem;
+      emitShip(battleship);
+    }
+    if (placedShip === "Destroyer") {
+      destroyer.cellID = targetElem;
+      emitShip(destroyer);
+    }
+    if (placedShip === "Submarine") {
+      submarine.cellID = targetElem;
+      emitShip(submarine);
+    }
+    if (placedShip === "PtBoat") {
+      ptBoat.cellID = targetElem;
+      emitShip(ptBoat);
+    }
 
-    console.log( targetElem ); // this is the grid location the ship was placed
-    socket.emit('shipLocation', targetElem);
-
-    // set the values to the global gameObj to then check then emit
-    placedShipObj.name = placedShip;
-    placedShipObj.location = targetElem;
-    
-    // checks if valid drop. if not, it corrects to closest valid grid space
-    checkShipPlacement( placedShip, targetElem, orientation );
-
-//    socket.emit('place_ship', gameObj[ placedShip ] );  // Christian thinks we should emit the gameObj[ placedShip ] object which contains all ship info (name, grid, orientation)
-//    therefore, the next lines are invalid
-    socket.emit('place_ship', placedShipObj);
-    socket.emit('shipName', placedShip);
-// ===== TAKE ABOVE LINES OUT??? SEE REASON IN COMMENT ABOVE =======
 
   } // END of drop definition
 }); // END of droppable
@@ -229,18 +239,25 @@ $( ".droppable" ).droppable({
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
       if( !gameStarted ){
-        if (aircraftCarrierRotation === 0) {
-          aircraftCarrierRotation +=90;
+        if (aircraftCarrier.rotation === 0) {
+          aircraftCarrier.rotation +=90;
           $('#draggableAircraftCarrier').addClass('ver');
           $('#draggableAircraftCarrier').removeClass('hor');
+
+          aircraftCarrier.rotation = '90';  
+
         } else {
-          aircraftCarrierRotation = 0;
+          aircraftCarrier.Rotation = 0;
           $('#draggableAircraftCarrier').addClass('hor');
           $('#draggableAircraftCarrier').removeClass('ver');
+
+          aircraftCarrier.rotation = '0';  
         }
-        $(this).rotate({ animateTo:aircraftCarrierRotation});
-        socket.emit('aircraftCarrierRotation', aircraftCarrierRotation);
-        console.log('aircraftCarrierRotation ' + aircraftCarrierRotation);
+//        $(this).rotate({ animateTo:aircraftCarrierRotation});
+
+        console.log('from rotate '  +  aircraftCarrier); 
+
+        emitShip(aircraftCarrier);
       }
      }//,
     // 'mouseover': function(){      // this highlights the ship when hover but it adds pixels to border which makes the ships shift.

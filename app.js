@@ -6,7 +6,11 @@ app = express(),
 http = require('http').Server(app),
 io = require('socket.io')(http),
 redis = require("redis"),
-client = redis.createClient(),
+url = require('url'),
+redisURL = url.parse(process.env.REDISCLOUD_URL),
+client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+client.auth(redisURL.auth.split(":")[1]),
+//client = redis.createClient(),
 methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
@@ -251,7 +255,7 @@ function LetterChanges(str) {
 }
 
 
-// load our server
-http.listen(3000, function(){
+// load our server with port switching for local or production
+http.listen((process.env.PORT || 3000), function(){
   console.log('listening on *:3000');
 });
