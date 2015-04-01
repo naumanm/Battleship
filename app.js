@@ -9,9 +9,9 @@ redis = require("redis"),
 url = require('url'),
 redisURL = url.parse(process.env.REDISCLOUD_URL),
 client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-client.auth(redisURL.auth.split(":")[1]),
+client.auth(redisURL.auth.split(":")[1]);
 //client = redis.createClient(),
-methodOverride = require("method-override"),
+var methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
