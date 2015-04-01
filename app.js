@@ -81,26 +81,22 @@ io.on('connection', function(socket){  //step #1 connection
 
 //game logic 
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
-  //NEED TO EMIT TO BOTH THAT GAME HAS STARTED AND NEED TO LOCK DOWN DRAGABLE
-  //have to handle game over
-  //game_status is true if player clicked "Ready To Play" button
-  //game_status is false if player clicked "Surrender" button
-// socket.on('game_status', function(game_status){
-  // gameOver = true;
-// });
+  
+  //Game Setup
   this.player1=player1;
   this.player2=player2;
   this.player1Fleet=player1Fleet;
   this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
-  gameOver=false;
-  readyCount=0;
-  readyToPlay=false;
-  console.log(gameId + " game id");
-  console.log("matchmaking complete, watiing for player ready and ship lockdown");
-  turnResult=false;
+  var gameOver=false,
+  player1ReadyStatus=false,
+  player2ReadyStatus=false,
+  readyToPlay=false,
+  turnComplete=false;
   
-
+  console.log(gameId + " game #");
+  console.log("matchmaking complete, waiting for player ready and ship lockdown");
+  
   function shipMover (playersocket,docklocation){
     playersocket.on('place_ship', function(placedShipObj){  //to be refactored in v2
     console.log(placedShipObj);
@@ -211,32 +207,24 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   shipMover(player2,drydockB);
   
   player1.on("game_status",function(){
-    readyCount++;
-    console.log("player1 is ready");
-    console.log(player1Fleet);
-    console.log(readyCount);
+    if(player1Fleet.length===5){
+      player1ReadyStatus=true;
+      console.log("player1 is ready");
+      console.log(player1Fleet);
+      console.log(readyCount);
+    }
   });
 
   player2.on("game_status", function(){
-    readyCount++;
-    console.log("player2 is ready");
-    console.log(player2Fleet);
-    console.log(readyCount);
+    if(player2Fleet.length===5){
+      player2ReadyStatus=true;
+      console.log("player2 is ready");
+      console.log(player2Fleet);
+      console.log(readyCount);
+    }
   });
-  
-  //make sure that the fleets are ready for firing
-  if (readyCount===2){
-    if ((player1Fleet || player2Fleet) ===[]){
-    console.log("game not ready");
-    // io.emit('shot',"Please Confirm Readiness by Clicking ready to play, thank you!"); 
-    //need event to tell client to reclick ready button
-    } 
-    else 
-    readyToPlay=true;
-    console.log("ready to play");
-  }
 
-  if(readyToPlay===true){
+  if(player1ReadyStatus && player2ReadyStatus){
     console.log("Player 1 Start!");
     var turnController=1;
     if (turnController%2 !==0) 
