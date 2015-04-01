@@ -23,7 +23,6 @@ drydockB=[]; //at this point, before game start they are sitting in the waiting 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
-
 console.log(process.env.REDISCLOUD_URL);
 
 // more middleware  Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
@@ -54,8 +53,6 @@ io.on('connection', function(socket){  //step #1 connection
   console.log(roomNumber);
   console.log(socket.id + " connected");
 
- 
-
  // //worry about rotation when rotation event occurs 
 
   socket.on('playerName', function(playerName) { 
@@ -82,7 +79,7 @@ io.on('connection', function(socket){  //step #1 connection
 
 });
 
-//game logic step 2(A) building the board
+//game logic 
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
   //NEED TO EMIT TO BOTH THAT GAME HAS STARTED AND NEED TO LOCK DOWN DRAGABLE
   //have to handle game over
@@ -222,29 +219,28 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     }
   });
 
-
- //worry about rotation when rotation event occurs 
-
-
-
   player1.on("game_status",function(){
     readyCount++;
     console.log("player1 is ready");
     console.log(player1Fleet);
+    console.log(readyCount);
   });
 
   player2.on("game_status", function(){
     readyCount++;
     console.log("player2 is ready");
     console.log(player2Fleet);
+    console.log(readyCount);
   });
   
   //make sure that the fleets are ready for firing
   if (readyCount===2){
     if ((player1Fleet || player2Fleet) ===[]){
-      io.emit('shot',"Please Confirm Readiness by clicking ready to play, thank you!");
+    console.log("game not ready");
+    // io.emit('shot',"Please Confirm Readiness by Clicking ready to play, thank you!"); 
+    //need event to tell client to reclick ready button
     } 
-    readyToPlay=true;
+    else readyToPlay=true;
   }
 
   if(readyToPlay===true){
@@ -252,39 +248,37 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     var turnController=1;
     if (turnController%2 !==0) 
     {
+      // player1.emit('shot',"your turn, player1"); //need an event on client side to announce turn
       console.log("move# "+ turnController);
       player1.on('shot', function(shotObj){  
       console.log(shotObj.id); 
       io.emit('shot', shotObj);
-      //need to add flash event for player click while not their turn
-      //need to disable other person's ability to shoot when not their turn
-      //ugly but...
       hitOrMiss(shotObj.id,player2Fleet.carrier,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
       if (turnResult===true)
-        io.emit("Hit!");
+        io.emit('shot',"Hit!");
+      turnResult=false;
       turnController++;
       }); 
     }
     else
-    {
+    { 
+      // player2.emit('shot',"your turn, player2"); need an event to announe to player that it's their turn
       console.log("move# "+ turnController);
       player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
       io.emit('shot', shotObj); 
-      //need to add flash event for player click while not their turn
-      //need to disable other person's ability to shoot when not their turn
-      //ugly but...
       hitOrMiss(shotObj.id,player1Fleet.carrier,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.battleship,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
       if (turnResult===true)
-        io.emit("Hit!");
+      // io.emit('hit_confirmation',"Hit! at "+shot.obj); //some client event needed for announcing shot hits
+      turnResult=false;
       turnController++;
      });  
     }
@@ -297,7 +291,6 @@ function hitOrMiss(shotObj,ship,fleet){
     if (ship.indexOf(shotObj)!==-1){
       if(ship.length===1){ //last hit sinks ship
         fleet.shipcount--;
-        io.emit('shot',ship+" Sunk");
       }
       hitFinder=ship.indexOf(shotObj);
       ship.splice(hitFinder,1); //removes from ship's working "length"
