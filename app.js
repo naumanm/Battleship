@@ -209,11 +209,12 @@ function Fleet (carrier,battleship,submarine,destroyer,ptboat){
   this.carrier=carrier;
   this.battleship=battleship;
   this.submarine=submarine;
-  this.destoryer=destroyer;
+  this.destroyer=destroyer;
   this.ptboat=ptboat;
   this.shipcount=5;
 } 
-//use for veritical
+//use for vertical code 
+
 function LetterChanges(str) {
     return str.replace(/[a-j]/, function(c){
         return String.fromCharCode(c.charCodeAt(0)+1);
