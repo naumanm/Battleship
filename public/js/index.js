@@ -1,9 +1,36 @@
 $(document).ready(function(){
 
+// objects to emit to backend
+var aircraftCarrier = {
+  name: "aircraftCarrier",
+  cell: "",
+  rotation: "0"
+};
+var battleship = {
+  name: "battleship",
+  cell: "",
+  rotation: "0"
+};
+var destroyer = {
+  name: "destroyer",
+  cell: "",
+  rotation: "0"
+};
+var submarine = {
+  name: "submarine",
+  cell: "",
+  rotation: "0"
+};
+var ptBoat = {
+  name: "ptBoat",
+  cell: "",
+  rotation: "0"
+};
+
 var socket = io(),
-// gameStatus = "setup" disallows firing and allows placing ships.
-// gameStatus = "play" disallows placing ships and allows firing.
-gameStatus; // this is global for if the game is in setup of play mode.
+// gameStarted = false ==> disallows firing and allows placing ships.
+// gameStarted = true ==> disallows placing ships and allows firing.
+    gameStarted = gameStarted || false;
 
 $('#playerSignIn').modal('show'); // shows the get player's name modal
 
@@ -82,7 +109,7 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
     socket.on('shot', function(shotObj){
       // Updates the Header UI for who took a shot and the cell location
       if (shotObj.player !== person) {
-        document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
+        document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + ". It's your turn!";
         // gets the shot fired and updates the gameboard
         // this is klugy, needs a better way...
         var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
@@ -114,12 +141,9 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
     grid: [25, 25] 
   });
   $( "#draggablePtBoat" ).draggable({ 
-    containment: ".snaptarget",
-    grid: [25, 25],
+    containment: "#snaptarget",
+    grid: [25, 25]
   });
-
-// Ability to place your ships on the grid
-var gameStarted = gameStarted || false;
 
 $( ".droppable" ).droppable({
   drop: function( event, ui ) {
@@ -142,19 +166,7 @@ $( ".droppable" ).droppable({
   } // END of drop definition
 }); // END of droppable
 
-//  Christian testing***********************************************************************
-gameStarted = false;  
-//  Christian testing***********************************************************************
-      
-$( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable droppable if game has started
-
   // ship rotation
-
-  var aircraftCarrierRotation = 0;
-  var battleshipRotation = 0;
-  var destroyerRotation = 0;
-  var submarineRotation = 0;
-  var ptBoatRotation = 0;
 
   // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
@@ -175,8 +187,6 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
     'dblclick': function() {
       if (battleshipRotation === 0) {
         battleshipRotation +=90;
-        $(this).height(100);    
-        $(this).width(25);
       }
       else {
         battleshipRotation = 0;
@@ -205,8 +215,6 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
     'dblclick': function() {
       if (submarineRotation === 0) {
         submarineRotation +=90;
-        $(this).height(75);    
-        $(this).width(25);
       }
       else {
         submarineRotation = 0;
@@ -221,8 +229,6 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
     'dblclick': function() {
       if (ptBoatRotation === 0) {
         ptBoatRotation +=90;
-        $(this).height(50);    
-        $(this).width(25);
       }
       else {
         ptBoatRotation = 0;
@@ -233,6 +239,30 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
     }
   });
 
-gamePlay();
+// toggle ships droppable
+  var gameReady = function( setTo ){
+// console.log("setTo", setTo);
+    // accepts val to set . gameStarted is a global var. Should only be called by player clicking "Ready To Play" button, by starting a new game
+    setTo = setTo || gameStarted;
+    gameStarted = setTo;
+//  Christian testing***********************************************************************
+    gameStarted = true;  
+//  Christian testing***********************************************************************
+// console.log("gameStarted", gameStarted);
+    $( ".ship" ).draggable( "option", "disabled", gameStarted );
+  }; // END disable gameReady funct
+
+// enable opponent's grid for shoots on connect of 2nd player or when player clicks ready to play?
+  $('#readyToPlay').on({
+    'click': function() {
+      event.preventDefault();
+      // disable droppable
+      $('#shotPlayer').text("Game ON!");
+      gameReady(true);
+      // emit to server player is ready
+    }
+  });
+
+  gamePlay();
 
 });

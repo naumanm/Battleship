@@ -12,7 +12,8 @@ roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
-gameRooms=[]; 
+gameRooms=[];
+drydock=[];
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
@@ -43,8 +44,67 @@ io.on('connection', function(socket){  //step #1 connection
   socket.join(roomNumber);
   console.log(roomNumber);
   console.log(socket.id + " connected");
-  //PUT PRE GAME SHIP HANDLER HERE?
-  socket.on('playerName', function(playerName) {  //step # building a lobby
+
+  //ship placement handler for horizontal based ships
+  socket.on('place_ship', function(placedShipObj){
+    var firstLocation = placedShipObj.location.charAt(0);
+    var secondLocation = placedShipObj.location.charAt(1);
+    console.log(firstLocation,secondLocation,name);
+    if (name==="AircraftCarrier"){
+      var carrier =[placedShipObj.location];
+       for (var i = 0; i < 5; i++) {
+        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+        carrier.push(newloc);
+       }
+       drydock[0]=carrier; //need to hash this with the socket.... 
+    }
+    if (name==="Battleship"){
+       var battleship =[placedShipObj.location];
+       for (var h = 0; h < 4; h++) {
+        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+        battleship.push(newloc);
+       }
+       drydock[1]=battleship; //need to hash this with the socket.... 
+    }
+    if (name==="Submarine"){
+      var submarine =[placedShipObj.location];
+       for (var j = 0; j < 2; j++) {
+        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+        submarine.push(newloc);
+       }
+       drydock[2]=submarine; //need to hash this with the socket.... 
+    }
+    if (name==="Destroyer"){
+       var destroyer =[placedShipObj.location];
+       for (var k = 0; k < 2; k++) {
+        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+        destroyer.push(newloc);
+       }
+       drydock[3]=destroyer; //need to hash this with the socket.... 
+    }
+    if (name==="PtBoat"){
+       var ptboat =[placedShipObj.location];
+       secondLocation++; //increments the location of the 2nd letter of the coordinate
+       newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+       ptboat.push(newloc);
+       drydock[4]=ptboat; //need to hash this with the socket.... 
+    }
+  });
+  
+   
+ //we get the ship name and location
+ //figure out what type of ship it is
+ //based on its location
+ //worry about rotation when rotation event occurs
+
+
+   
+
+  socket.on('playerName', function(playerName) { 
   socket.nickname=playerName;
   });
   //SAVE USERNAME FROM playername TO REDIS FOR WIN/LOSS KEEPING, ALSO SESSION KEEPING use SOCKET.ID FOR THAT PART
@@ -113,6 +173,7 @@ function Game (player1,player2,gameId){
       hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
      turnController++;
     }); 
   }
@@ -129,6 +190,7 @@ function Game (player1,player2,gameId){
       hitOrMiss(shotObj.id,player1Fleet.battleship,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
      turnController++;
     });  
   }
@@ -153,12 +215,13 @@ function hitOrMiss(shotObj,ship,fleet){
   }
 }
 
-function Fleet (carrier,battleship,submarine,ptboat){
+function Fleet (carrier,battleship,submarine,destroyer,ptboat){
   this.carrier=carrier;
   this.battleship=battleship;
   this.submarine=submarine;
+  this.destoryer=destroyer;
   this.ptboat=ptboat;
-  this.shipcount=4;
+  this.shipcount=5;
 } 
 
 // load our server

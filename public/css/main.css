@@ -24,6 +24,11 @@ table td { /* only right and bottom so as not to double up on the borders per ta
   border-bottom: 1px solid black;
 }
 
+#readyToPlay {
+  position: relative;
+  left: 520px;
+}
+
 .colHead {
   text-align: center;
 }
@@ -79,21 +84,18 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 }
 
 /* These left: settings on the ships are for the starting location of the ships to look nice in a row prior to placing them on the board */
-/*.aircraftCarrier { left: 240px; top: 8px; }*/
+.aircraftCarrier { left: 240px; top: 8px; }
+.battleship { left: 370px; top: 8px; }
+.destroyer { left: 475px; top: 8px; }
+.submarine { left: 555px; top: 8px; }
+.ptBoat { left: 635px; top: 8px; }
+
 .aircraftCarrier {
-  z-index: 100;
-  width: 125px;
-  height: 25px;
-  color: blue;
+  offset: 100px;
+
+
 }
 
-.battleship { left: 370px; top: 8px; }
-
-.destroyer { left: 475px; top: 8px; }
-
-.submarine { left: 555px; top: 8px; }
-
-.ptBoat { left: 635px; top: 8px; }
 
 .hit {
   /*color: red;*/
@@ -141,15 +143,12 @@ table td { /* only right and bottom so as not to double up on the borders per ta
   display: inline;
 }
 
-.top {
-
+#draggableTest {
+  width: 25px;
+  height: 25px;
+  background-color: red;
+  z-index: 1000;
 }
 
-.left {
-}
-
-.inside {
-  display: inline;
-}
 
 
