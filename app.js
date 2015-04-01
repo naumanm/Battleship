@@ -161,7 +161,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     console.log("move# "+ turnController);
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
-      io.emit('shot', shotObj); 
+      io.emit('shot', shotObj);
       //need to add flash event for player click while not their turn
       //need to disable other person's ability to shoot when not their turn
       //ugly but...
@@ -200,7 +200,9 @@ function hitOrMiss(shotObj,ship,fleet){
         console.log(ship+" sunk at "+shotObj);
         if(fleet.shipcount===0)
         {
-         console.log("gameover"); //need to add game over functionality
+          gameOver = true;
+          io.emit('game_status', gameOver);
+          console.log("Game Over"); //need to add game over functionality
         }
       }
       hitFinder=ship.indexOf(shotObj);
