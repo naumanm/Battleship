@@ -128,6 +128,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
 
   this.player1=player1;
   this.player2=player2;
+  this.player1Fleet=player1Fleet;
+  this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
   console.log(gameId + " game id");
   gameOver=false;
