@@ -57,7 +57,8 @@ io.on('connection', function(socket){  //step #1 connection
         newloc=firstLocation+secondLocation; //concat as a string thanks javascript
         carrier.push(newloc);
        }
-       drydock[0]=carrier; //need to hash this with the socket.... 
+       drydock[0]=carrier; //need to hash this with the socket...or REDIS and tie to user until gamestart
+       //will to research
     }
     if (name==="Battleship"){
        var battleship =[placedShipObj.location];
@@ -66,7 +67,8 @@ io.on('connection', function(socket){  //step #1 connection
         newloc=firstLocation+secondLocation; //concat as a string thanks javascript
         battleship.push(newloc);
        }
-       drydock[1]=battleship; //need to hash this with the socket.... 
+       drydock[1]=battleship; //need to hash this with the socket....or REDIS and tie to user until gamestart
+       //will to research 
     }
     if (name==="Submarine"){
       var submarine =[placedShipObj.location];
@@ -75,7 +77,8 @@ io.on('connection', function(socket){  //step #1 connection
         newloc=firstLocation+secondLocation; //concat as a string thanks javascript
         submarine.push(newloc);
        }
-       drydock[2]=submarine; //need to hash this with the socket.... 
+       drydock[2]=submarine; //need to hash this with the socket....or REDIS and tie to user until gamestart
+       //will to research 
     }
     if (name==="Destroyer"){
        var destroyer =[placedShipObj.location];
@@ -84,14 +87,16 @@ io.on('connection', function(socket){  //step #1 connection
         newloc=firstLocation+secondLocation; //concat as a string thanks javascript
         destroyer.push(newloc);
        }
-       drydock[3]=destroyer; //need to hash this with the socket.... 
+       drydock[3]=destroyer; //need to hash this with the socket....or REDIS and tie to user until gamestart
+       //will to research 
     }
     if (name==="PtBoat"){
        var ptboat =[placedShipObj.location];
        firstLocation++; //increments the location of the 2nd letter of the coordinate
        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
        ptboat.push(newloc);
-       drydock[4]=ptboat; //need to hash this with the socket.... 
+       drydock[4]=ptboat; //need to hash this with the socket....or REDIS and tie to user until gamestart 
+       //will to research 
     }
   });
   
