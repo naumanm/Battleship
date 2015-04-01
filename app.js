@@ -1,6 +1,7 @@
 // entry point when server starts
 
 // setup env
+require('dotenv').load();
 var express = require('express'),
 app = express(),
 http = require('http').Server(app),
@@ -10,7 +11,7 @@ url = require('url'),
 redisURL = url.parse(process.env.REDISCLOUD_URL),
 client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 client.auth(redisURL.auth.split(":")[1]),
-//client = redis.createClient(),
+// client = redis.createClient(),
 methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
@@ -21,6 +22,9 @@ drydockA=[], //have to use two to keep player ships separated until game assignm
 drydockB=[]; //at this point, before game start they are sitting in the waiting queue p1 =waitingroom[0]
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
+
+
+console.log(process.env.REDISCLOUD_URL);
 
 // more middleware  Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
 app.use(bodyParser.urlencoded({extended: true}));
@@ -177,7 +181,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   this.gameId=gameId;  //gameroom
   console.log(gameId + " game id");
   //FIX THIS
-  console.log("game start emitter needed on server, and on socket needed on client side"):
+  console.log("game start emitter needed on server, and on socket needed on client side");
   gameOver=false;
   var hitFinder;
   var turnController=1;

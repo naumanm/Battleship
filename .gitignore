@@ -2,3 +2,4 @@ node_modules
 .DS_Store
 .rtf
 dump.rdb
+.env
