@@ -32,11 +32,26 @@ td {
   left: 26px;
 }
 
+.headerTopOpponent {
+  position: absolute;
+  left: 330px;
+}
+
 .headerSide {
   position: absolute;
   top: 46px;
 }
 
+.headerSideOpponent {
+  position: absolute;
+  top: 46px;
+  left: 302px;
+}
+
+.headerSide {
+  position: absolute;
+  top: 46px;
+}
 .myBoard {
   position: absolute;
   z-index: 0;
@@ -52,7 +67,7 @@ td {
   text-align: center;
 }
 
-.gameboard {
+.gameboard, .noColor {
   background: lightblue;
   text-align: middle;
   position-align: center;
@@ -64,7 +79,7 @@ td {
 }
 
 .opponent {
-  left: 300px;
+  left: 330px;
   position: relative;
 }
 
@@ -196,7 +211,6 @@ wanted ease-in-out
 #playerBoard,
 #opponentBoard {
   position: relative;
-
 }
 
 #draggableAircraftCarrier,
