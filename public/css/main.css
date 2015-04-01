@@ -77,6 +77,7 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 .ptBoat,
 .dashboardTitle {
   position: absolute;
+  z-index: 100;
 }
 
 .hor {
@@ -130,6 +131,8 @@ wanted ease-in-out
 
 .aircraftCarrier {
   offset: 100px;
+  z-index: 100;
+
 
 
 }
@@ -151,8 +154,8 @@ wanted ease-in-out
 }
 
 .snaptarget {
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
 }
 
 .gameboard h4 {
@@ -192,4 +195,12 @@ wanted ease-in-out
   z-index: 0;
   top: 46px;
   left: 28px;
+}
+
+#draggableAircraftCarrier,
+#draggableBattleship,
+#draggableDestroyer,
+#draggableSubmarine,
+#draggablePtBoat {
+  z-index: 100;
 }
