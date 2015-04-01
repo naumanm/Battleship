@@ -6,7 +6,7 @@ var socket = io(),
   gameStarted = gameStarted || false;
 
 // objects to emit to backend
-// Christian thiks gameObj should be an object with key value pairs. gameObj['battleship']['name']  ==> "battleship"  THIS works. I tested it in console.
+// Christian thinks gameObj should be an object with key value pairs. gameObj['battleship']['name']  ==> "battleship"  THIS works. I tested it in console.
 // This way, the checkShipPlacement function can receive the ship name to check then use the global gameObj and work.
 // Once we do game persistance, we should have function here to check any existing game then add that to the gameObj
 var gameObj = {
@@ -344,6 +344,7 @@ $( ".droppable" ).droppable({
   });
 
 // checks each ship's placement on the grid if it is a valid location. IE a ship isn't off the grid.
+// checkWhat can be "checkDrop", "checkRotate"
   var checkShipPlacement = function( checkWhat, ship_name, ship_grid, ship_orientation ){
     // placedShipObj.name = placedShip;
     // placedShipObj.location = targetElem;
@@ -367,21 +368,21 @@ $( ".droppable" ).droppable({
     };
 
 //if switched to horiz use validHGrid
-    // if(1){
-    //   if(ship_orientation === "Horizontal", ship_grid){
-    //     //do something using validHGrid
-    //     var validH = validHGrid[ ship_name.toString() ].indexOf( ship_grid );
-    //     if ( validH == -1 ) {
-    //       //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-    //     }
-    //   } else {
-    //     //do something using validVGrid
-    //     var validV = validVGrid[ ship_name.toString() ].indexOf( ship_grid );
-    //     if ( validV == -1 ) {
-    //       //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-    //     }
-    //   }
-    // } // END of check if rotation check
+    if( checkWhat === "checkRotate"){
+      if(ship_orientation === "Horizontal", ship_grid){
+        //do something using validHGrid
+        var validH = validHGrid[ ship_name.toString() ].indexOf( ship_grid );
+        if ( validH == -1 ) {
+          //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+        }
+      } else {
+        //do something using validVGrid
+        var validV = validVGrid[ ship_name.toString() ].indexOf( ship_grid );
+        if ( validV == -1 ) {
+          //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+        }
+      } // END of if(ship_orientation === "Horizontal", ship_grid){
+    } // END of check if rotation check
 
   }; // END of checkShipPlacement function
 
