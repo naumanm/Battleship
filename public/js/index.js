@@ -33,7 +33,6 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
 
   function gamePlay(){
 
-
     var selectedArr = []; // array of all shots
 
     // color change on hover
@@ -79,7 +78,6 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
       } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
     });  // end of select to take a shot
 
-
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
       // Updates the Header UI for who took a shot and the cell location
@@ -90,15 +88,9 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
         var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
         $(hitArr[1]).css("background-color", "red");
       }
-      // else 
-      // {
-      //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
-      // }
-      });
+    });
 
-
-
-    } // End of gamePlay function
+  } // End of gamePlay function
 
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
@@ -122,7 +114,7 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
     grid: [25, 25] 
   });
   $( "#draggablePtBoat" ).draggable({ 
-    containment: "#snaptarget",
+    containment: ".snaptarget",
     grid: [25, 25],
   });
 
@@ -137,8 +129,10 @@ $( ".droppable" ).droppable({
     // remove "draggable" from the passed ship's name
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable'
     console.log( placedShip ); // this is the ship that was placed
+    socket.emit('shipName', placedShip);
 
     console.log( targetElem ); // this is the grid location the ship was placed
+    socket.emit('shipLocation', targetElem);
 
     // need to emit targetElem back to server for ship location
     var placedShipObj = {};
@@ -151,7 +145,7 @@ $( ".droppable" ).droppable({
 //  Christian testing***********************************************************************
 gameStarted = false;  
 //  Christian testing***********************************************************************
-
+      
 $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable droppable if game has started
 
   // ship rotation
@@ -165,61 +159,51 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
   // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
-      if (aircraftCarrierRotation === 0) {
-        aircraftCarrierRotation +=90;
-      }
-      else {
-        aircraftCarrierRotation = 0;
-      }
+      if (aircraftCarrierRotation === 0) {aircraftCarrierRotation +=90;}
+      else {aircraftCarrierRotation = 0;}
       $(this).rotate({ animateTo:aircraftCarrierRotation});
+      socket.emit('aircraftCarrierRotation', aircraftCarrierRotation);
+      console.log('aircraftCarrierRotation ' + aircraftCarrierRotation);
     }
   });
 
   $('#draggableBattleship').on({
     'dblclick': function() {
-      if (battleshipRotation === 0) {
-        battleshipRotation +=90;
-      }
-      else {
-        battleshipRotation = 0;
-      }
+      if (battleshipRotation === 0) {battleshipRotation +=90;}
+      else {battleshipRotation = 0;}
       $(this).rotate({ animateTo:battleshipRotation});
+      socket.emit('battleshipRotation', battleshipRotation);
+      console.log('battleshipRotation ' + battleshipRotation);
     }
   });
 
   $('#draggableDestroyer').on({
     'dblclick': function() {
-      if (destroyerRotation === 0) {
-        destroyerRotation +=90;
-      }
-      else {
-        destroyerRotation = 0;
-      }
+      if (destroyerRotation === 0) {destroyerRotation +=90;}
+      else {destroyerRotation = 0;}
       $(this).rotate({ animateTo:destroyerRotation});
+      socket.emit('destroyerRotation', destroyerRotation);
+      console.log('destroyerRotation ' + destroyerRotation);
     }
   });
 
   $('#draggableSubmarine').on({
     'dblclick': function() {
-      if (submarineRotation === 0) {
-        submarineRotation +=90;
-      }
-      else {
-        submarineRotation = 0;
-      }
+      if (submarineRotation === 0) {submarineRotation +=90;}
+      else {submarineRotation = 0;}
       $(this).rotate({ animateTo:submarineRotation});
+      socket.emit('submarineRotation', submarineRotation);
+      console.log('submarineRotation ' + submarineRotation);
     }
   });
 
   $('#draggablePtBoat').on({
     'dblclick': function() {
-      if (ptBoatRotation === 0) {
-        ptBoatRotation +=90;
-      }
-      else {
-        ptBoatRotation = 0;
-      }
+      if (ptBoatRotation === 0) {ptBoatRotation +=90;}
+      else {ptBoatRotation = 0;}
       $(this).rotate({ animateTo:ptBoatRotation});
+      socket.emit('ptBoatRotation', ptBoatRotation);
+      console.log('ptBoatRotation ' + ptBoatRotation);
     }
   });
 

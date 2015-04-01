@@ -4,15 +4,6 @@ body {
   font-family: arial, sans-serif;
 }
 
-/*  jQuery API doc for draggable
-    https://jqueryui.com/draggable/#snap-to */
-#snaptarget {
-  padding: 0;
-
-  /*width: 250px;*/
-  /*height: 250px;*/
-}
-
 td {
   width: 25px;
   height: 25px;
@@ -73,12 +64,7 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 .submarine,
 .ptBoat,
 .dashboardTitle {
-  /*height: 25px;*/
   position: absolute;
-  /*margin: 1px;*/
-  background: green;
-  top: 0;
-  left: 0;  
 }
 
 .dashboardTitle {
@@ -93,7 +79,12 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 }
 
 /* These left: settings on the ships are for the starting location of the ships to look nice in a row prior to placing them on the board */
-.aircraftCarrier { left: 240px; top: 8px; }
+/*.aircraftCarrier { left: 240px; top: 8px; }*/
+.aircraftCarrier {
+  width: 125px;
+  height: 25px;
+  color: blue;
+}
 
 .battleship { left: 370px; top: 8px; }
 

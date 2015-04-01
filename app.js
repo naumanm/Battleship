@@ -43,32 +43,24 @@ io.on('connection', function(socket){  //step #1 connection
   socket.join(roomNumber);
   console.log(roomNumber);
   console.log(socket.id + " connected");
-   ///PUT PRE GAME SHIP HANDLER HERE, HOWEVER HOW TO ATTACH DURING ACTUAL GAME FUNCTION TBD, fix firing first
-  //socket.on('playerName', function(playerName) {  //step # building a lobby
-  console.log(socket.id);//change to player name once modal is working correctly
-  // socket.nickname=playerName;
+  //PUT PRE GAME SHIP HANDLER HERE?
+  socket.on('playerName', function(playerName) {  //step # building a lobby
+  socket.nickname=playerName;
+  });
+  //SAVE USERNAME FROM playername TO REDIS FOR WIN/LOSS KEEPING, ALSO SESSION KEEPING use SOCKET.ID FOR THAT PART
   //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
-  //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
-  //client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
-  waitingRoom.push(socket); //need to save in session as value with nickname as key for reconnect?
+  //client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point -
+  waitingRoom.push(socket);
   playerPair++;
   //assign a game, roomNumber, and reset queue when two players are in the waiting room
   if (playerPair===2){
-    //client.HSETNX("opponent", socket.id, socket.id);
+    //client.HSETNX("opponent", socket.id, socket.id);  ? will we still need this...since player is being saved above as a player with session?
     // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
     gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber));
     waitingRoom=[];
     roomNumber++;
     playerPair=0;
   }
-  //});
-
-  //ORIGINAL SHOT FUNCTION KEEP THIS 
-  // socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
-  //   io.emit('shot', shotObj); 
-  //   //needs to merge with shot html route
-  //   console.log(shotObj);
-  // });
 
 socket.on('disconnect', function(){
   console.log(socket.id + " disconnected");
@@ -147,7 +139,8 @@ function hitOrMiss(shotObj,ship,fleet){
     if (ship.indexOf(shotObj)!==-1){
       if(ship.length===1){ //last hit sinks ship
         fleet.shipcount--;
-        console.log(ship+" sunk at "+shotObj); //broadcast this to players
+        io.emit(ship+"sunk at"+shotObj);
+        console.log(ship+" sunk at "+shotObj);
         if(fleet.shipcount===0)
         {
          console.log("gameover"); //need to add game over functionality
@@ -155,7 +148,8 @@ function hitOrMiss(shotObj,ship,fleet){
       }
       hitFinder=ship.indexOf(shotObj);
       ship.splice(hitFinder,1); //removes from ship's working "length"
-      console.log("hit detected at "+ shotObj); //add broadcasting capability
+      io.emit("Hit detected at "+shotObj);
+      console.log("hit detected at "+ shotObj); 
       console.log(ship);
     }
   }
