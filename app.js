@@ -191,11 +191,13 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   player1.on("game_status",function(){
     readyCount++;
     console.log("player1 is ready");
+    console.log(player1Fleet);
   });
 
   player2.on("game_status", function(){
     readyCount++;
     console.log("player2 is ready");
+    console.log(player2Fleet);
   });
 
   if (readyCount===2){
