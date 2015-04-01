@@ -336,15 +336,12 @@ console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
       if ( validH === -1 ) {
         console.log("not valid Horiz placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
         // correct the grid location here
-// get the last array element of the given ships validHGrid
+        // get the last array element of the given ships validHGrid
         var lastValidElement = validHGrid[ placedShip ][ validHGrid[ placedShip ].length-1 ];
-        console.log( "lastValidElement", lastValidElement );
-        // add that to the current placedVGrid
-        // toString();
-        // save it to the 
-        // gameObj[placedShip].cell = 'a1';
-
-        // placedLocation = placedShipObj.cell;
+        // console.log( "lastValidElement", lastValidElement );
+        var fixedCell = placedVGrid + lastValidElement.toString(); // add that after the current placedVGrid
+        console.log( "fixedCell", fixedCell );
+        placedLocation = fixedCell;
 
       } // END invalid HORIZONTAL placement with ship placement fix
 
@@ -354,10 +351,19 @@ console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
       console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
       if ( validV === -1 ) {
         console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+        // correct the grid location here
+        // get the last array element of the given ships validVGrid
+        var lastValidElement = validVGrid[ placedShip ][ validVGrid[ placedShip ].length-1 ];
+        // console.log( "lastValidElement", lastValidElement );
+        var fixedCell = lastValidElement + placedVGrid; // add that after the current placedVGrid
+        console.log( "fixedCell", fixedCell );
+        placedLocation = fixedCell;
       } // END invalid VERTICAL placement with ship placement fix
 
     } // END of placedOrientation check for rotaion at 0 or 90 degrees
-// put the dropped cell location or fixed cell location into the global gameObj
+
+    // put the dropped cell location or fixed cell location into the global gameObj
+    gameObj[ placedShip ].cell = placedLocation;
 
   }; // END of checkShipPlacement function
 
