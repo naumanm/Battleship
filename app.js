@@ -54,92 +54,91 @@ io.on('connection', function(socket){  //step #1 connection
   console.log(roomNumber);
   console.log(socket.id + " connected");
 
-  //ship placement befor game launch handler for horizontal based ships
-  socket.on('place_ship', function(placedShipObj){
-    var name=placedShipObj.name;
-    var firstLocation = placedShipObj.location.charAt(0);
-    var secondLocation = placedShipObj.location.charAt(1);
-    if (name==="AircraftCarrier"){
-      //if (placedShipObj.rotation===0){
-        var carrier =[placedShipObj.location];
-        for (var i = 0; i < 5; i++) {
-          secondLocation++; //increments the location of the 2nd letter of the coordinate
-          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
-          carrier.push(newloc);
-        }
-   //  } 
-      if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
-        drydockA[0]=carrier;
-       }
-        else{
-          drydockB[0]=carrier;
-       } 
-    }
-    if (name==="Battleship"){
-       var battleship =[placedShipObj.location];
-       //if (placedShipObj.rotation===0){
-        for (var h = 0; h < 4; h++) {
-          secondLocation++; //increments the location of the 2nd letter of the coordinate
-          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
-          battleship.push(newloc);
-        }
-      // } 
-       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
-        drydockA[1]=battleship;
-       }
-        else{
-          drydockB[1]=battleship;
-       } 
-    }
-    if (name==="Submarine"){
-      var submarine =[placedShipObj.location];
-       //if (placedShipObj.rotation===0){
-        for (var j = 0; j < 2; j++) {
-          secondLocation++; //increments the location of the 2nd letter of the coordinate
-          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
-          submarine.push(newloc);
-        }
-     //}
-       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
-        drydockA[2]=submarine;
-       }
-        else{
-          drydockB[2]=submarine;
-       } 
-    }
-    if (name==="Destroyer"){
-       var destroyer =[placedShipObj.location];
-       //if (placedShipObj.rotation===0){
-        for (var k = 0; k < 2; k++) {
-          secondLocation++; //increments the location of the 2nd letter of the coordinate
-          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
-          destroyer.push(newloc);
-        }
-      //}  
-       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
-        drydockA[3]=destroyer;
-       }
-        else{
-          drydockB[3]=destroyer;
-       } 
-    }
-    if (name==="PtBoat"){
-       //if (placedShipObj.rotation===0){
-       var ptboat =[placedShipObj.location];
-       secondLocation++; //increments the location of the 2nd letter of the coordinate
-       newloc=firstLocation+secondLocation; //concat as a string thanks javascript
-       ptboat.push(newloc);
-    // }
-       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
-        drydockA[4]=ptboat;
-       }
-        else{
-        drydockB[4]=ptboat;
-       } 
-    }
-  });
+ //  socket.on('place_ship', function(placedShipObj){
+ //    var name=placedShipObj.name;
+ //    var firstLocation = placedShipObj.location.charAt(0);
+ //    var secondLocation = placedShipObj.location.charAt(1);
+ //    if (name==="AircraftCarrier"){
+ //      //if (placedShipObj.rotation===0){
+ //        var carrier =[placedShipObj.location];
+ //        for (var i = 0; i < 5; i++) {
+ //          secondLocation++; //increments the location of the 2nd letter of the coordinate
+ //          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+ //          carrier.push(newloc);
+ //        }
+ //   //  } 
+ //      if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
+ //        drydockA[0]=carrier;
+ //       }
+ //        else{
+ //          drydockB[0]=carrier;
+ //       } 
+ //    }
+ //    if (name==="Battleship"){
+ //       var battleship =[placedShipObj.location];
+ //       //if (placedShipObj.rotation===0){
+ //        for (var h = 0; h < 4; h++) {
+ //          secondLocation++; //increments the location of the 2nd letter of the coordinate
+ //          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+ //          battleship.push(newloc);
+ //        }
+ //      // } 
+ //       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
+ //        drydockA[1]=battleship;
+ //       }
+ //        else{
+ //          drydockB[1]=battleship;
+ //       } 
+ //    }
+ //    if (name==="Submarine"){
+ //      var submarine =[placedShipObj.location];
+ //       //if (placedShipObj.rotation===0){
+ //        for (var j = 0; j < 2; j++) {
+ //          secondLocation++; //increments the location of the 2nd letter of the coordinate
+ //          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+ //          submarine.push(newloc);
+ //        }
+ //     //}
+ //       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
+ //        drydockA[2]=submarine;
+ //       }
+ //        else{
+ //          drydockB[2]=submarine;
+ //       } 
+ //    }
+ //    if (name==="Destroyer"){
+ //       var destroyer =[placedShipObj.location];
+ //       //if (placedShipObj.rotation===0){
+ //        for (var k = 0; k < 2; k++) {
+ //          secondLocation++; //increments the location of the 2nd letter of the coordinate
+ //          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+ //          destroyer.push(newloc);
+ //        }
+ //      //}  
+ //       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
+ //        drydockA[3]=destroyer;
+ //       }
+ //        else{
+ //          drydockB[3]=destroyer;
+ //       } 
+ //    }
+ //    if (name==="PtBoat"){
+ //       //if (placedShipObj.rotation===0){
+ //       var ptboat =[placedShipObj.location];
+ //       secondLocation++; //increments the location of the 2nd letter of the coordinate
+ //       newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+ //       ptboat.push(newloc);
+ //    // }
+ //       if (socket===waitingRoom[0]){ //making sure the boat matches the correct watiing room player...
+ //        drydockA[4]=ptboat;
+ //       }
+ //        else{
+ //        drydockB[4]=ptboat;
+ //       } 
+ //    }
+ //  });
 
- //worry about rotation when rotation event occurs 
+ // //worry about rotation when rotation event occurs 
 
   socket.on('playerName', function(playerName) { 
   socket.nickname=playerName;
@@ -186,6 +185,131 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   console.log("matchmaking complete, watiing for player ready and ship lockdown");
   turnResult=false;
   
+  player1.on('place_ship', function(placedShipObj){
+    var name=placedShipObj.name;
+    var firstLocation = placedShipObj.location.charAt(0);
+    var secondLocation = placedShipObj.location.charAt(1);
+    if (name==="AircraftCarrier"){
+      //if (placedShipObj.rotation===0){
+        var carrier =[placedShipObj.location];
+        for (var i = 0; i < 5; i++) {
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          carrier.push(newloc);
+        }
+   //  } 
+        drydockA[0]=carrier;
+    }
+    if (name==="Battleship"){
+       var battleship =[placedShipObj.location];
+       //if (placedShipObj.rotation===0){
+        for (var h = 0; h < 4; h++) {
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          battleship.push(newloc);
+        }
+      // } 
+        drydockA[1]=battleship;
+    }
+    if (name==="Submarine"){
+      var submarine =[placedShipObj.location];
+       //if (placedShipObj.rotation===0){
+        for (var j = 0; j < 2; j++) {
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          submarine.push(newloc);
+        }
+     //}
+
+        drydockA[2]=submarine;
+    }
+    if (name==="Destroyer"){
+       var destroyer =[placedShipObj.location];
+       //if (placedShipObj.rotation===0){
+        for (var k = 0; k < 2; k++) {
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          destroyer.push(newloc);
+        }
+      //}  
+        drydockA[3]=destroyer;
+    }
+    if (name==="PtBoat"){
+       //if (placedShipObj.rotation===0){
+       var ptboat =[placedShipObj.location];
+       secondLocation++; //increments the location of the 2nd letter of the coordinate
+       newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+       ptboat.push(newloc);
+    // }
+        drydockA[4]=ptboat;
+    }
+  });
+
+  player2.on('place_ship', function(placedShipObj){
+    var name=placedShipObj.name;
+    var firstLocation = placedShipObj.location.charAt(0);
+    var secondLocation = placedShipObj.location.charAt(1);
+    if (name==="AircraftCarrier"){
+      //if (placedShipObj.rotation===0){
+        var carrier =[placedShipObj.location];
+        for (var i = 0; i < 5; i++) {
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          carrier.push(newloc);
+        }
+   //  } 
+        drydockB[0]=carrier;
+    }
+    if (name==="Battleship"){
+       var battleship =[placedShipObj.location];
+       //if (placedShipObj.rotation===0){
+        for (var h = 0; h < 4; h++) {
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          battleship.push(newloc);
+        }
+      // } 
+        drydockB[1]=battleship;
+    }
+    if (name==="Submarine"){
+      var submarine =[placedShipObj.location];
+       //if (placedShipObj.rotation===0){
+        for (var j = 0; j < 2; j++) {
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          submarine.push(newloc);
+        }
+     //}
+
+        drydockB[2]=submarine;
+    }
+    if (name==="Destroyer"){
+       var destroyer =[placedShipObj.location];
+       //if (placedShipObj.rotation===0){
+        for (var k = 0; k < 2; k++) {
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          destroyer.push(newloc);
+        }
+      //}  
+        drydockB[3]=destroyer;
+    }
+    if (name==="PtBoat"){
+       //if (placedShipObj.rotation===0){
+       var ptboat =[placedShipObj.location];
+       secondLocation++; //increments the location of the 2nd letter of the coordinate
+       newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+       ptboat.push(newloc);
+    // }
+        drydockB[4]=ptboat;
+    }
+  });
+
+
+ //worry about rotation when rotation event occurs 
+
+
+
   player1.on("game_status",function(){
     readyCount++;
     console.log("player1 is ready");
