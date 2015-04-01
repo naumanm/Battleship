@@ -309,9 +309,9 @@ $( ".droppable" ).droppable({
     placedOrientation = placedShipObj.rotation;
     console.log("placedShip",placedShip,"placedLocation",placedLocation,"placedOrientation",placedOrientation);
 
-    var placedHGrid = placedLocation.substr(1, 1).toString(); //check the 2nd char of the grid location
+    var placedHGrid = placedLocation.substr(1, 2).toString(); //check the 2nd (and maybe the 3rd) char of the grid location
     var placedVGrid = placedLocation.substr(0, 1).toString(); //check the 1st char of the grid location
-// console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
+console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
 
     var validHGrid = { // use with rotation === 0
       "AircraftCarrier": [1,2,3,4,5,6],
@@ -329,21 +329,35 @@ $( ".droppable" ).droppable({
       "PtBoat": ["a","b","c","d","e","f","g","h","i"],
     };
 
-    if( placedOrientation === 0 ){ // use validHGrid
-      //do something using validHGrid
-      var validH = validHGrid[ placedShip ].indexOf( placedHGrid ); // .toString()
-      if ( validH == -1 ) {
+    if( placedOrientation === 0 ){ // HORIZONTAL
+      // use validHGrid
+      var validH = validHGrid[ placedShip ].indexOf( parseInt(placedHGrid, 10) ); // .toString()
+      console.log(placedShip, "is at", parseInt(placedHGrid, 10), "and can be in",validHGrid[ placedShip ]);
+      if ( validH === -1 ) {
         console.log("not valid Horiz placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-      }
+        // correct the grid location here
+// get the last array element of the given ships validHGrid
+        var lastValidElement = validHGrid[ placedShip ][ validHGrid[ placedShip ].length-1 ];
+        console.log( "lastValidElement", lastValidElement );
+        // add that to the current placedVGrid
+        // toString();
+        // save it to the 
+        // gameObj[placedShip].cell = 'a1';
 
-    } else { // use validVGrid
-      //do something using validVGrid
+        // placedLocation = placedShipObj.cell;
+
+      } // END invalid HORIZONTAL placement with ship placement fix
+
+    } else { // VERTICAL
+      // use validVGrid
       var validV = validVGrid[ placedShip ].indexOf( placedVGrid );
-      if ( validV == -1 ) {
+      console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
+      if ( validV === -1 ) {
         console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-      }
+      } // END invalid VERTICAL placement with ship placement fix
 
-    } // END of if(placedOrientation === "Horizontal", ship_grid){
+    } // END of placedOrientation check for rotaion at 0 or 90 degrees
+// put the dropped cell location or fixed cell location into the global gameObj
 
   }; // END of checkShipPlacement function
 
