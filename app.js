@@ -198,7 +198,6 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
           submarine.push(newloc);
         }
      //}
-
         drydockB[2]=submarine;
     }
     if (name==="Destroyer"){
@@ -239,8 +238,12 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     console.log("player2 is ready");
     console.log(player2Fleet);
   });
-  //GAME READY CHECKER
-  if (readyCount===2 &&()){
+  
+  //make sure that the fleets are ready for firing
+  if (readyCount===2){
+    if ((player1Fleet || player2Fleet) ===[]){
+      io.emit('shot',"Please Confirm Readiness by clicking ready to play, thank you!");
+    } 
     readyToPlay=true;
   }
 
