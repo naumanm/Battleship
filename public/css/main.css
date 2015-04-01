@@ -9,11 +9,6 @@ table {
   margin: 5px;
 }
 
-table td { /* only right and bottom so as not to double up on the borders per table cell */
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-}
-
 td {
   width: 25px;
   height: 25px;
@@ -25,38 +20,46 @@ td {
   border-bottom: 1px solid black;
 }
 
+table td { /* only right and bottom so as not to double up on the borders per table cell */
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
 /* -- Classes --*/
 
 .headerTop {
   position: absolute;
-  left: 26px;
-}
-
-.headerTopOpponent {
-  position: absolute;
-  left: 330px;
+  left: 66px;
 }
 
 .headerSide {
   position: absolute;
   top: 46px;
+  left: 37px;
+}
+
+.headerTopOpponent {
+  position: absolute;
+  left: 420px;
 }
 
 .headerSideOpponent {
   position: absolute;
   top: 46px;
-  left: 302px;
+  left: 391px;
 }
 
-.headerSide {
-  position: absolute;
-  top: 46px;
-}
-.myBoard {
+.player {
   position: absolute;
   z-index: 0;
   top: 46px;
-  left: 28px;
+  left: 66px;
+}
+
+.opponent {
+  left: 420px;
+  top: 51px;
+  position: relative;
 }
 
 .colHead {
@@ -72,15 +75,6 @@ td {
   text-align: middle;
   position-align: center;
 
-}
-
-.player, .opponent, .dashboard {
-  display: inline-block;
-}
-
-.opponent {
-  left: 330px;
-  position: relative;
 }
 
 .dashboard {
