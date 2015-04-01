@@ -6,14 +6,19 @@ app = express(),
 http = require('http').Server(app),
 io = require('socket.io')(http),
 redis = require("redis"),
-client = redis.createClient(),
+url = require('url'),
+redisURL = url.parse(process.env.REDISCLOUD_URL),
+client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+client.auth(redisURL.auth.split(":")[1]),
+//client = redis.createClient(),
 methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
 gameRooms=[],
-drydock=[];
+drydockA=[], //have to use two to keep player ships separated until game assignment of player one and two
+drydockB=[]; //at this point, before game start they are sitting in the waiting queue p1 =waitingroom[0]
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
@@ -45,9 +50,7 @@ io.on('connection', function(socket){  //step #1 connection
   console.log(roomNumber);
   console.log(socket.id + " connected");
 
-  
-
-  //ship placement handler for horizontal based ships
+  //ship placement befor game launch handler for horizontal based ships
   socket.on('place_ship', function(placedShipObj){
     var firstLocation = placedShipObj.location.charAt(0);
     var secondLocation = placedShipObj.location.charAt(1);
@@ -60,8 +63,12 @@ io.on('connection', function(socket){  //step #1 connection
           carrier.push(newloc);
         }
    //  } 
-       drydock[0]=carrier; //need to hash this with the socket...or REDIS and tie to user until gamestart
-       //will to research
+      if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[0]=carrier;
+       }
+        else{
+          drydockB[0]=carrier;
+       } 
     }
     if (name==="Battleship"){
        var battleship =[placedShipObj.location];
@@ -72,8 +79,12 @@ io.on('connection', function(socket){  //step #1 connection
           battleship.push(newloc);
         }
       // } 
-       drydock[1]=battleship; //need to hash this with the socket....or REDIS and tie to user until gamestart
-       //will to research 
+       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[1]=battleship;
+       }
+        else{
+          drydockB[1]=battleship;
+       } 
     }
     if (name==="Submarine"){
       var submarine =[placedShipObj.location];
@@ -84,8 +95,12 @@ io.on('connection', function(socket){  //step #1 connection
           submarine.push(newloc);
         }
      //}
-       drydock[2]=submarine; //need to hash this with the socket....or REDIS and tie to user until gamestart
-       //will to research 
+       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[2]=submarine;
+       }
+        else{
+          drydockB[2]=submarine;
+       } 
     }
     if (name==="Destroyer"){
        var destroyer =[placedShipObj.location];
@@ -96,8 +111,12 @@ io.on('connection', function(socket){  //step #1 connection
           destroyer.push(newloc);
         }
       //}  
-       drydock[3]=destroyer; //need to hash this with the socket....or REDIS and tie to user until gamestart
-       //will to research 
+       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[3]=destroyer;
+       }
+        else{
+          drydockB[3]=destroyer;
+       } 
     }
     if (name==="PtBoat"){
        //if (placedShipObj.rotation===0){
@@ -106,8 +125,12 @@ io.on('connection', function(socket){  //step #1 connection
        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
        ptboat.push(newloc);
     // }
-       drydock[4]=ptboat; //need to hash this with the socket....or REDIS and tie to user until gamestart 
-       //will to research 
+       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[4]=ptboat;
+       }
+        else{
+          drydockB[4]=ptboat;
+       } 
     }
   });
 
@@ -125,18 +148,17 @@ io.on('connection', function(socket){  //step #1 connection
   if (playerPair===2){
     //client.HSETNX("opponent", socket.id, socket.id);  ? will we still need this...since player is being saved above as a player with session?
     // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
-    gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber));
+    gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber,drydockA,drydockB));
     waitingRoom=[];
     roomNumber++;
     playerPair=0;
   }
 
   socket.on('disconnect', function(){
-    console.log(socket.id + " disconnected");
-    //if (!socket.nickname) return;              
+    console.log(socket.id + " disconnected");            
   });
 
-}); // END game communication within io.on('connection'...
+});
 
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
@@ -154,6 +176,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
   console.log(gameId + " game id");
+  //FIX THIS
+  console.log("game start emitter needed on server, and on socket needed on client side");
   gameOver=false;
   var hitFinder;
   var turnController=1;
@@ -231,7 +255,7 @@ function LetterChanges(str) {
 }
 
 
-// load our server
-http.listen(3000, function(){
+// load our server with port switching for local or production
+http.listen((process.env.PORT || 3000), function(){
   console.log('listening on *:3000');
 });
