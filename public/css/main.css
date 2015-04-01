@@ -5,6 +5,15 @@ body {
   font-family: arial, sans-serif;
 }
 
+table {
+  margin: 5px;
+}
+
+table td { /* only right and bottom so as not to double up on the borders per table cell */
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
 td {
   width: 25px;
   height: 25px;
@@ -16,19 +25,23 @@ td {
   border-bottom: 1px solid black;
 }
 
-table {
-  margin: 5px;
+/* -- Classes --*/
+
+.headerTop {
+  position: absolute;
+  left: 26px;
 }
 
-table td { /* only right and bottom so as not to double up on the borders per table cell */
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+.headerSide {
+  position: absolute;
+  top: 46px;
 }
 
-#readyToPlay {
-  position: relative;
-  top: -10px;
-  left: 340px;
+.myBoard {
+  position: absolute;
+  z-index: 0;
+  top: 46px;
+  left: 28px;
 }
 
 .colHead {
@@ -39,8 +52,7 @@ table td { /* only right and bottom so as not to double up on the borders per ta
   text-align: center;
 }
 
-/*Classes*/
-.gameboard, .noColor {
+.gameboard {
   background: lightblue;
   text-align: middle;
   position-align: center;
@@ -132,11 +144,7 @@ wanted ease-in-out
 .aircraftCarrier {
   offset: 100px;
   z-index: 100;
-
-
-
 }
-
 
 .hit {
   /*color: red;*/
@@ -162,6 +170,15 @@ wanted ease-in-out
   display: inline;
 }
 
+
+/* -- IDs --*/
+
+#readyToPlay {
+  position: relative;
+  top: -10px;
+  left: 340px;
+}
+
 #placeShips {
   padding: 8px 8px;
   border: 1px solid black;
@@ -176,25 +193,10 @@ wanted ease-in-out
   width: 234px;
 }
 
-#board {
+#playerBoard,
+#opponentBoard {
   position: relative;
-}
 
-.headerTop {
-  position: absolute;
-  left: 26px;
-}
-
-.headerSide {
-  position: absolute;
-  top: 46px;
-}
-
-.myBoard {
-  position: absolute;
-  z-index: 0;
-  top: 46px;
-  left: 28px;
 }
 
 #draggableAircraftCarrier,
@@ -203,4 +205,8 @@ wanted ease-in-out
 #draggableSubmarine,
 #draggablePtBoat {
   z-index: 100;
+}
+
+#gameWrapper {
+  #wrapper { margin: 0px auto; }
 }

@@ -135,7 +135,6 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
           submarine.push(newloc);
         }
      //}
-
         drydockA[2]=submarine;
     }
     if (name==="Destroyer"){
@@ -240,7 +239,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     // io.emit('shot',"Please Confirm Readiness by Clicking ready to play, thank you!"); 
     //need event to tell client to reclick ready button
     } 
-    else readyToPlay=true;
+    else 
+    return readyToPlay=true;
   }
 
   if(readyToPlay===true){
@@ -282,7 +282,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       turnController++;
      });  
     }
-   } 
+  } 
 }
 
 function hitOrMiss(shotObj,ship,fleet){  
