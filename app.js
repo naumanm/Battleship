@@ -13,6 +13,7 @@ playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
 gameRooms=[],
+gameOver,
 drydock=[];
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
@@ -45,8 +46,13 @@ io.on('connection', function(socket){  //step #1 connection
   console.log(roomNumber);
   console.log(socket.id + " connected");
 
- //ship placement handler for horizontal based ships
+  //game_status is true if player clicked "Ready To Play" button
+  //game_status is false if player clicked "Surrender" button
+  socket.on('game_status', function(game_status){
+    gameOver = true;
+  });
 
+  //ship placement handler for horizontal based ships
   socket.on('place_ship', function(placedShipObj){
     var firstLocation = placedShipObj.location.charAt(0);
     var secondLocation = placedShipObj.location.charAt(1);
