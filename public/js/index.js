@@ -148,23 +148,63 @@ $( ".droppable" ).droppable({
   var ptBoatRotation = 0;
 
   // making the images of the ships rotate on the 'Your Ships' grid
+  // $('#zzzz-draggableAircraftCarrier').on({
+  //   'dblclick': function () {
+  //     if( !gameStarted ){
+  //       if (aircraftCarrierRotation === 0) {
+  //         aircraftCarrierRotation +=90;
+  //         $('#draggableAircraftCarrier').addClass('ver');
+  //         $('#draggableAircraftCarrier').removeClass('hor');
+  //       } else {
+  //         aircraftCarrierRotation = 0;
+  //         $('#draggableAircraftCarrier').addClass('hor');
+  //         $('#draggableAircraftCarrier').removeClass('ver');
+  //     }
+  //       // $(this).rotate({ animateTo:aircraftCarrierRotation});
+  //       socket.emit('aircraftCarrierRotation', aircraftCarrierRotation);
+  //       console.log('aircraftCarrierRotation ' + aircraftCarrierRotation);
+  //     }
+  //   }
+  // });
+
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
       if( !gameStarted ){
-        if (aircraftCarrierRotation === 0) {aircraftCarrierRotation +=90;}
-        else {aircraftCarrierRotation = 0;}
+        if (aircraftCarrierRotation === 0) {
+          aircraftCarrierRotation +=90;
+          $('#draggableAircraftCarrier').addClass('ver');
+          $('#draggableAircraftCarrier').removeClass('hor');
+        } else {
+          aircraftCarrierRotation = 0;
+          $('#draggableAircraftCarrier').addClass('hor');
+          $('#draggableAircraftCarrier').removeClass('ver');
+        }
         $(this).rotate({ animateTo:aircraftCarrierRotation});
         socket.emit('aircraftCarrierRotation', aircraftCarrierRotation);
         console.log('aircraftCarrierRotation ' + aircraftCarrierRotation);
       }
-    }
+     }//,
+    // 'mouseover': function(){      // this highlights the ship when hover but it adds pixels to border which makes the ships shift.
+    //   $('#draggableAircraftCarrier').addClass('highlight');
+      
+    // },
+    // 'mouseout': function(){
+    //   $('#draggableAircraftCarrier').removeClass('highlight');
+      
+    // }
   });
 
   $('#draggableBattleship').on({
     'dblclick': function() {
       if( !gameStarted ){
-        if (battleshipRotation === 0) {battleshipRotation +=90;}
-        else {battleshipRotation = 0;}
+        if (battleshipRotation === 0) {battleshipRotation +=90;
+          $('#draggableBattleship').addClass('ver');
+          $('#draggableBattleship').removeClass('hor');
+        } else {
+          battleshipRotation = 0;
+          $('#draggableBattleship').addClass('hor');
+          $('#draggableBattleship').removeClass('ver');
+        }
         $(this).rotate({ animateTo:battleshipRotation});
         socket.emit('battleshipRotation', battleshipRotation);
         console.log('battleshipRotation ' + battleshipRotation);
@@ -175,8 +215,15 @@ $( ".droppable" ).droppable({
   $('#draggableDestroyer').on({
     'dblclick': function() {
       if( !gameStarted ){
-        if (destroyerRotation === 0) {destroyerRotation +=90;}
-        else {destroyerRotation = 0;}
+        if (destroyerRotation === 0) {
+          destroyerRotation +=90;
+          $('#draggableDestroyer').addClass('ver');
+          $('#draggableDestroyer').removeClass('hor');
+        } else {
+          destroyerRotation = 0;
+          $('#draggableDestroyer').addClass('hor');
+          $('#draggableDestroyer').removeClass('ver');
+        }
         $(this).rotate({ animateTo:destroyerRotation});
         socket.emit('destroyerRotation', destroyerRotation);
         console.log('destroyerRotation ' + destroyerRotation);
@@ -187,8 +234,15 @@ $( ".droppable" ).droppable({
   $('#draggableSubmarine').on({
     'dblclick': function() {
       if( !gameStarted ){
-        if (submarineRotation === 0) {submarineRotation +=90;}
-        else {submarineRotation = 0;}
+        if (submarineRotation === 0) {
+          submarineRotation +=90;
+          $('#draggableSubmarine').addClass('ver');
+          $('#draggableSubmarine').removeClass('hor');
+        } else {
+          submarineRotation = 0;
+          $('#draggableSubmarine').addClass('hor');
+          $('#draggableSubmarine').removeClass('ver');
+        }
         $(this).rotate({ animateTo:submarineRotation});
         socket.emit('submarineRotation', submarineRotation);
         console.log('submarineRotation ' + submarineRotation);
@@ -199,8 +253,15 @@ $( ".droppable" ).droppable({
   $('#draggablePtBoat').on({
     'dblclick': function() {
       if( !gameStarted ){
-        if (ptBoatRotation === 0) {ptBoatRotation +=90;}
-        else {ptBoatRotation = 0;}
+        if (ptBoatRotation === 0) {
+          ptBoatRotation +=90;
+          $('#draggablePtBoat').addClass('ver');
+          $('#draggablePtBoat').removeClass('hor');
+        } else {
+          ptBoatRotation = 0;
+          $('#draggablePtBoat').addClass('hor');
+          $('#draggablePtBoat').removeClass('ver');
+        }
         $(this).rotate({ animateTo:ptBoatRotation});
         socket.emit('ptBoatRotation', ptBoatRotation);
         console.log('ptBoatRotation ' + ptBoatRotation);
@@ -208,20 +269,39 @@ $( ".droppable" ).droppable({
     }
   });
 
+// checks each ship's placement on the grid if it is a valid location. IE a ship isn't off the grid.
+  var checkShipPlacement = function(){
+    //check the 2nd char of the grid location
+    validHGrid = {
+      "draggableAircraftCarrier": [1,2,3,4,5,6],
+      "draggableBattleship": [1,2,3,4,5,6,7],
+      "draggableDestroyer": [1,2,3,4,5,6,7,8],
+      "draggableSubmarine": [1,2,3,4,5,6,7,8],
+      "draggablePtBoat": [1,2,3,4,5,6,7,8,9],
+    };
+
+    //check the 1st char of the grid location
+    validVGrid = {
+      "draggableAircraftCarrier": [a,b,c,d,e,f],
+      "draggableBattleship": [a,b,c,d,e,f,g],
+      "draggableDestroyer": [a,b,c,d,e,f,g,h],
+      "draggableSubmarine": [a,b,c,d,e,f,g,h],
+      "draggablePtBoat": [a,b,c,d,e,f,g,h,i],
+    };
+  };
+
 // toggle ships droppable
   var gameReady = function( setTo ){
-// console.log("setTo", setTo);
-    // accepts val to set . gameStarted is a global var. Should only be called by player clicking "Ready To Play" button, by starting a new game
+  // accepts val to set . gameStarted is a global var. Should only be called by player clicking "Ready To Play" button, by starting a new game
     setTo = setTo || gameStarted;
     gameStarted = setTo;
-//  Christian testing***********************************************************************
-    gameStarted = true;  
-//  Christian testing***********************************************************************
-// console.log("gameStarted", gameStarted);
     $( ".ship" ).draggable( "option", "disabled", gameStarted );
+    socket.emit('game_status', gameStarted);
   }; // END disable gameReady funct
 
-// enable opponent's grid for shoots on connect of 2nd player or when player clicks ready to play?
+// "Ready To Play" button.
+// On click, set gameStarted to true.
+// Dissable ship draggable and rotation.
   $('#readyToPlay').on({
     'click': function() {
       event.preventDefault();
@@ -231,8 +311,6 @@ $( ".droppable" ).droppable({
       // emit to server player is ready
     }
   });
-
-
 
   gamePlay();
 

@@ -77,8 +77,9 @@
   -->
 
   <div class="gameboard">
+    <span id="placeShipsWrapper">
     <div id="placeShips">
-      <h4>Place Your Ships By Dragging Them To The Left Grid. Double Click A Ship To Rotate It.</h4>
+      <h4>Place your ships by dragging them to the left grid. Double click a ship to rotate it.</h4>
       <img src="/images/wholeCarrier.png"
            alt="Drag your Aircraft Carrier to Your Ships Board"
            id="draggableAircraftCarrier"
@@ -107,7 +108,8 @@
       <!-- <input id="readyToPlay" class="btn btn-success" type="submit" value="Ready To Play"> -->
       <button id="readyToPlay" class="btn btn-success" value="Ready To Play">Ready To Play</button> <!-- jQuery UI is overridding Bootstrap's styling -->
     </div> <!-- END #placeShips -->
-    
+    </span> <!-- END #placeShipsWrapper -->
+
     <!-- <span class="ui-widget-header"> -->
     <table class="player" id="snaptarget">
       <tr><th colspan="11">Your Ships</th></tr>
