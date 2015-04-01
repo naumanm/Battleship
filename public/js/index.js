@@ -1,5 +1,32 @@
 $(document).ready(function(){
 
+// objects to emit to backend
+var aircraftCarrier = {
+  name: "aircraftCarrier",
+  cell: "",
+  rotation: "0"
+};
+var battleship = {
+  name: "battleship",
+  cell: "",
+  rotation: "0"
+};
+var destroyer = {
+  name: "destroyer",
+  cell: "",
+  rotation: "0"
+};
+var submarine = {
+  name: "submarine",
+  cell: "",
+  rotation: "0"
+};
+var ptBoat = {
+  name: "ptBoat",
+  cell: "",
+  rotation: "0"
+};
+
 var socket = io(),
 // gameStarted = false ==> disallows firing and allows placing ships.
 // gameStarted = true ==> disallows placing ships and allows firing.
@@ -114,8 +141,8 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
     grid: [25, 25] 
   });
   $( "#draggablePtBoat" ).draggable({ 
-    containment: ".snaptarget",
-    grid: [25, 25],
+    containment: "#snaptarget",
+    grid: [25, 25]
   });
 
 $( ".droppable" ).droppable({
@@ -140,12 +167,6 @@ $( ".droppable" ).droppable({
 }); // END of droppable
 
   // ship rotation
-
-  var aircraftCarrierRotation = 0;
-  var battleshipRotation = 0;
-  var destroyerRotation = 0;
-  var submarineRotation = 0;
-  var ptBoatRotation = 0;
 
   // making the images of the ships rotate on the 'Your Ships' grid
   // $('#zzzz-draggableAircraftCarrier').on({

@@ -123,6 +123,13 @@ wanted ease-in-out
 .submarine { left: 555px; top: 8px; }
 .ptBoat { left: 635px; top: 8px; }
 
+.aircraftCarrier {
+  offset: 100px;
+
+
+}
+
+
 .hit {
   /*color: red;*/
 }
@@ -162,4 +169,12 @@ wanted ease-in-out
 }
 
 
-/*IDs
+#draggableTest {
+  width: 25px;
+  height: 25px;
+  background-color: red;
+  z-index: 1000;
+}
+
+
+
