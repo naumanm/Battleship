@@ -51,6 +51,11 @@ table td { /* only right and bottom so as not to double up on the borders per ta
   display: inline-block;
 }
 
+.opponent {
+  left: 300px;
+  position: relative;
+}
+
 .dashboard {
   /*background: blue;*/
   width: 400px;
@@ -117,11 +122,11 @@ wanted ease-in-out
 }
 
 /* These left: settings on the ships are for the starting location of the ships to look nice in a row prior to placing them on the board */
-.aircraftCarrier { left: 240px; top: 8px; }
-.battleship { left: 370px; top: 8px; }
-.destroyer { left: 475px; top: 8px; }
-.submarine { left: 555px; top: 8px; }
-.ptBoat { left: 635px; top: 8px; }
+.aircraftCarrier { left: 240px; top: 8px; z-index: 100;}
+.battleship { left: 370px; top: 8px; z-index: 100;}
+.destroyer { left: 475px; top: 8px; z-index: 100;}
+.submarine { left: 555px; top: 8px; z-index: 100;}
+.ptBoat { left: 635px; top: 8px; z-index: 100;}
 
 .aircraftCarrier {
   offset: 100px;
@@ -168,13 +173,23 @@ wanted ease-in-out
   width: 234px;
 }
 
-
-#draggableTest {
-  width: 25px;
-  height: 25px;
-  background-color: red;
-  z-index: 1000;
+#board {
+  position: relative;
 }
 
+.headerTop {
+  position: absolute;
+  left: 26px;
+}
 
+.headerSide {
+  position: absolute;
+  top: 46px;
+}
 
+.myBoard {
+  position: absolute;
+  z-index: 0;
+  top: 46px;
+  left: 28px;
+}
