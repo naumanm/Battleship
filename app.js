@@ -163,7 +163,7 @@ io.on('connection', function(socket){  //step #1 connection
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
   //NEED TO EMIT TO BOTH THAT GAME HAS STARTED AND NEED TO LOCK DOWN DRAGABLE
-  
+  //have to handle game over
   //game_status is true if player clicked "Ready To Play" button
   //game_status is false if player clicked "Surrender" button
 // socket.on('game_status', function(game_status){
@@ -178,9 +178,10 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   readyToPlay=false;
   console.log(gameId + " game id");
   console.log("matchmaking complete, watiing for player ready and ship lockdown");
-  
+  turnResult=false;
+
   if(readyToPlay===true){
-    var hitFinder=false;
+    console.log("Player 1 Start!");
     var turnController=1;
     if (turnController%2 !==0) 
     {
@@ -196,6 +197,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
+      if (turnResult===true)
+        io.emit("Hit!");
       turnController++;
       }); 
     }
@@ -213,6 +216,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
+      if (turnResult===true)
+        io.emit("Hit!");
       turnController++;
      });  
     }
@@ -220,22 +225,14 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
 }
 
 function hitOrMiss(shotObj,ship,fleet){  
+  var hitFinder;
   if (ship!==[]){
     if (ship.indexOf(shotObj)!==-1){
       if(ship.length===1){ //last hit sinks ship
         fleet.shipcount--;
-        console.log(ship+" sunk at "+shotObj);
-        if(fleet.shipcount===0)
-        {
-          gameOver = true;
-          io.emit('game_status', gameOver);
-          console.log("Game Over"); //need to add game over functionality
-        }
       }
       hitFinder=ship.indexOf(shotObj);
       ship.splice(hitFinder,1); //removes from ship's working "length"
-      console.log("hit detected at "+ shotObj); 
-      console.log(ship);
     }
   }
 }
