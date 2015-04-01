@@ -13,7 +13,8 @@ playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
 gameRooms=[],
-drydock=[];
+drydockA=[], //have to use two to keep player ships separated until game assignment of player one and two
+drydockB=[]; //at this point, before game start they are sitting in the waiting queue p1 =waitingroom[0]
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
@@ -45,9 +46,7 @@ io.on('connection', function(socket){  //step #1 connection
   console.log(roomNumber);
   console.log(socket.id + " connected");
 
-  
-
-  //ship placement handler for horizontal based ships
+  //ship placement befor game launch handler for horizontal based ships
   socket.on('place_ship', function(placedShipObj){
     var firstLocation = placedShipObj.location.charAt(0);
     var secondLocation = placedShipObj.location.charAt(1);
@@ -60,8 +59,12 @@ io.on('connection', function(socket){  //step #1 connection
           carrier.push(newloc);
         }
    //  } 
-       drydock[0]=carrier; //need to hash this with the socket...or REDIS and tie to user until gamestart
-       //will to research
+      if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[0]=carrier;
+       }
+        else{
+          drydockB[0]=carrier;
+       } 
     }
     if (name==="Battleship"){
        var battleship =[placedShipObj.location];
@@ -72,8 +75,12 @@ io.on('connection', function(socket){  //step #1 connection
           battleship.push(newloc);
         }
       // } 
-       drydock[1]=battleship; //need to hash this with the socket....or REDIS and tie to user until gamestart
-       //will to research 
+       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[1]=battleship;
+       }
+        else{
+          drydockB[1]=battleship;
+       } 
     }
     if (name==="Submarine"){
       var submarine =[placedShipObj.location];
@@ -84,8 +91,12 @@ io.on('connection', function(socket){  //step #1 connection
           submarine.push(newloc);
         }
      //}
-       drydock[2]=submarine; //need to hash this with the socket....or REDIS and tie to user until gamestart
-       //will to research 
+       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[2]=submarine;
+       }
+        else{
+          drydockB[2]=submarine;
+       } 
     }
     if (name==="Destroyer"){
        var destroyer =[placedShipObj.location];
@@ -96,8 +107,12 @@ io.on('connection', function(socket){  //step #1 connection
           destroyer.push(newloc);
         }
       //}  
-       drydock[3]=destroyer; //need to hash this with the socket....or REDIS and tie to user until gamestart
-       //will to research 
+       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[3]=destroyer;
+       }
+        else{
+          drydockB[3]=destroyer;
+       } 
     }
     if (name==="PtBoat"){
        //if (placedShipObj.rotation===0){
@@ -106,8 +121,12 @@ io.on('connection', function(socket){  //step #1 connection
        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
        ptboat.push(newloc);
     // }
-       drydock[4]=ptboat; //need to hash this with the socket....or REDIS and tie to user until gamestart 
-       //will to research 
+       if (socket===waitingroom[0]){ //making sure the boat matches the correct watiing room player...
+        drydockA[4]=ptboat;
+       }
+        else{
+          drydockB[4]=ptboat;
+       } 
     }
   });
 
