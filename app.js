@@ -43,24 +43,24 @@ io.on('connection', function(socket){  //step #1 connection
   socket.join(roomNumber);
   console.log(roomNumber);
   console.log(socket.id + " connected");
-
+   ///PUT PRE GAME SHIP HANDLER HERE, HOWEVER HOW TO ATTACH DURING ACTUAL GAME FUNCTION TBD, fix firing first
   //socket.on('playerName', function(playerName) {  //step # building a lobby
-    console.log(socket.id);//change to player name once modal is working correctly
-   // socket.nickname=playerName;
-    //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
-    //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
-    //client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
-    waitingRoom.push(socket); //need to save in session as value with nickname as key for reconnect?
-    playerPair++;
-    //assign a game, roomNumber, and reset queue when two players are in the waiting room
-    if (playerPair===2){
-      //client.HSETNX("opponent", socket.id, socket.id);
-      // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
-      gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber));
-      waitingRoom=[];
-      roomNumber++;
-      playerPair=0;
-    }
+  console.log(socket.id);//change to player name once modal is working correctly
+  // socket.nickname=playerName;
+  //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
+  //unsure of the use of this, as this is maintained by the game object and socket io room, which is temporary
+  //client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point
+  waitingRoom.push(socket); //need to save in session as value with nickname as key for reconnect?
+  playerPair++;
+  //assign a game, roomNumber, and reset queue when two players are in the waiting room
+  if (playerPair===2){
+    //client.HSETNX("opponent", socket.id, socket.id);
+    // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
+    gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber));
+    waitingRoom=[];
+    roomNumber++;
+    playerPair=0;
+  }
   //});
 
   //ORIGINAL SHOT FUNCTION KEEP THIS 
@@ -79,14 +79,18 @@ socket.on('disconnect', function(){
 
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId){  
+  //NEED TO EMIT TO BOTH THAT GAME HAS STARTED AND NEED TO LOCK DOWN DRAGABLE
+
   this.player1=player1;
   this.player2=player2;
   this.gameId=gameId;  //gameroom
   console.log(gameId + " game id");
   gameOver=false;
+  var hitFinder;
+  var turnController=1;
   //dummy data
-  var player1Fleet=new Fleet(player1,["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
-  var player2Fleet=new Fleet(player2,["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
+  var player1Fleet = new Fleet(["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
+  var player2Fleet = new Fleet(["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
   //keep this for live play, seeding dummy test fire data
   // player1.on('place_ship',function(data){
   //console.log("placedShipObj", placedShipObj);    
@@ -104,53 +108,60 @@ function Game (player1,player2,gameId){
   //    pt =[];
   //    var player2Fleet = newFleet(carrier,battle,sub,pt); 
   //  }); 
-turnController=1;
-console.log("move# " + turnController);
-if (!turnController%2===0)
-{
+  if (!turnController%2===0)
+  {
+    console.log("move# "+ turnController);
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+      console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
       io.emit('shot', shotObj); 
       //need to add flash event for player click while not their turn
-      console.log("player 1 shot"+shotObj);
-      turnController++;
-      console.log("move# "+ turnController);
-      this.hitOrMiss(shotObj,this.player2Fleet);
-    });
+      //need to disable other person's ability to shoot when not their turn
+      //ugly but...
+      hitOrMiss(shotObj.id,player2Fleet.carrier,player2Fleet);
+      hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
+      hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
+      hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
+     turnController++;
+    }); 
   }
   else
   {
-    player2.socket.on('shot', function(shotObj){  //#step 3 firing a shot in the game
-     io.emit('shot', shotObj); 
-     //need to add flash event for player click while not their turn
-     console.log("player 1 shot"+shotObj);
+   console.log("move# "+ turnController);
+    player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+      console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
+      io.emit('shot', shotObj); 
+      //need to add flash event for player click while not their turn
+      //need to disable other person's ability to shoot when not their turn
+      //ugly but...
+      hitOrMiss(shotObj.id,player1Fleet.carrier,player1Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.battleship,player1Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Fleet);
      turnController++;
-     console.log("move# "+ turnController);
-     this.hitOrMiss(shotObj,this.player1Fleet);
-   });
+    });  
   }
 }
 
-//step 3(A) firing and turn switching
-Game.prototype.hitOrMiss = function(shotObj,targetPlayerFleet) {  
-  //is there a hit
-  targetPlayerFleet.formation.forEach(ship,function(shotobj){
-    if(ship.indexOf(shotObj)===true){
-      ship.pop(shotObj); //removes from ship's working "length"
-      console.log("hit detected at"+shotObj); //add broadcasting capability
-      if (ship===[]){
-        console.log("ship sunk"); //add broadcasting capability
-        targetPlayerFleet.shipcount--;
-        if (targetPlayerFleet.shipcount===0){
-          console.log("gameOver");
-          return;
+function hitOrMiss(shotObj,ship,fleet){  
+  if (ship!==[]){
+    if (ship.indexOf(shotObj)!==-1){
+      if(ship.length===1){ //last hit sinks ship
+        fleet.shipcount--;
+        console.log(ship+" sunk at "+shotObj); //broadcast this to players
+        if(fleet.shipcount===0)
+        {
+         console.log("gameover"); //need to add game over functionality
         }
       }
+      hitFinder=ship.indexOf(shotObj);
+      ship.splice(hitFinder,1); //removes from ship's working "length"
+      console.log("hit detected at "+ shotObj); //add broadcasting capability
+      console.log(ship);
     }
-  });
-};
+  }
+}
 
-function Fleet (owner,carrier,battleship,submarine,ptboat){
-  this.owner=owner; //socket who placed ship
+function Fleet (carrier,battleship,submarine,ptboat){
   this.carrier=carrier;
   this.battleship=battleship;
   this.submarine=submarine;
