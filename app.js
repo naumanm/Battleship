@@ -12,7 +12,7 @@ roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
-gameRooms=[];
+gameRooms=[],
 drydock=[];
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
@@ -95,14 +95,7 @@ io.on('connection', function(socket){  //step #1 connection
     }
   });
   
-   
- //we get the ship name and location
- //figure out what type of ship it is
- //based on its location
- //worry about rotation when rotation event occurs
-
-
-   
+ //worry about rotation when rotation event occurs 
 
   socket.on('playerName', function(playerName) { 
   socket.nickname=playerName;
@@ -130,7 +123,7 @@ socket.on('disconnect', function(){
 });  
 
 //game logic step 2(A) building the board
-function Game (player1,player2,gameId){  
+function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
   //NEED TO EMIT TO BOTH THAT GAME HAS STARTED AND NEED TO LOCK DOWN DRAGABLE
 
   this.player1=player1;
@@ -140,26 +133,6 @@ function Game (player1,player2,gameId){
   gameOver=false;
   var hitFinder;
   var turnController=1;
-  //dummy data
-  var player1Fleet = new Fleet(["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
-  var player2Fleet = new Fleet(["a1","a2","a3","a4","a5"],["b1","b2","b3","b4"],["c1","c2","c3"],["d1","d2"]);
-  //keep this for live play, seeding dummy test fire data
-  // player1.on('place_ship',function(data){
-  //console.log("placedShipObj", placedShipObj);    
-  //    carrier=[]; 
-  //    battle=[];
-  //    sub=[];
-  //    pt =[];
-  //    var player1Fleet = newFleet(carrier,battle,sub,pt); 
-  //  });
-  // player2.on('place_ship',function(data){
-  // console.log("placedShipObj", placedShipObj);   
-  //    carrier=[]; //get this from client end hard code test
-  //    battle=[];
-  //    sub=[];
-  //    pt =[];
-  //    var player2Fleet = newFleet(carrier,battle,sub,pt); 
-  //  }); 
   if (!turnController%2===0)
   {
     console.log("move# "+ turnController);
