@@ -144,18 +144,17 @@ io.on('connection', function(socket){  //step #1 connection
   if (playerPair===2){
     //client.HSETNX("opponent", socket.id, socket.id);  ? will we still need this...since player is being saved above as a player with session?
     // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
-    gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber));
+    gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber,drydockA,drydockB));
     waitingRoom=[];
     roomNumber++;
     playerPair=0;
   }
 
   socket.on('disconnect', function(){
-    console.log(socket.id + " disconnected");
-    //if (!socket.nickname) return;              
+    console.log(socket.id + " disconnected");            
   });
 
-}); // END game communication within io.on('connection'...
+});
 
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
@@ -173,6 +172,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
   console.log(gameId + " game id");
+  //FIX THIS
+  console.log("game start emitter needed on server, and on socket needed on client side"):
   gameOver=false;
   var hitFinder;
   var turnController=1;
