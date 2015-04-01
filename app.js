@@ -55,9 +55,9 @@ io.on('connection', function(socket){  //step #1 connection
 
  // //worry about rotation when rotation event occurs 
 
-  socket.on('playerName', function(playerName) { 
+ socket.on('playerName', function(playerName) { 
   socket.nickname=playerName;
-  });
+});
   //SAVE USERNAME FROM playername TO REDIS FOR WIN/LOSS KEEPING, ALSO SESSION KEEPING use SOCKET.ID FOR THAT PART
   //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
   //client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point -
@@ -81,7 +81,7 @@ io.on('connection', function(socket){  //step #1 connection
 
 //game logic 
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
-  
+
   //Game Setup
   this.player1=player1;
   this.player2=player2;
@@ -99,114 +99,114 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   
   function shipMover (playersocket,docklocation){
     playersocket.on('place_ship', function(placedShipObj){  //to be refactored in v2
-    console.log(placedShipObj);
-    var name=placedShipObj.name;
-    var firstLocation = placedShipObj.cell.charAt(0);
-    var secondLocation = placedShipObj.cell.charAt(1);
-    var rotation=placedShipObj.rotation;
+      console.log(placedShipObj);
+      var name=placedShipObj.name;
+      var firstLocation = placedShipObj.cell.charAt(0);
+      var secondLocation = placedShipObj.cell.charAt(1);
+      var rotation=placedShipObj.rotation;
     //to be refactored in v2
     if (name==="AircraftCarrier"){ 
-        var carrier=[]; 
-        carrier[0]=placedShipObj.cell;
-        if (rotation===0){
-          for (var i = 0; i < 4; i++) {
-            secondLocation++; 
-            newloc=firstLocation+secondLocation; 
-            carrier.push(newloc);
-          }
+      var carrier=[]; 
+      carrier[0]=placedShipObj.cell;
+      if (rotation===0){
+        for (var i = 0; i < 4; i++) {
+          secondLocation++; 
+          newloc=firstLocation+secondLocation; 
+          carrier.push(newloc);
         }
-        if (rotation===90)
-          {
-            for (var l = 0; l < 4; l++) {
-            firstLocation=nextLetter(firstLocation); 
-            newloc=firstLocation+secondLocation; 
-            carrier.push(newloc);
-          }
+      }
+      if (rotation===90)
+      {
+        for (var l = 0; l < 4; l++) {
+          firstLocation=nextLetter(firstLocation); 
+          newloc=firstLocation+secondLocation; 
+          carrier.push(newloc);
         }
-        docklocation[0]=carrier;
+      }
+      docklocation[0]=carrier;
     }
     if (name==="Battleship"){ 
-        var battleship=[]; 
-        battleship[0]=[placedShipObj.cell];
-        if (rotation===0){
-          for (var j = 0; j < 3; j++) {
-            secondLocation++;
-            newloc=firstLocation+secondLocation; 
-            battleship.push(newloc);
-          }
+      var battleship=[]; 
+      battleship[0]=[placedShipObj.cell];
+      if (rotation===0){
+        for (var j = 0; j < 3; j++) {
+          secondLocation++;
+          newloc=firstLocation+secondLocation; 
+          battleship.push(newloc);
         }
-        if (rotation===90)
-          {
-            for (var m = 0; m < 3; m++) {
-            firstLocation=nextLetter(firstLocation); 
-            newloc=firstLocation+secondLocation; 
-            battleship.push(newloc);
-          }
+      }
+      if (rotation===90)
+      {
+        for (var m = 0; m < 3; m++) {
+          firstLocation=nextLetter(firstLocation); 
+          newloc=firstLocation+secondLocation; 
+          battleship.push(newloc);
         }
-        docklocation[1]=battleship;
+      }
+      docklocation[1]=battleship;
     }
     if (name==="Submarine"){ 
-        var submarine=[]; 
-        submarine[2]=[placedShipObj.cell];
-        if (rotation===0){
-          for (var k = 0; k < 2; k++) {
-            secondLocation++; 
-            newloc=firstLocation+secondLocation; 
-            submarine.push(newloc);
-          }
+      var submarine=[]; 
+      submarine[2]=[placedShipObj.cell];
+      if (rotation===0){
+        for (var k = 0; k < 2; k++) {
+          secondLocation++; 
+          newloc=firstLocation+secondLocation; 
+          submarine.push(newloc);
         }
-        if (rotation===90)
-          {
-            for (var n = 0; n < 2; n++) {
-            firstLocation=nextLetter(firstLocation); 
-            newloc=firstLocation+secondLocation; 
-            submarine.push(newloc);
-          }
+      }
+      if (rotation===90)
+      {
+        for (var n = 0; n < 2; n++) {
+          firstLocation=nextLetter(firstLocation); 
+          newloc=firstLocation+secondLocation; 
+          submarine.push(newloc);
         }
-        docklocation[2]=submarine;
+      }
+      docklocation[2]=submarine;
     }
     if (name==="Destroyer"){ 
-        var destroyer=[]; 
-        destroyer[0]=[placedShipObj.cell];
-        if (rotation===0){
-          for (var p = 0; p < 2; p++) {
-            secondLocation++;
-            newloc=firstLocation+secondLocation; 
-            destroyer.push(newloc);
-          }
+      var destroyer=[]; 
+      destroyer[0]=[placedShipObj.cell];
+      if (rotation===0){
+        for (var p = 0; p < 2; p++) {
+          secondLocation++;
+          newloc=firstLocation+secondLocation; 
+          destroyer.push(newloc);
         }
-        if (rotation===90)
-          {
-            for (var o = 0; o < 2; o++) {
-            firstLocation=nextLetter(firstLocation); 
-            newloc=firstLocation+secondLocation; 
-            destroyer.push(newloc);
-          }
+      }
+      if (rotation===90)
+      {
+        for (var o = 0; o < 2; o++) {
+          firstLocation=nextLetter(firstLocation); 
+          newloc=firstLocation+secondLocation; 
+          destroyer.push(newloc);
         }
-        docklocation[3]=destroyer;
+      }
+      docklocation[3]=destroyer;
     }
     if (name==="PtBoat"){ 
-        var ptboat=[]; 
-        ptboat[0]=[placedShipObj.cell];
-        if (rotation===0){
-            secondLocation++; 
-            newloc=firstLocation+secondLocation; 
-            ptboat.push(newloc);
-          }
-        if (rotation===90){
-            firstLocation=nextLetter(firstLocation); 
-            newloc=firstLocation+secondLocation; 
-            ptboat.push(newloc);
-          }
-        docklocation[4]=ptboat;
-     }
+      var ptboat=[]; 
+      ptboat[0]=[placedShipObj.cell];
+      if (rotation===0){
+        secondLocation++; 
+        newloc=firstLocation+secondLocation; 
+        ptboat.push(newloc);
+      }
+      if (rotation===90){
+        firstLocation=nextLetter(firstLocation); 
+        newloc=firstLocation+secondLocation; 
+        ptboat.push(newloc);
+      }
+      docklocation[4]=ptboat;
+    }
   });
-}
 
-  shipMover(player1,drydockA);
-  shipMover(player2,drydockB);
-  
-  player1.on("game_status",function(){
+
+shipMover(player1,drydockA);
+shipMover(player2,drydockB);
+
+  player1.on("game_status",function(){  //can be refactored in v2
     if(player1Fleet.length===5){
       player1ReadyStatus=true;
       console.log("player1 is ready");
@@ -224,7 +224,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     }
   });
 
-  if(player1ReadyStatus && player2ReadyStatus){
+  if(player1ReadyStatus && player2ReadyStatus && !gameOver)
+  {
     console.log("Player 1 Start!");
     var turnController=1;
     if (turnController%2 !==0) 
@@ -232,17 +233,17 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       // player1.emit('shot',"your turn, player1"); //need an event on client side to announce turn
       console.log("move# "+ turnController);
       player1.on('shot', function(shotObj){  
-      console.log(shotObj.id); 
-      io.emit('shot', shotObj);
-      hitOrMiss(shotObj.id,player2Fleet.carrier,player2Fleet);
-      hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
-      hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
-      hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
-      hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
-      if (turnResult===true)
-        io.emit('shot',"Hit!");
-      turnResult=false;
-      turnController++;
+        console.log(shotObj.id); 
+        io.emit('shot', shotObj);
+        hitOrMiss(shotObj.id,player2Fleet.carrier,player2Fleet);
+        hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
+        hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
+        hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
+        hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
+        if (turnResult===true)
+        //  io.emit('shot',"Hit!");
+        turnResult=false;
+        turnController++;
       }); 
     }
     else
@@ -259,11 +260,12 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
       if (turnResult===true)
       // io.emit('hit_confirmation',"Hit! at "+shot.obj); //some client event needed for announcing shot hits
-      turnResult=false;
-      turnController++;
-     });  
+    turnResult=false;
+    turnController++;
+  });  
     }
   } 
+}
 }
 
 function hitOrMiss(shotObj,ship,fleet){  
@@ -290,9 +292,9 @@ function Fleet (carrier,battleship,submarine,destroyer,ptboat){
 //use for vertical code 
 
 function nextLetter(str) {
-    return str.replace(/[a-j]/, function(c){
-        return String.fromCharCode(c.charCodeAt(0)+1);
-    });
+  return str.replace(/[a-j]/, function(c){
+    return String.fromCharCode(c.charCodeAt(0)+1);
+  });
 }
 
 
