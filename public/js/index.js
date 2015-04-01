@@ -39,6 +39,9 @@ var gameObj = {
     playerName: ""    
   };
 
+  $("#readyToPlay").css("visibility","visible");
+
+
   // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
   // gameObj.playerName = $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
   /*var playerName = */
@@ -57,6 +60,9 @@ var gameObj = {
 
     socket.emit('playerName', /* playerName */ gameObj.playerName );
 
+    $("#readyToPlay").css("visibility","hidden");  
+
+
     return /* playerName */ gameObj.playerName;
     // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
     // 1) Player already connected to the game and refreshed.
@@ -69,7 +75,7 @@ var gameObj = {
 // *******************UN-COMMENT ONCE DONE WITH TESTING**************************
 //TEMPORARY DISABLE SINCE IT'S SO ANNOYING WHILE TESTING
   var isNameEmpty = function(a){
-  $('#playerSignIn').modal('show'); // shows the get player's name modal
+    $('#playerSignIn').modal('show'); // shows the get player's name modal
   }();
 
   function gamePlay(){
