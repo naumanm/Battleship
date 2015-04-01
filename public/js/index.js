@@ -368,21 +368,25 @@ $( ".droppable" ).droppable({
     };
 
 //if switched to horiz use validHGrid
-    if( checkWhat === "checkRotate"){
-      if(ship_orientation === "Horizontal", ship_grid){
-        //do something using validHGrid
-        var validH = validHGrid[ ship_name.toString() ].indexOf( ship_grid );
-        if ( validH == -1 ) {
-          //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-        }
-      } else {
-        //do something using validVGrid
-        var validV = validVGrid[ ship_name.toString() ].indexOf( ship_grid );
-        if ( validV == -1 ) {
-          //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-        }
-      } // END of if(ship_orientation === "Horizontal", ship_grid){
-    } // END of check if rotation check
+    // if( checkWhat === "checkRotate"){
+
+    //   if(ship_orientation === "Horizontal", ship_grid){
+    //     //do something using validHGrid
+    //     var validH = validHGrid[ ship_name.toString() ].indexOf( ship_grid );
+    //     if ( validH == -1 ) {
+    //       //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+    //     }
+
+    //   } else {
+    //     //do something using validVGrid
+    //     var validV = validVGrid[ ship_name.toString() ].indexOf( ship_grid );
+    //     if ( validV == -1 ) {
+    //       //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+    //     }
+
+    //   } // END of if(ship_orientation === "Horizontal", ship_grid){
+
+    // } // END of check if rotation check
 
   }; // END of checkShipPlacement function
 
