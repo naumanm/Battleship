@@ -12,7 +12,8 @@ roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
-gameRooms=[]; 
+gameRooms=[];
+drydock=[];
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
@@ -48,24 +49,49 @@ io.on('connection', function(socket){  //step #1 connection
   socket.on('place_ship', function(placedShipObj){
     var firstLocation = placedShipObj.location.charAt(0);
     var secondLocation = placedShipObj.location.charAt(1);
-    var name=placedShipObj.name;
     console.log(firstLocation,secondLocation,name);
     if (name==="AircraftCarrier"){
-      //plus and minus function needed
+      carrier =[placedShipObj.location];
+       for (var i = 0; i < 5; i++) {
+        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+        carrier.push(newloc);
+       }
+       drydock[0]=carrier; //need to hash this with the socket.... 
     }
     if (name==="Battleship"){
-       //plus and minus function
-    }
-    if (name==="Destroyer"){
-       //plus and minus function
+       battleship =[placedShipObj.location];
+       for (var h = 0; h < 4; h++) {
+        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+        battleship.push(newloc);
+       }
+       drydock[1]=battleship; //need to hash this with the socket.... 
     }
     if (name==="Submarine"){
-       //plus and minus function
+      submarine =[placedShipObj.location];
+       for (var j = 0; j < 2; j++) {
+        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+        submarine.push(newloc);
+       }
+       drydock[2]=submarine; //need to hash this with the socket.... 
+    }
+    if (name==="Destroyer"){
+       destroyer =[placedShipObj.location];
+       for (var k = 0; k < 2; k++) {
+        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+        destroyer.push(newloc);
+       }
+       drydock[3]=destroyer; //need to hash this with the socket.... 
     }
     if (name==="PtBoat"){
-       //run plusfunction
        ptboat =[placedShipObj.location];
-       console.log(ptboat);
+       secondLocation++; //increments the location of the 2nd letter of the coordinate
+       newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+       ptboat.push(newloc);
+       drydock[4]=ptboat; //need to hash this with the socket.... 
     }
   });
   
