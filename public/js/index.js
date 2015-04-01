@@ -159,8 +159,12 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
   // making the images of the ships rotate on the 'Your Ships' grid
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
-      if (aircraftCarrierRotation === 0) {aircraftCarrierRotation +=90;}
-      else {aircraftCarrierRotation = 0;}
+      if (aircraftCarrierRotation === 0) {
+        aircraftCarrierRotation +=90;
+      }
+      else {
+        aircraftCarrierRotation = 0;
+      }
       $(this).rotate({ animateTo:aircraftCarrierRotation});
       socket.emit('aircraftCarrierRotation', aircraftCarrierRotation);
       console.log('aircraftCarrierRotation ' + aircraftCarrierRotation);
@@ -169,8 +173,14 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
 
   $('#draggableBattleship').on({
     'dblclick': function() {
-      if (battleshipRotation === 0) {battleshipRotation +=90;}
-      else {battleshipRotation = 0;}
+      if (battleshipRotation === 0) {
+        battleshipRotation +=90;
+        $(this).height(100);    
+        $(this).width(25);
+      }
+      else {
+        battleshipRotation = 0;
+      }
       $(this).rotate({ animateTo:battleshipRotation});
       socket.emit('battleshipRotation', battleshipRotation);
       console.log('battleshipRotation ' + battleshipRotation);
@@ -179,8 +189,12 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
 
   $('#draggableDestroyer').on({
     'dblclick': function() {
-      if (destroyerRotation === 0) {destroyerRotation +=90;}
-      else {destroyerRotation = 0;}
+      if (destroyerRotation === 0) {
+        destroyerRotation +=90;
+      }
+      else {
+        destroyerRotation = 0;
+      }
       $(this).rotate({ animateTo:destroyerRotation});
       socket.emit('destroyerRotation', destroyerRotation);
       console.log('destroyerRotation ' + destroyerRotation);
@@ -189,8 +203,14 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
 
   $('#draggableSubmarine').on({
     'dblclick': function() {
-      if (submarineRotation === 0) {submarineRotation +=90;}
-      else {submarineRotation = 0;}
+      if (submarineRotation === 0) {
+        submarineRotation +=90;
+        $(this).height(75);    
+        $(this).width(25);
+      }
+      else {
+        submarineRotation = 0;
+      }
       $(this).rotate({ animateTo:submarineRotation});
       socket.emit('submarineRotation', submarineRotation);
       console.log('submarineRotation ' + submarineRotation);
@@ -199,8 +219,14 @@ $( ".droppable" ).droppable( "option", "disabled", gameStarted ); // END disable
 
   $('#draggablePtBoat').on({
     'dblclick': function() {
-      if (ptBoatRotation === 0) {ptBoatRotation +=90;}
-      else {ptBoatRotation = 0;}
+      if (ptBoatRotation === 0) {
+        ptBoatRotation +=90;
+        $(this).height(50);    
+        $(this).width(25);
+      }
+      else {
+        ptBoatRotation = 0;
+      }
       $(this).rotate({ animateTo:ptBoatRotation});
       socket.emit('ptBoatRotation', ptBoatRotation);
       console.log('ptBoatRotation ' + ptBoatRotation);

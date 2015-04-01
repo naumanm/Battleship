@@ -81,6 +81,7 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 /* These left: settings on the ships are for the starting location of the ships to look nice in a row prior to placing them on the board */
 /*.aircraftCarrier { left: 240px; top: 8px; }*/
 .aircraftCarrier {
+  z-index: 100;
   width: 125px;
   height: 25px;
   color: blue;
@@ -140,4 +141,15 @@ table td { /* only right and bottom so as not to double up on the borders per ta
   display: inline;
 }
 
-/*IDs
+.top {
+
+}
+
+.left {
+}
+
+.inside {
+  display: inline;
+}
+
+
