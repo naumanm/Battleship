@@ -2,7 +2,7 @@ $(document).ready(function(){
 
   var socket = io();
 
- $('#playerSignIn').modal('show'); // shows the get player's name modal
+  $('#playerSignIn').modal('show'); // shows the get player's name modal
 
   // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
   var playerName = 
@@ -30,7 +30,6 @@ $(document).ready(function(){
   }); // END listener for the form submit
 
   function gamePlay(){
-
 
     var selectedArr = []; // array of all shots
 
@@ -77,7 +76,6 @@ $(document).ready(function(){
       } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
     });  // end of select to take a shot
 
-
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
       // Updates the Header UI for who took a shot and the cell location
@@ -88,15 +86,9 @@ $(document).ready(function(){
         var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
         $(hitArr[1]).css("background-color", "red");
       }
-      // else 
-      // {
-      //   document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + " Your turn!";
-      // }
-      });
+    });
 
-
-
-    } // End of gamePlay function
+  } // End of gamePlay function
 
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
@@ -133,9 +125,11 @@ $(document).ready(function(){
       // remove "draggable" from the passed ship's name
       placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable'
       console.log( placedShip ); // this is the ship that was placed
+      socket.emit('shipName', placedShip);
 
       console.log( targetElem ); // this is the grid location the ship was placed
-
+      socket.emit('shipLocation', targetElem);
+      
       // need to emit targetElem back to server for ship location
       var placedShipObj = {};
       placedShipObj.name = placedShip;
@@ -159,6 +153,8 @@ $(document).ready(function(){
       if (aircraftCarrierRotation === 0) {aircraftCarrierRotation +=90;}
       else {aircraftCarrierRotation = 0;}
       $(this).rotate({ animateTo:aircraftCarrierRotation});
+      socket.emit('aircraftCarrierRotation', aircraftCarrierRotation);
+      console.log('aircraftCarrierRotation ' + aircraftCarrierRotation);
     }
   });
 
@@ -167,6 +163,8 @@ $(document).ready(function(){
       if (battleshipRotation === 0) {battleshipRotation +=90;}
       else {battleshipRotation = 0;}
       $(this).rotate({ animateTo:battleshipRotation});
+      socket.emit('battleshipRotation', battleshipRotation);
+      console.log('battleshipRotation ' + battleshipRotation);
     }
   });
 
@@ -175,7 +173,8 @@ $(document).ready(function(){
       if (destroyerRotation === 0) {destroyerRotation +=90;}
       else {destroyerRotation = 0;}
       $(this).rotate({ animateTo:destroyerRotation});
-      console.log(destroyerRotation);
+      socket.emit('destroyerRotation', destroyerRotation);
+      console.log('destroyerRotation ' + destroyerRotation);
     }
   });
 
@@ -184,6 +183,8 @@ $(document).ready(function(){
       if (submarineRotation === 0) {submarineRotation +=90;}
       else {submarineRotation = 0;}
       $(this).rotate({ animateTo:submarineRotation});
+      socket.emit('submarineRotation', submarineRotation);
+      console.log('submarineRotation ' + submarineRotation);
     }
   });
 
@@ -192,6 +193,8 @@ $(document).ready(function(){
       if (ptBoatRotation === 0) {ptBoatRotation +=90;}
       else {ptBoatRotation = 0;}
       $(this).rotate({ animateTo:ptBoatRotation});
+      socket.emit('ptBoatRotation', ptBoatRotation);
+      console.log('ptBoatRotation ' + ptBoatRotation);
     }
   });
 
