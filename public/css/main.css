@@ -74,12 +74,13 @@ td {
 
 }
 
-.player, .opponent, .dashboard {
+/*.player, .opponent, .dashboard {
   display: inline-block;
 }
-
+*/
 .opponent {
   left: 330px;
+  top: 51px;
   position: relative;
 }
 
