@@ -13,7 +13,6 @@ playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
 gameRooms=[],
-gameOver,
 drydock=[];
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
@@ -46,11 +45,7 @@ io.on('connection', function(socket){  //step #1 connection
   console.log(roomNumber);
   console.log(socket.id + " connected");
 
-  //game_status is true if player clicked "Ready To Play" button
-  //game_status is false if player clicked "Surrender" button
-  socket.on('game_status', function(game_status){
-    gameOver = true;
-  });
+  
 
   //ship placement handler for horizontal based ships
   socket.on('place_ship', function(placedShipObj){
@@ -146,7 +141,11 @@ socket.on('disconnect', function(){
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
   //NEED TO EMIT TO BOTH THAT GAME HAS STARTED AND NEED TO LOCK DOWN DRAGABLE
-
+  //game_status is true if player clicked "Ready To Play" button
+  //game_status is false if player clicked "Surrender" button
+  socket.on('game_status', function(game_status){
+    gameOver = true;
+  });
   this.player1=player1;
   this.player2=player2;
   this.player1Fleet=player1Fleet;
