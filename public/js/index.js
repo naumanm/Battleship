@@ -40,6 +40,8 @@ var gameObj = {
   };
 
   $("#readyToPlay").css("visibility","visible");
+  $("#placeShips").css("visibility","visible");
+
 
 
   // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
@@ -60,7 +62,6 @@ var gameObj = {
 
     socket.emit('playerName', /* playerName */ gameObj.playerName );
 
-    $("#readyToPlay").css("visibility","hidden");  
 
 
     return /* playerName */ gameObj.playerName;
@@ -390,6 +391,9 @@ console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
       $('#shotPlayer').text("Game ON!");
       gameReady(true);
       // emit to server player is ready
+
+      $("#readyToPlay").css("visibility","hidden");  
+      //$("#placeShips").css("visibility","hidden");
     }
   });
 
