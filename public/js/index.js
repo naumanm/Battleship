@@ -1,33 +1,6 @@
 $(document).ready(function(){
 
 // objects to emit to backend
-<<<<<<< HEAD
-var aircraftCarrier = {
-  name: "aircraftCarrier",
-  cellID: "",
-  rotation: "0"
-};
-var battleship = {
-  name: "battleship",
-  cellID: "",
-  rotation: "0"
-};
-var destroyer = {
-  name: "destroyer",
-  cellID: "",
-  rotation: "0"
-};
-var submarine = {
-  name: "submarine",
-  cellID: "",
-  rotation: "0"
-};
-var ptBoat = {
-  name: "ptBoat",
-  cellID: "",
-  rotation: "0"
-};
-=======
 // Christian thiks gameObj should be an object with key value pairs. gameObj['battleship']['name']  ==> "battleship"  THIS works. I tested it in console.
 // This way, the checkShipPlacement function can receive the ship name to check then use the global gameObj and work.
 // Once we do game persistance, we should have function here to check any existing game then add that to the gameObj
@@ -61,7 +34,6 @@ var ptBoat = {
 //       playerName = playerName || "";
 
 //   };
->>>>>>> f67bd59ea99946e74a2ffed2f0537b5aa0c806b6
 
 var socket = io(),
   // gameStarted = false ==> disallows firing and allows placing ships.
@@ -237,11 +209,6 @@ $( ".droppable" ).droppable({
     var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
     // remove "draggable" from the passed ship's name
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable'
-<<<<<<< HEAD
-=======
-    console.log( placedShip ); // this is the ship that was placed
-
->>>>>>> f67bd59ea99946e74a2ffed2f0537b5aa0c806b6
 
     if (placedShip === "AircraftCarrier") {
       aircraftCarrier.cellID = targetElem;
@@ -265,22 +232,6 @@ $( ".droppable" ).droppable({
     }
 
 
-<<<<<<< HEAD
-=======
-    // set the values to the global gameObj to then check then emit
-    placedShipObj.name = placedShip;
-    placedShipObj.location = targetElem;
-    
-    // checks if valid drop. if not, it corrects to closest valid grid space
-    checkShipPlacement( placedShip, targetElem, orientation );
-
-//    socket.emit('place_ship', gameObj[ placedShip ] );  // Christian thinks we should emit the gameObj[ placedShip ] object which contains all ship info (name, grid, orientation)
-//    therefore, the next lines are invalid
-    socket.emit('place_ship', placedShipObj);
-    socket.emit('shipName', placedShip);
-// ===== TAKE ABOVE LINES OUT??? SEE REASON IN COMMENT ABOVE =======
-
->>>>>>> f67bd59ea99946e74a2ffed2f0537b5aa0c806b6
   } // END of drop definition
 }); // END of droppable
 
