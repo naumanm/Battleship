@@ -94,13 +94,13 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
   gameOver=false;
-  readyCount=0;
+  player1ReadyStatus=false;
+  player2ReadyStatus=false;
   readyToPlay=false;
   console.log(gameId + " game id");
   console.log("matchmaking complete, watiing for player ready and ship lockdown");
   turnResult=false;
   
-
   function shipMover (playersocket,docklocation){
     playersocket.on('place_ship', function(placedShipObj){  //to be refactored in v2
     console.log(placedShipObj);
@@ -211,14 +211,14 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   shipMover(player2,drydockB);
   
   player1.on("game_status",function(){
-    readyCount++;
+    player1ReadyStatus=true;
     console.log("player1 is ready");
     console.log(player1Fleet);
     console.log(readyCount);
   });
 
   player2.on("game_status", function(){
-    readyCount++;
+    player2ReadyStatus=true;
     console.log("player2 is ready");
     console.log(player2Fleet);
     console.log(readyCount);
