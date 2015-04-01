@@ -79,6 +79,8 @@
       class="bg-danger"      BG is red, white black
   -->
 
+  <button id="readyToPlay" class="btn btn-success" value="Ready To Play">Ready To Play</button> 
+
   <div class="gameboard">
     <span id="placeShipsWrapper">
     <div id="placeShips">
@@ -109,7 +111,7 @@
            class="ui-widget-content, ptBoat, ship"></li>
 
       <!-- <input id="readyToPlay" class="btn btn-success" type="submit" value="Ready To Play"> -->
-      <button id="readyToPlay" class="btn btn-success" value="Ready To Play">Ready To Play</button> <!-- jQuery UI is overridding Bootstrap's styling -->
+      <!-- jQuery UI is overridding Bootstrap's styling -->
     </div> <!-- END #placeShips -->
     </span> <!-- END #placeShipsWrapper -->
 
@@ -148,8 +150,8 @@
         <tr><td data-id="header" class="rowHead">j</td></tr>
       </table>
 
-      <table class="myBoard player" id="snaptarget">
-        <tr class="currentPlayer">
+      <table class="player" id="snaptarget">
+        <tr>
           <td data-id="a1" class="droppable" data-state="unselected"></td>
           <td data-id="a2" class="droppable" data-state="unselected"></td>
           <td data-id="a3" class="droppable" data-state="unselected"></td>
@@ -161,7 +163,7 @@
           <td data-id="a9" class="droppable" data-state="unselected"></td>
           <td data-id="a10" class="droppable" data-state="unselected"></td>
         </tr>
-        <tr class="currentPlayer">
+        <tr>
           <td data-id="b1" class="droppable" data-state="unselected"></td>
           <td data-id="b2" class="droppable" data-state="unselected"></td>
           <td data-id="b3" class="droppable" data-state="unselected"></td>
@@ -173,7 +175,7 @@
           <td data-id="b9" class="droppable" data-state="unselected"></td>
           <td data-id="b10" class="droppable" data-state="unselected"></td>
         </tr>
-        <tr class="currentPlayer">
+        <tr>
           <td data-id="c1" class="droppable" data-state="unselected"></td>
           <td data-id="c2" class="droppable" data-state="unselected"></td>
           <td data-id="c3" class="droppable" data-state="unselected"></td>
@@ -185,7 +187,7 @@
           <td data-id="c9" class="droppable" data-state="unselected"></td>
           <td data-id="c10" class="droppable" data-state="unselected"></td>
         </tr>
-        <tr class="currentPlayer">
+        <tr>
           <td data-id="d1" class="droppable" data-state="unselected"></td>
           <td data-id="d2" class="droppable" data-state="unselected"></td>
           <td data-id="d3" class="droppable" data-state="unselected"></td>
@@ -197,7 +199,7 @@
           <td data-id="d9" class="droppable" data-state="unselected"></td>
           <td data-id="d10" class="droppable" data-state="unselected"></td>
         </tr>
-        <tr class="currentPlayer">
+        <tr>
           <td data-id="e1" class="droppable" data-state="unselected"></td>
           <td data-id="e2" class="droppable" data-state="unselected"></td>
           <td data-id="e3" class="droppable" data-state="unselected"></td>
@@ -209,7 +211,7 @@
           <td data-id="e9" class="droppable" data-state="unselected"></td>
           <td data-id="e10" class="droppable" data-state="unselected"></td>
         </tr>
-        <tr class="currentPlayer">
+        <tr>
           <td data-id="f1" class="droppable" data-state="unselected"></td>
           <td data-id="f2" class="droppable" data-state="unselected"></td>
           <td data-id="f3" class="droppable" data-state="unselected"></td>
@@ -221,7 +223,7 @@
           <td data-id="f9" class="droppable" data-state="unselected"></td>
           <td data-id="f10" class="droppable" data-state="unselected"></td>
         </tr>
-        <tr class="currentPlayer">
+        <tr>
           <td data-id="g1" class="droppable" data-state="unselected"></td>
           <td data-id="g2" class="droppable" data-state="unselected"></td>
           <td data-id="g3" class="droppable" data-state="unselected"></td>
@@ -233,7 +235,7 @@
           <td data-id="g9" class="droppable" data-state="unselected"></td>
           <td data-id="g10" class="droppable" data-state="unselected"></td>
         </tr>
-        <tr class="currentPlayer">
+        <tr>
           <td data-id="h1" class="droppable" data-state="unselected"></td>
           <td data-id="h2" class="droppable" data-state="unselected"></td>
           <td data-id="h3" class="droppable" data-state="unselected"></td>
@@ -245,7 +247,7 @@
           <td data-id="h9" class="droppable" data-state="unselected"></td>
           <td data-id="h10" class="droppable" data-state="unselected"></td>
         </tr>
-        <tr class="currentPlayer">
+        <tr>
           <td data-id="i1" class="droppable" data-state="unselected"></td>
           <td data-id="i2" class="droppable" data-state="unselected"></td>
           <td data-id="i3" class="droppable" data-state="unselected"></td>
@@ -257,7 +259,7 @@
           <td data-id="i9" class="droppable" data-state="unselected"></td>
           <td data-id="i10" class="droppable" data-state="unselected"></td>
         </tr>
-        <tr class="currentPlayer">
+        <tr>
           <td data-id="j1" class="droppable" data-state="unselected"></td>
           <td data-id="j2" class="droppable" data-state="unselected"></td>
           <td data-id="j3" class="droppable" data-state="unselected"></td>
