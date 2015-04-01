@@ -46,14 +46,14 @@ io.on('connection', function(socket){  //step #1 connection
   console.log(socket.id + " connected");
 
   //ship placement handler for horizontal based ships
+
   socket.on('place_ship', function(placedShipObj){
     var firstLocation = placedShipObj.location.charAt(0);
     var secondLocation = placedShipObj.location.charAt(1);
-    console.log(firstLocation,secondLocation,name);
     if (name==="AircraftCarrier"){
       var carrier =[placedShipObj.location];
        for (var i = 0; i < 5; i++) {
-        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        firstLocation++; //increments the location of the 2nd letter of the coordinate
         newloc=firstLocation+secondLocation; //concat as a string thanks javascript
         carrier.push(newloc);
        }
@@ -62,7 +62,7 @@ io.on('connection', function(socket){  //step #1 connection
     if (name==="Battleship"){
        var battleship =[placedShipObj.location];
        for (var h = 0; h < 4; h++) {
-        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        firstLocation++; //increments the location of the 2nd letter of the coordinate
         newloc=firstLocation+secondLocation; //concat as a string thanks javascript
         battleship.push(newloc);
        }
@@ -71,7 +71,7 @@ io.on('connection', function(socket){  //step #1 connection
     if (name==="Submarine"){
       var submarine =[placedShipObj.location];
        for (var j = 0; j < 2; j++) {
-        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        firstLocation++; //increments the location of the 2nd letter of the coordinate
         newloc=firstLocation+secondLocation; //concat as a string thanks javascript
         submarine.push(newloc);
        }
@@ -80,7 +80,7 @@ io.on('connection', function(socket){  //step #1 connection
     if (name==="Destroyer"){
        var destroyer =[placedShipObj.location];
        for (var k = 0; k < 2; k++) {
-        secondLocation++; //increments the location of the 2nd letter of the coordinate
+        firstLocation++; //increments the location of the 2nd letter of the coordinate
         newloc=firstLocation+secondLocation; //concat as a string thanks javascript
         destroyer.push(newloc);
        }
@@ -88,7 +88,7 @@ io.on('connection', function(socket){  //step #1 connection
     }
     if (name==="PtBoat"){
        var ptboat =[placedShipObj.location];
-       secondLocation++; //increments the location of the 2nd letter of the coordinate
+       firstLocation++; //increments the location of the 2nd letter of the coordinate
        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
        ptboat.push(newloc);
        drydock[4]=ptboat; //need to hash this with the socket.... 
@@ -198,6 +198,13 @@ function Fleet (carrier,battleship,submarine,destroyer,ptboat){
   this.ptboat=ptboat;
   this.shipcount=5;
 } 
+//use for veritical
+function LetterChanges(str) {
+    return str.replace(/[a-j]/, function(c){
+        return String.fromCharCode(c.charCodeAt(0)+1);
+    });
+}
+
 
 // load our server
 http.listen(3000, function(){
