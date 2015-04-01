@@ -46,15 +46,26 @@ io.on('connection', function(socket){  //step #1 connection
 
   //ship placement handler for horizontal based ships
   socket.on('place_ship', function(placedShipObj){
-    if (placedShipObj.name==="AircraftCarrier"){
+    var firstLocation = placedShipObj.location.charAt(0);
+    var secondLocation = placedShipObj.location.charAt(1);
+    var name=placedShipObj.name;
+    console.log(firstLocation,secondLocation,name);
+    if (name==="AircraftCarrier"){
+      //plus and minus function needed
     }
-    if (placedShipObj.name==="Battleship"){
+    if (name==="Battleship"){
+       //plus and minus function
     }
-    if (placedShipObj.name==="Destroyer"){
+    if (name==="Destroyer"){
+       //plus and minus function
     }
-    if (placedShipObj.name==="Submarine"){
+    if (name==="Submarine"){
+       //plus and minus function
     }
-    if (placedShipObj.name==="PtBoat"){
+    if (name==="PtBoat"){
+       //run plusfunction
+       ptboat =[placedShipObj.location];
+       console.log(ptboat);
     }
   });
   
