@@ -177,26 +177,22 @@ var gameObj = {
 
 $( ".droppable" ).droppable({
   drop: function( event, ui ) {
-    var targetElem = $(this).data("id");
-    var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
-    // remove "draggable" from the passed ship's name
-    placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable'
-    // console.log( "The", placedShip, "was dropped on", targetElem ); // this is the ship that was placed and where
 
-    // set the values to the global gameObj to then check then emit
-    placedShipObj = {};
+    var placedShipObj = {};
+
+    var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
+
+    placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable' from the ships name
     placedShipObj.name = placedShip;
-    placedShipObj.location = targetElem;
-// Christian finnish this
-    // placedShipObj.rotation = this.orientation;
+    placedShipObj.cell = $(this).data("id");
+    placedShipObj.rotation = gameObj[placedShip]['rotation'];
+
+    console.log( "The", placedShip, "was dropped on", targetElem ); // this is the ship that was placed and where
 
     console.log( "placedShipObj", placedShipObj );
     
     // checks if valid drop. if not, it corrects to closest valid grid space
-// ***************************************************************
-// UNCOMMENT ONCE WE'RE FURTHER ALONG... this is not MVP
-    // checkShipPlacement( "checkDrop", placedShip, targetElem );
-// ***************************************************************
+    checkShipPlacement( placedShipObj ); // placedShip, targetElem, orientation
 
 //    socket.emit('place_ship', gameObj[ placedShip ] );  // Christian thinks we should emit the gameObj[ placedShip ] object which contains all ship info (name, grid, orientation)
 //    therefore, the next lines are invalid
@@ -318,9 +314,8 @@ $( ".droppable" ).droppable({
     }
   });
 
-// checks each ship's placement on the grid if it is a valid location. IE a ship isn't off the grid.
-// checkWhat can be "checkDrop", "checkRotate"
-  var checkShipPlacement = function( checkWhat, ship_name, ship_grid, ship_orientation ){
+// checks each ship's placement on the grid if it is a valid location. i.e. a ship isn't off the grid.
+  var checkShipPlacement = function( ship_name, ship_grid, ship_orientation ){
     // placedShipObj.name = placedShip;
     // placedShipObj.location = targetElem;
     // need ship's orientation
@@ -343,25 +338,21 @@ $( ".droppable" ).droppable({
     };
 
 //if switched to horiz use validHGrid
-    // if( checkWhat === "checkRotate"){
+    if(ship_orientation === "Horizontal", ship_grid){
+      //do something using validHGrid
+      var validH = validHGrid[ ship_name.toString() ].indexOf( ship_grid );
+      if ( validH == -1 ) {
+        //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+      }
 
-    //   if(ship_orientation === "Horizontal", ship_grid){
-    //     //do something using validHGrid
-    //     var validH = validHGrid[ ship_name.toString() ].indexOf( ship_grid );
-    //     if ( validH == -1 ) {
-    //       //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-    //     }
+    } else {
+      //do something using validVGrid
+      var validV = validVGrid[ ship_name.toString() ].indexOf( ship_grid );
+      if ( validV == -1 ) {
+        //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+      }
 
-    //   } else {
-    //     //do something using validVGrid
-    //     var validV = validVGrid[ ship_name.toString() ].indexOf( ship_grid );
-    //     if ( validV == -1 ) {
-    //       //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-    //     }
-
-    //   } // END of if(ship_orientation === "Horizontal", ship_grid){
-
-    // } // END of check if rotation check
+    } // END of if(ship_orientation === "Horizontal", ship_grid){
 
   }; // END of checkShipPlacement function
 
