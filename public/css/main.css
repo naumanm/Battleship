@@ -5,6 +5,15 @@ body {
   font-family: arial, sans-serif;
 }
 
+table {
+  margin: 5px;
+}
+
+table td { /* only right and bottom so as not to double up on the borders per table cell */
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
 td {
   width: 25px;
   height: 25px;
@@ -16,19 +25,23 @@ td {
   border-bottom: 1px solid black;
 }
 
-table {
-  margin: 5px;
+/* -- Classes --*/
+
+.headerTop {
+  position: absolute;
+  left: 26px;
 }
 
-table td { /* only right and bottom so as not to double up on the borders per table cell */
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+.headerSide {
+  position: absolute;
+  top: 46px;
 }
 
-#readyToPlay {
-  position: relative;
-  top: -10px;
-  left: 340px;
+.myBoard {
+  position: absolute;
+  z-index: 0;
+  top: 46px;
+  left: 28px;
 }
 
 .colHead {
@@ -39,8 +52,7 @@ table td { /* only right and bottom so as not to double up on the borders per ta
   text-align: center;
 }
 
-/*Classes*/
-.gameboard, .noColor {
+.gameboard {
   background: lightblue;
   text-align: middle;
   position-align: center;
@@ -77,6 +89,7 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 .ptBoat,
 .dashboardTitle {
   position: absolute;
+  z-index: 100;
 }
 
 .hor {
@@ -130,10 +143,8 @@ wanted ease-in-out
 
 .aircraftCarrier {
   offset: 100px;
-
-
+  z-index: 100;
 }
-
 
 .hit {
   /*color: red;*/
@@ -151,12 +162,21 @@ wanted ease-in-out
 }
 
 .snaptarget {
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
 }
 
 .gameboard h4 {
   display: inline;
+}
+
+
+/* -- IDs --*/
+
+#readyToPlay {
+  position: relative;
+  top: -10px;
+  left: 340px;
 }
 
 #placeShips {
@@ -173,23 +193,20 @@ wanted ease-in-out
   width: 234px;
 }
 
-#board {
+#playerBoard,
+#opponentBoard {
   position: relative;
+
 }
 
-.headerTop {
-  position: absolute;
-  left: 26px;
+#draggableAircraftCarrier,
+#draggableBattleship,
+#draggableDestroyer,
+#draggableSubmarine,
+#draggablePtBoat {
+  z-index: 100;
 }
 
-.headerSide {
-  position: absolute;
-  top: 46px;
-}
-
-.myBoard {
-  position: absolute;
-  z-index: 0;
-  top: 46px;
-  left: 28px;
+#gameWrapper {
+  #wrapper { margin: 0px auto; }
 }
