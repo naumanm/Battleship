@@ -100,6 +100,71 @@ io.on('connection', function(socket){  //step #1 connection
     }
   });
   
+ //ship placement handler for horizontal based ships
+
+  socket.on('place_ship', function(placedShipObj){
+    var firstLocation = placedShipObj.location.charAt(0);
+    var secondLocation = placedShipObj.location.charAt(1);
+    if (name==="AircraftCarrier"){
+      //if (placedShipObj.rotation===0){
+        var carrier =[placedShipObj.location];
+        for (var i = 0; i < 5; i++) {
+          firstLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          carrier.push(newloc);
+        }
+   //  } 
+       drydock[0]=carrier; //need to hash this with the socket...or REDIS and tie to user until gamestart
+       //will to research
+    }
+    if (name==="Battleship"){
+       var battleship =[placedShipObj.location];
+       //if (placedShipObj.rotation===0){
+        for (var h = 0; h < 4; h++) {
+          firstLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          battleship.push(newloc);
+        }
+      // } 
+       drydock[1]=battleship; //need to hash this with the socket....or REDIS and tie to user until gamestart
+       //will to research 
+    }
+    if (name==="Submarine"){
+      var submarine =[placedShipObj.location];
+       //if (placedShipObj.rotation===0){
+        for (var j = 0; j < 2; j++) {
+          firstLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          submarine.push(newloc);
+        }
+     //}
+       drydock[2]=submarine; //need to hash this with the socket....or REDIS and tie to user until gamestart
+       //will to research 
+    }
+    if (name==="Destroyer"){
+       var destroyer =[placedShipObj.location];
+       //if (placedShipObj.rotation===0){
+        for (var k = 0; k < 2; k++) {
+          firstLocation++; //increments the location of the 2nd letter of the coordinate
+          newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+          destroyer.push(newloc);
+        }
+      //}  
+       drydock[3]=destroyer; //need to hash this with the socket....or REDIS and tie to user until gamestart
+       //will to research 
+    }
+    if (name==="PtBoat"){
+       //if (placedShipObj.rotation===0){
+       var ptboat =[placedShipObj.location];
+       firstLocation++; //increments the location of the 2nd letter of the coordinate
+       newloc=firstLocation+secondLocation; //concat as a string thanks javascript
+       ptboat.push(newloc);
+    // }
+       drydock[4]=ptboat; //need to hash this with the socket....or REDIS and tie to user until gamestart 
+       //will to research 
+    }
+  });
+
  //worry about rotation when rotation event occurs 
 
   socket.on('playerName', function(playerName) { 
