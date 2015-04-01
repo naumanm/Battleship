@@ -69,7 +69,7 @@ var gameObj = {
 // *******************UN-COMMENT ONCE DONE WITH TESTING**************************
 //TEMPORARY DISABLE SINCE IT'S SO ANNOYING WHILE TESTING
   var isNameEmpty = function(a){
-  // $('#playerSignIn').modal('show'); // shows the get player's name modal
+  $('#playerSignIn').modal('show'); // shows the get player's name modal
   }();
 
   function gamePlay(){
