@@ -181,7 +181,6 @@ $( ".droppable" ).droppable({
     var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
     // remove "draggable" from the passed ship's name
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable'
-<<<<<<< HEAD
     // console.log( "The", placedShip, "was dropped on", targetElem ); // this is the ship that was placed and where
 
     // set the values to the global gameObj to then check then emit
@@ -206,30 +205,6 @@ $( ".droppable" ).droppable({
     socket.emit('shipLocation', targetElem);
     socket.emit('shipName', placedShip);
 // ===== TAKE ABOVE LINES OUT??? SEE REASON IN COMMENT ABOVE =======
-=======
-
-    if (placedShip === "AircraftCarrier") {
-      aircraftCarrier.cellID = targetElem;
-      emitShip(aircraftCarrier);
-    }
-    if (placedShip === "Battleship") {
-      battleship.cellID = targetElem;
-      emitShip(battleship);
-    }
-    if (placedShip === "Destroyer") {
-      destroyer.cellID = targetElem;
-      emitShip(destroyer);
-    }
-    if (placedShip === "Submarine") {
-      submarine.cellID = targetElem;
-      emitShip(submarine);
-    }
-    if (placedShip === "PtBoat") {
-      ptBoat.cellID = targetElem;
-      emitShip(ptBoat);
-    }
-
->>>>>>> 65c3be5abea56d9494c1dc356e242179fc5e062c
 
   } // END of drop definition
 }); // END of droppable
