@@ -71,7 +71,6 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 }
 
 .gameboard, .noColor {
-  background: lightblue;
   text-align: middle;
   position-align: center;
 
@@ -189,6 +188,7 @@ wanted ease-in-out
 }
 
 #placeShips {
+  background: lightblue;
   padding: 8px 8px;
   border: 1px solid black;
   width: 760px;
