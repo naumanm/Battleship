@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
 // objects to emit to backend
+<<<<<<< HEAD
 var aircraftCarrier = {
   name: "aircraftCarrier",
   cellID: "",
@@ -26,19 +27,81 @@ var ptBoat = {
   cellID: "",
   rotation: "0"
 };
+=======
+// Christian thiks gameObj should be an object with key value pairs. gameObj['battleship']['name']  ==> "battleship"  THIS works. I tested it in console.
+// This way, the checkShipPlacement function can receive the ship name to check then use the global gameObj and work.
+// Once we do game persistance, we should have function here to check any existing game then add that to the gameObj
+// var gameObj = {
+//     aircraftCarrier: {
+//       name: "aircraftCarrier",
+//       cell: "",
+//       rotation: "0"
+//     },
+//     battleship: {
+//       name: "battleship",
+//       cell: "",
+//       rotation: "0"
+//     },
+//       destroyer: {
+//       name: "destroyer",
+//       cell: "",
+//       rotation: "0"
+//     },
+//       submarine: {
+//       name: "submarine",
+//       cell: "",
+//       rotation: "0"
+//     },
+//       ptBoat: {
+//       name: "ptBoat",
+//       cell: "",
+//       rotation: "0"
+//     },
+//       gameStarted = gameStarted || false,
+//       playerName = playerName || "";
+
+//   };
+>>>>>>> f67bd59ea99946e74a2ffed2f0537b5aa0c806b6
 
 var socket = io(),
-// gameStarted = false ==> disallows firing and allows placing ships.
-// gameStarted = true ==> disallows placing ships and allows firing.
-    gameStarted = gameStarted || false;
+  // gameStarted = false ==> disallows firing and allows placing ships.
+  // gameStarted = true ==> disallows placing ships and allows firing.
+  gameStarted = gameStarted || false;
 
-$('#playerSignIn').modal('show'); // shows the get player's name modal
+var aircraftCarrier = {
+    name: "aircraftCarrier",
+    cell: "",
+    rotation: "0"
+  },
+    battleship = {
+    name: "battleship",
+    cell: "",
+    rotation: "0"
+  },
+    destroyer = {
+    name: "destroyer",
+    cell: "",
+    rotation: "0"
+  },
+    submarine = {
+    name: "submarine",
+    cell: "",
+    rotation: "0"
+  },
+    ptBoat = {
+    name: "ptBoat",
+    cell: "",
+    rotation: "0"
+  };
 
-// as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
-var playerName = $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
-    var playerName = $('#personsName').val();
-    $( "#userName" ).text( "Hello " + playerName );
-}).keyup();
+  // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
+  // gameObj.playerName = $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
+  /*var playerName = */
+  $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
+      // gameObj.playerName = $('#personsName').val();
+      var playerName = $('#personsName').val();
+      $( "#userName" ).text( "Hello " + playerName /* gameObj.playerName */ );
+  }).keyup();
 
   // listener for the form submit
   $('form').submit(function(e){
@@ -46,11 +109,11 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
     var playerName = document.getElementsByTagName("input")[0].value; // wasn't working using same code from above function like like 10 (  var playerName = $('#personsName').val();  )
 
     $('#playerSignIn').modal('hide'); // shows the get player's name modal
-    console.log("playerName", playerName);
+    console.log("playerName", playerName /* gameObj.playerName */ );
 
-    socket.emit('playerName', playerName);
+    socket.emit('playerName', playerName /* gameObj.playerName */ );
 
-    return playerName;
+    return playerName /* gameObj.playerName */;
     // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
     // 1) Player already connected to the game and refreshed.
     // 2) Player started a new game (using a different player name)
@@ -58,9 +121,16 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
 
   }); // END listener for the form submit
 
+
+// *******************UN-COMMENT ONCE DONE WITH TESTING**************************
+//TEMPORARY DISABLE SINCE IT'S SO ANNOYING WHILE TESTING
+  var isNameEmpty = function(a){
+  // $('#playerSignIn').modal('show'); // shows the get player's name modal
+  }();
+
   function gamePlay(){
 
-    var selectedArr = []; // array of all shots
+    var selectedArr = selectedArr || []; // array of all shots
 
     // color change on hover
     $("td").mouseover(function(){
@@ -115,7 +185,16 @@ var playerName = $( "#personsName" ).keyup(function() { // #personsName is the i
         var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
         $(hitArr[1]).css("background-color", "red");
       }
-    });
+    }); // END of socket.on 'shot'
+
+    // make this into game_status to start or end game
+    socket.on('game_status', function( gameOver ){
+      if ( gameOver ) {
+        document.getElementById("shotPlayer").innerHTML = "Game Over. Thanks for playing."; // Add Play again?
+      } else {
+        // Does something need to go here for gameOver = false???
+      }
+    }); // END of socket.on 'game_status'
 
   } // End of gamePlay function
 
@@ -158,6 +237,11 @@ $( ".droppable" ).droppable({
     var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
     // remove "draggable" from the passed ship's name
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable'
+<<<<<<< HEAD
+=======
+    console.log( placedShip ); // this is the ship that was placed
+
+>>>>>>> f67bd59ea99946e74a2ffed2f0537b5aa0c806b6
 
     if (placedShip === "AircraftCarrier") {
       aircraftCarrier.cellID = targetElem;
@@ -181,31 +265,26 @@ $( ".droppable" ).droppable({
     }
 
 
+<<<<<<< HEAD
+=======
+    // set the values to the global gameObj to then check then emit
+    placedShipObj.name = placedShip;
+    placedShipObj.location = targetElem;
+    
+    // checks if valid drop. if not, it corrects to closest valid grid space
+    checkShipPlacement( placedShip, targetElem, orientation );
+
+//    socket.emit('place_ship', gameObj[ placedShip ] );  // Christian thinks we should emit the gameObj[ placedShip ] object which contains all ship info (name, grid, orientation)
+//    therefore, the next lines are invalid
+    socket.emit('place_ship', placedShipObj);
+    socket.emit('shipName', placedShip);
+// ===== TAKE ABOVE LINES OUT??? SEE REASON IN COMMENT ABOVE =======
+
+>>>>>>> f67bd59ea99946e74a2ffed2f0537b5aa0c806b6
   } // END of drop definition
 }); // END of droppable
 
   // ship rotation
-
-  // making the images of the ships rotate on the 'Your Ships' grid
-  // $('#zzzz-draggableAircraftCarrier').on({
-  //   'dblclick': function () {
-  //     if( !gameStarted ){
-  //       if (aircraftCarrierRotation === 0) {
-  //         aircraftCarrierRotation +=90;
-  //         $('#draggableAircraftCarrier').addClass('ver');
-  //         $('#draggableAircraftCarrier').removeClass('hor');
-  //       } else {
-  //         aircraftCarrierRotation = 0;
-  //         $('#draggableAircraftCarrier').addClass('hor');
-  //         $('#draggableAircraftCarrier').removeClass('ver');
-  //     }
-  //       // $(this).rotate({ animateTo:aircraftCarrierRotation});
-  //       socket.emit('aircraftCarrierRotation', aircraftCarrierRotation);
-  //       console.log('aircraftCarrierRotation ' + aircraftCarrierRotation);
-  //     }
-  //   }
-  // });
-
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
       if( !gameStarted ){
@@ -316,7 +395,10 @@ $( ".droppable" ).droppable({
   });
 
 // checks each ship's placement on the grid if it is a valid location. IE a ship isn't off the grid.
-  var checkShipPlacement = function(){
+  var checkShipPlacement = function( ship_name, ship_grid, ship_orientation ){
+    // placedShipObj.name = placedShip;
+    // placedShipObj.location = targetElem;
+    // need ship's orientation
     //check the 2nd char of the grid location
     validHGrid = {
       "draggableAircraftCarrier": [1,2,3,4,5,6],
@@ -334,7 +416,22 @@ $( ".droppable" ).droppable({
       "draggableSubmarine": [a,b,c,d,e,f,g,h],
       "draggablePtBoat": [a,b,c,d,e,f,g,h,i],
     };
-  };
+
+//if switched to horiz use validHGrid
+    if(ifHorizontal, ship_grid){
+      //do something using validHGrid
+      var validH = validHGrid[ ship_name.toString() ].indexOf( ship_grid );
+      if ( validH == -1 ) {
+        //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+      }
+    } else {
+      //do something using validVGrid
+      var validV = validVGrid[ ship_name.toString() ].indexOf( ship_grid );
+      if ( validV == -1 ) {
+        //invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+      }
+    }
+  }; // END of checkShipPlacement function
 
 // toggle ships droppable
   var gameReady = function( setTo ){
@@ -345,9 +442,7 @@ $( ".droppable" ).droppable({
     socket.emit('game_status', gameStarted);
   }; // END disable gameReady funct
 
-// "Ready To Play" button.
-// On click, set gameStarted to true.
-// Dissable ship draggable and rotation.
+// "Ready To Play" button to dissable ship draggable and rotation.
   $('#readyToPlay').on({
     'click': function() {
       event.preventDefault();

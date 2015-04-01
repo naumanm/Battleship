@@ -131,12 +131,12 @@ io.on('connection', function(socket){  //step #1 connection
     playerPair=0;
   }
 
-socket.on('disconnect', function(){
-  console.log(socket.id + " disconnected");
+  socket.on('disconnect', function(){
+    console.log(socket.id + " disconnected");
     //if (!socket.nickname) return;              
   });
 
-});  
+}); // END game communication within io.on('connection'...
 
 //game logic step 2(A) building the board
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
@@ -144,9 +144,9 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   
   //game_status is true if player clicked "Ready To Play" button
   //game_status is false if player clicked "Surrender" button
-  socket.on('game_status', function(game_status){
-    gameOver = true;
-  });
+// socket.on('game_status', function(game_status){
+  // gameOver = true;
+// });
   
   this.player1=player1;
   this.player2=player2;
@@ -157,12 +157,12 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   gameOver=false;
   var hitFinder;
   var turnController=1;
-  if (!turnController%2===0)
-  {
+  if (!turnController%2===0) // Christian asks shouldn't this be turnController%2 != 0 ?
+   {
     console.log("move# "+ turnController);
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
-      io.emit('shot', shotObj); 
+      io.emit('shot', shotObj);
       //need to add flash event for player click while not their turn
       //need to disable other person's ability to shoot when not their turn
       //ugly but...
@@ -201,7 +201,9 @@ function hitOrMiss(shotObj,ship,fleet){
         console.log(ship+" sunk at "+shotObj);
         if(fleet.shipcount===0)
         {
-         console.log("gameover"); //need to add game over functionality
+          gameOver = true;
+          io.emit('game_status', gameOver);
+          console.log("Game Over"); //need to add game over functionality
         }
       }
       hitFinder=ship.indexOf(shotObj);
