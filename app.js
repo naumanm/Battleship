@@ -63,7 +63,7 @@ io.on('connection', function(socket){  //step #1 connection
       //if (placedShipObj.rotation===0){
         var carrier =[placedShipObj.location];
         for (var i = 0; i < 5; i++) {
-          firstLocation++; //increments the location of the 2nd letter of the coordinate
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
           newloc=firstLocation+secondLocation; //concat as a string thanks javascript
           carrier.push(newloc);
         }
@@ -79,7 +79,7 @@ io.on('connection', function(socket){  //step #1 connection
        var battleship =[placedShipObj.location];
        //if (placedShipObj.rotation===0){
         for (var h = 0; h < 4; h++) {
-          firstLocation++; //increments the location of the 2nd letter of the coordinate
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
           newloc=firstLocation+secondLocation; //concat as a string thanks javascript
           battleship.push(newloc);
         }
@@ -95,7 +95,7 @@ io.on('connection', function(socket){  //step #1 connection
       var submarine =[placedShipObj.location];
        //if (placedShipObj.rotation===0){
         for (var j = 0; j < 2; j++) {
-          firstLocation++; //increments the location of the 2nd letter of the coordinate
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
           newloc=firstLocation+secondLocation; //concat as a string thanks javascript
           submarine.push(newloc);
         }
@@ -111,7 +111,7 @@ io.on('connection', function(socket){  //step #1 connection
        var destroyer =[placedShipObj.location];
        //if (placedShipObj.rotation===0){
         for (var k = 0; k < 2; k++) {
-          firstLocation++; //increments the location of the 2nd letter of the coordinate
+          secondLocation++; //increments the location of the 2nd letter of the coordinate
           newloc=firstLocation+secondLocation; //concat as a string thanks javascript
           destroyer.push(newloc);
         }
@@ -126,7 +126,7 @@ io.on('connection', function(socket){  //step #1 connection
     if (name==="PtBoat"){
        //if (placedShipObj.rotation===0){
        var ptboat =[placedShipObj.location];
-       firstLocation++; //increments the location of the 2nd letter of the coordinate
+       secondLocation++; //increments the location of the 2nd letter of the coordinate
        newloc=firstLocation+secondLocation; //concat as a string thanks javascript
        ptboat.push(newloc);
     // }
@@ -184,8 +184,6 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   readyToPlay=false;
   console.log(gameId + " game id");
   console.log("matchmaking complete, watiing for player ready and ship lockdown");
-  console.log(player1Fleet);
-  console.log(player2Fleet);
   turnResult=false;
   
   player1.on("game_status",function(){
