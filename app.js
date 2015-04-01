@@ -139,7 +139,6 @@ function hitOrMiss(shotObj,ship,fleet){
     if (ship.indexOf(shotObj)!==-1){
       if(ship.length===1){ //last hit sinks ship
         fleet.shipcount--;
-        io.emit(ship+"sunk at"+shotObj);
         console.log(ship+" sunk at "+shotObj);
         if(fleet.shipcount===0)
         {
@@ -148,7 +147,6 @@ function hitOrMiss(shotObj,ship,fleet){
       }
       hitFinder=ship.indexOf(shotObj);
       ship.splice(hitFinder,1); //removes from ship's working "length"
-      io.emit("Hit detected at "+shotObj);
       console.log("hit detected at "+ shotObj); 
       console.log(ship);
     }
