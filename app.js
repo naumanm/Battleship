@@ -92,6 +92,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   player1ReadyStatus=false,
   player2ReadyStatus=false,
   readyToPlay=false,
+  player1Total=5,
+  player2Total=5,
   turnComplete=false;
   
   console.log(gameId + " game #");
@@ -432,12 +434,7 @@ if(player2ReadyStatus && player1ReadyStatus){
     player1.on('shot', function(shotObj){  
       console.log(shotObj.id); 
       io.emit('shot', shotObj);
-      hitOrMiss(shotObj.id,player2Fleet.carrier,player2Fleet);
-      hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
-      hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
-      hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
-      hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
-      //  io.emit('shot',"Hit!");
+      hitOrMiss(shotObj.id,drydockB,player1Total);
       turnController++;
       console.log("switching turns");
     }); 
@@ -448,26 +445,21 @@ if(player2ReadyStatus && player1ReadyStatus){
     player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
       io.emit('shot', shotObj); 
-      hitOrMiss(shotObj.id,player1Fleet.carrier,player1Fleet);
-      hitOrMiss(shotObj.id,player1Fleet.battleship,player1Fleet);
-      hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
-      hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Fleet);
-      hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
-      // io.emit('hit_confirmation',"Hit! at "+shot.obj); //some client event needed for announcing shot hits
+      hitOrMiss(shotObj.id,drydockA,player1Total);
       turnController++;
       console.log("player 1's turn");
     });
   }  
 }
 
-function hitOrMiss(shotObj,fleet){  
+function hitOrMiss(shotObj,fleet,shipcount){  
   var hitFinder;
     shotObj.result = "Miss";
   for(var i=0;i<fleet.length;i++){
     if (fleet[i]!==[]){
       if (fleet[i].indexOf(shotObj)!==-1){
         if(fleet[i].length===1){ //last hit sinks ship
-        shotObj.result="{ship} Sunk!";
+        shotObj.result="Ship Sunk!";
           shipcount--;
         }
     shotObj.result="Hit";
