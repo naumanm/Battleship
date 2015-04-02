@@ -465,16 +465,18 @@ function hitOrMiss(shotObj,fleet,shipcount){
     shotObj.result = "Miss";
   for(var i=0;i<fleet.length;i++){
     if (fleet[i]!==[]){
-      if (fleet[i].indexOf(shotObj)!==-1){
-        if(fleet[i].length===1){ //last hit sinks ship
-        shotObj.result="Ship Sunk!";
-          shipcount--;
+      for (var j = 0; j < fleet[i][j].length; j++) {
+        if (fleet[i][j].indexOf(shotObj)!==-1){
+          if(fleet[i][j].length===1){ //last hit sinks ship
+            shotObj.result="Ship Sunk!";
+            shipcount--;
+          }
+          shotObj.result="Hit";
+          hitFinder=ship[i][j].indexOf(shotObj);
+          ship[i][j].splice(hitFinder,1); //removes from ship's working "length"
         }
-    shotObj.result="Hit";
-    hitFinder=ship[i].indexOf(shotObj);
-    ship[i].splice(hitFinder,1); //removes from ship's working "length"
+      }
     }
-   }
   }
   io.emit('shot',shotObj);
 }
