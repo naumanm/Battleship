@@ -460,19 +460,21 @@ if(player2ReadyStatus && player1ReadyStatus){
   }  
 }
 
-function hitOrMiss(shotObj,ship,fleet){  
+function hitOrMiss(shotObj,fleet){  
   var hitFinder;
     shotObj.result = "Miss";
-  if (ship!==[]){
-    if (ship.indexOf(shotObj)!==-1){
-      if(ship.length===1){ //last hit sinks ship
-       shotObj.result="{ship} Sunk!";
-        fleet.shipcount--;
-      }
+  for(var i=0;i<fleet.length;i++){
+    if (fleet[i]!==[]){
+      if (fleet[i].indexOf(shotObj)!==-1){
+        if(fleet[i].length===1){ //last hit sinks ship
+        shotObj.result="{ship} Sunk!";
+          shipcount--;
+        }
     shotObj.result="Hit";
-    hitFinder=ship.indexOf(shotObj);
-    ship.splice(hitFinder,1); //removes from ship's working "length"
+    hitFinder=ship[i].indexOf(shotObj);
+    ship[i].splice(hitFinder,1); //removes from ship's working "length"
     }
+   }
   }
   io.emit('shot',shotObj);
 }
