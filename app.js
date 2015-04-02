@@ -467,8 +467,8 @@ function hitOrMiss(shotObj,fleet,shipcount){
           if(fleet[i][j].length===1){ //last hit sinks ship
             shipcount--;
           }
-          hitFinder=ship[i][j].indexOf(shotObj);
-          fleet[i][j].splice(hitFinder,1); 
+          hitFinder=fleet[i][j].indexOf(shotObj);
+          fleet[i][hitFinder]=null; 
           return true;
         }
       }
