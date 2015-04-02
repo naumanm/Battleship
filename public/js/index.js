@@ -168,26 +168,36 @@ var socket = io(),
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
 
-  $( "#draggableAircraftCarrier" ).draggable({ 
-    containment: "#snaptarget",
-    grid: [25, 25] 
+  $( "#draggableAircraftCarrier" ).draggable({
+    snap: ".snapCell",
+    snapMode: "inner"
+    // containment: "#snaptarget",
+    // grid: [13, 13] 
   });
 
-  $( "#draggableBattleship" ).draggable({ 
-    containment: "#snaptarget",
-    grid: [25, 25] 
+  $( "#draggableBattleship" ).draggable({
+    snap: ".snapCell",
+    snapMode: "inner"
+    // containment: "#snaptarget",
+    // grid: [25, 25] 
   });
-  $( "#draggableDestroyer" ).draggable({ 
-    containment: "#snaptarget",
-    grid: [25, 25] 
+  $( "#draggableDestroyer" ).draggable({
+    snap: ".snapCell",
+    snapMode: "inner"
+    // containment: "#snaptarget",
+    // grid: [25, 25] 
   });
-  $( "#draggableSubmarine" ).draggable({ 
-    containment: "#snaptarget",
-    grid: [25, 25] 
+  $( "#draggableSubmarine" ).draggable({
+    snap: ".snapCell",
+    snapMode: "inner"
+    // containment: "#snaptarget",
+    // grid: [25, 25] 
   });
-  $( "#draggablePtBoat" ).draggable({ 
-    containment: "#snaptarget",
-    grid: [25, 25]
+  $( "#draggablePtBoat" ).draggable({
+    snap: ".snapCell",
+    snapMode: "inner"
+    // containment: "#snaptarget",
+    // grid: [25, 25]
   });
 
 
@@ -367,18 +377,22 @@ $( ".droppable" ).droppable({
         var lastValidElement = validHGrid[ placedShip ][ validHGrid[ placedShip ].length-1 ];
         // console.log( "lastValidElement", lastValidElement );
         var fixedCell = placedVGrid + lastValidElement.toString(); // add that after the current placedVGrid
-        //console.log( "fixedCell", fixedCell );
+        console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
         // count the difference from placed cell to fixed cell
-        var fixedDistance = 1;// index of place cell minus the index of the fixed cell
+        var fixedDistance = validHGrid[ placedShip ].indexOf( parseInt(placedHGrid, 10) ) - validHGrid[ placedShip ].indexOf( parseInt(lastValidElement, 10) );// index of place cell minus the index of the fixed cell
         // multiply by 25 px
-
+        fixedDistance = fixedDistance * 25;
         // get the draggable style and
-
+        var getTheShip = "#draggable"+ placedShip.name;
+        var theShipStyle = $(getTheShip).attr('style');
+console.log("theShipStyle", theShipStyle);
         // subtract the fixed cell distance from the style's location
 
         // add that to the img style
         // once working, add the companion fix to the else block
+// var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
+// var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
 
 
       } // END invalid HORIZONTAL placement with ship placement fix
@@ -386,7 +400,7 @@ $( ".droppable" ).droppable({
     } else { // VERTICAL
       // use validVGrid
       var validV = validVGrid[ placedShip ].indexOf( placedVGrid );
-      //console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
+      console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
       if ( validV === -1 ) {
         //console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
         // correct the grid location here
@@ -394,9 +408,26 @@ $( ".droppable" ).droppable({
         var lastValidElement = validVGrid[ placedShip ][ validVGrid[ placedShip ].length-1 ]; // the linter incorrectly thinks this var has already been defined. There is another assignment but inside the conditional. The logic will only use one or the other.
         // console.log( "lastValidElement", lastValidElement );
         // var fixedCell = lastValidElement + placedHGrid; // I think this is the incorrect code. Suspect needs placedVGrid which is next line
-        var fixedCell = lastValidElement + placedVGrid; // add that after the current placedVGrid
+        var fixedCell = lastValidElement + placedHGrid; // add that after the current placedVGrid
         console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
+        // count the difference from placed cell to fixed cell
+        var fixedDistance = validVGrid[ placedShip ].indexOf( parseInt(placedVGrid, 10) ) - validVGrid[ placedShip ].indexOf( parseInt(lastValidElement, 10) );// index of place cell minus the index of the fixed cell
+        // multiply by 25 px
+        fixedDistance = fixedDistance * 25;
+        // get the draggable style and
+        var getTheShip = "#draggable"+ placedShip.name;
+        var theShipStyle = $(getTheShip).attr('style');
+console.log("theShipStyle", theShipStyle);
+        // subtract the fixed cell distance from the style's location
+
+        // add that to the img style
+        // once working, add the companion fix to the else block
+// var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
+// var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
+
+
+
       } // END invalid VERTICAL placement with ship placement fix
 
     } // END of placedOrientation check for rotaion at 0 or 90 degrees
@@ -443,6 +474,11 @@ $( ".droppable" ).droppable({
         $("#readyToPlay").css("display","none");  
         $('h4').text(''); 
       }
+      else {
+
+        console.log("should prompt user");
+      }
+
     }
   });
 

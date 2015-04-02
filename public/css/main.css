@@ -159,7 +159,17 @@ wanted ease-in-out
   height: 25px;
 }
 
-.droppable img {
+img.droppable { /* these are the ships */
+  height: 25px;
+  width: 25px;
+  overflow: visible;
+  
+  /* set width height: to 25  px */
+  /* the image overflow is visible */
+  /* image aligns left to overflow to the right */
+}
+
+.droppable img { // this is the hit miss img
   margin: 0;
   padding: 0;
   background-repeat: no-repeat;
@@ -173,12 +183,13 @@ wanted ease-in-out
   /*height: 25px;*/
   /*width: 25px;*/
   background-color: red;
-  z-index: 100;
+  z-index: 200;
 }
 
 .miss {
+  background-image: url("/images/miss.png");
   background-color: blue;
-  z-index: 100;
+  z-index: 200;
 }
 
 .hide {
