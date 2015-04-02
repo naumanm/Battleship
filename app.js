@@ -218,7 +218,7 @@ player2.on("game_status", function(){
 });
 
   
-if(player2ReadyStatus && player1ReadyStatus){
+//if(player2ReadyStatus && player1ReadyStatus){
   var turnController=1;
   if (turnController%2 !==0){
     // player1.emit('shot',"your turn, player1"); //need an event on client side to announce turn
@@ -226,6 +226,7 @@ if(player2ReadyStatus && player1ReadyStatus){
     
     player1.on('shot', function(shotObj){  
       console.log(shotObj.id); 
+      io.emit('shot', shotObj);
       hitOrMiss(shotObj.id,player2Fleet.carrier,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
@@ -241,6 +242,7 @@ if(player2ReadyStatus && player1ReadyStatus){
     console.log("player 2's turn");
     player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
+      io.emit('shot', shotObj); 
       hitOrMiss(shotObj.id,player1Fleet.carrier,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.battleship,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
@@ -251,7 +253,7 @@ if(player2ReadyStatus && player1ReadyStatus){
       console.log("player 1's turn");
     });
   }  
-}
+//}
 
 function hitOrMiss(shotObj,ship,fleet){  
   var hitFinder;
@@ -267,7 +269,6 @@ function hitOrMiss(shotObj,ship,fleet){
     ship.splice(hitFinder,1); //removes from ship's working "length"
     }
   }
-  console.log("server version of shot obj "+shotObj);
   io.emit('shot',shotObj);
 }
 
