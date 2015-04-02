@@ -226,7 +226,6 @@ if(player2ReadyStatus && player1ReadyStatus){
     
     player1.on('shot', function(shotObj){  
       console.log(shotObj.id); 
-      io.emit('shot', shotObj);
       hitOrMiss(shotObj.id,player2Fleet.carrier,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
       hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
@@ -242,7 +241,6 @@ if(player2ReadyStatus && player1ReadyStatus){
     console.log("player 2's turn");
     player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
-      io.emit('shot', shotObj); 
       hitOrMiss(shotObj.id,player1Fleet.carrier,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.battleship,player1Fleet);
       hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
@@ -269,6 +267,7 @@ function hitOrMiss(shotObj,ship,fleet){
     ship.splice(hitFinder,1); //removes from ship's working "length"
     }
   }
+  console.log("server version of shot obj "+shotObj);
   io.emit('shot',shotObj);
 }
 
