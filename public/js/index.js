@@ -168,7 +168,7 @@ var socket = io(),
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
 
-  $( "#draggableAircraftCarrier" ).draggable({
+  $( ".draggableAircraftCarrier" ).draggable({
     snap: ".snapCell",
     snapMode: "inner"
     // containment: "#snaptarget",

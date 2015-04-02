@@ -71,8 +71,10 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 }
 
 .gameboard, .noColor {
-  text-align: middle;
-  position-align: center;
+  /*text-align: middle;*/
+  text-align: center;
+
+  /*position-align: center;*/
 
 }
 
@@ -154,7 +156,7 @@ wanted ease-in-out
   z-index: 100;
 }
 
-.droppable span {
+.droppable  {
   width: 25px;
   height: 25px;
 }
@@ -196,13 +198,6 @@ img.droppable { /* these are the ships */
   display: none;
 }
 
-.noLIDisk {
-  list-style-type: none;
-  list-style-position: outside;
-  position: relative;
-  left: -5px;
-}
-
 .snaptarget {
   width: 200px;
   height: 200px;
@@ -228,6 +223,14 @@ img.droppable { /* these are the ships */
   position: relative;
 }
 
+#placeShips span {
+  z-index: 110;
+  width: 24px;
+  height: 24px;
+  background-color: blue;
+
+}
+
 #stats {
   margin-top: 15px;
   padding: 4px 8px;
@@ -246,6 +249,7 @@ img.droppable { /* these are the ships */
 #draggableSubmarine,
 #draggablePtBoat {
   z-index: 100;
+  
 }
 
 #gameWrapper {
