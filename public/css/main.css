@@ -129,7 +129,7 @@ wanted ease-in-out
 
 .dashboardTitle {
   position: absolute;
-  background: cyan;
+  background: lightyellow;
   border-width: 3px;
   border-color: black;
   text-align: center;
@@ -210,7 +210,7 @@ img.droppable { /* these are the ships */
 }
 
 #placeShips {
-  background: lightblue;
+  background: lightyellow;
   padding: 8px 8px;
   border: 1px solid black;
   width: 760px;
