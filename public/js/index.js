@@ -443,6 +443,11 @@ $( ".droppable" ).droppable({
         $("#readyToPlay").css("display","none");  
         $('h4').text(''); 
       }
+      else {
+
+        console.log("should prompt user");
+      }
+
     }
   });
 
