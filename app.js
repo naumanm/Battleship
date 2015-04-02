@@ -84,8 +84,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   //Game Setup
   this.player1=player1;
   this.player2=player2;
-  this.player1Fleet=player1Fleet;
-  this.player2Fleet=player2Fleet;
+  this.player1Fleet=new Fleet(player1Fleet);
+  this.player2Fleet=new Fleet(player2Fleet);
   this.gameId=gameId;  //gameroom
   var gameOver=false,
   player1ReadyStatus=false,
