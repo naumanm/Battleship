@@ -125,12 +125,14 @@ var socket = io(),
           shotObj.id = cellId;
           //console.log('\nshotObj (player name - cell ID)' , shotObj);
           socket.emit('shot', shotObj);
+          console.log(shotObj);
         } // END of (selectedArr.indexOf(cellId) === -1)
       } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
     });  // end of select to take a shot
 
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
+      console.log(shotObj);
       // Updates the Header UI for who took a shot and the cell location
       if (shotObj.player !== person) {
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + ". It's your turn!";
