@@ -12,17 +12,11 @@ table {
 td {
   width: 25px;
   height: 25px;
-  color: white;
-  background: gray;
+  color: black;
+  background: lightyellow;
   text-align: center;
   /* only right and bottom so as not to double up on the borders per table cell */
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-}
-
-table td { /* only right and bottom so as not to double up on the borders per table cell */
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+  border: 1px solid black;
 }
 
 /* -- Classes --*/
@@ -34,8 +28,8 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 
 .headerSide {
   position: absolute;
-  top: 46px;
-  left: 37px;
+  top: 47px;
+  left: 36px;
 }
 
 .headerTopOpponent {
@@ -45,7 +39,7 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 
 .headerSideOpponent {
   position: absolute;
-  top: 46px;
+  top: 47px;
   left: 391px;
 }
 

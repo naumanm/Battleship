@@ -442,8 +442,7 @@ if (player1Total===0){
   if (turnController % 2 ===0){
     player2.on('shot', function(shotObj){  
       console.log(shotObj.id); 
-      io.emit('shot', shotObj);
-      hitOrMiss(shotObj.id,drydockB,player1Total);
+      hitOrMiss(shotObj.id,drydockA,player1Total);
       turnController++;
       console.log("switching turns");
     }); 
@@ -452,7 +451,6 @@ if (player1Total===0){
     console.log("player 1's turn");
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
-      io.emit('shot', shotObj); 
       hitOrMiss(shotObj.id,drydockB,player2Total);
       turnController++;
       console.log("player 2's turn");
@@ -462,21 +460,21 @@ if (player1Total===0){
 
 function hitOrMiss(shotObj,fleet,shipcount){  
   var hitFinder;
-    shotObj.result = "Miss";
   for(var i=0;i<fleet.length;i++){
     if (fleet[i]!==[]){
-      if (fleet[i].indexOf(shotObj)!==-1){
-        if(fleet[i].length===1){ //last hit sinks ship
-        shotObj.result="Ship Sunk!";
-          shipcount--;
+      for (var j = 0; j < fleet[i][j].length; j++) {
+        if (fleet[i][j].indexOf(shotObj)!==-1){
+          if(fleet[i][j].length===1){ //last hit sinks ship
+            shipcount--;
+          }
+          hitFinder=fleet[i][j].indexOf(shotObj);
+          fleet[i][hitFinder]=null; 
+          return true;
         }
-    shotObj.result="Hit";
-    hitFinder=ship[i].indexOf(shotObj);
-    ship[i].splice(hitFinder,1); //removes from ship's working "length"
+      }
     }
-   }
   }
-  io.emit('shot',shotObj);
+  return false;
 }
 
 // function Fleet (carrier,battleship,submarine,destroyer,ptboat){
