@@ -203,7 +203,7 @@ $( ".droppable" ).droppable({
     // checks if valid drop. if not, it corrects to closest valid grid space
     checkShipPlacement( placedShipObj );
 
-    socket.emit('place_ship', placedShipObj);
+    socket.emit('place_ship', gameObj);
 
   } // END of drop definition
 }); // END of droppable
@@ -384,6 +384,11 @@ console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
   }; // END disable gameReady funct
 
 // "Ready To Play" button to dissable ship draggable and rotation.
+
+// need to add check to see if all ships have a cell value if if so enable the button.
+
+console.log(gameObj.AircraftCarrier.cell);
+
   $('#readyToPlay').on({
     'click': function() {
       event.preventDefault();
@@ -393,7 +398,6 @@ console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
       // emit to server player is ready
 
       $("#readyToPlay").css("display","none");  
-      //$("#placeShips").css("visibility","hidden");
     }
   });
 
