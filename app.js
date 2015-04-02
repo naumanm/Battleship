@@ -206,7 +206,6 @@ player1.on("game_status",function(){  //can be refactored in v2
     player1ReadyStatus=true;
     console.log("player1 is ready");
     console.log(player1Fleet);
-    console.log(readyCount);
   }
 });
 
@@ -215,43 +214,45 @@ player2.on("game_status", function(){
     player2ReadyStatus=true;
     console.log("player2 is ready");
     console.log(player2Fleet);
-    console.log(readyCount);
   }
 });
 
   
-console.log("Player 1 Start!");
-var turnController=1;
-if (turnController%2 !==0){
-  // player1.emit('shot',"your turn, player1"); //need an event on client side to announce turn
-  console.log("move# "+ turnController);
+if(player2ReadyStatus && player1ReadyStatus){
+  var turnController=1;
+  if (turnController%2 !==0){
+    // player1.emit('shot',"your turn, player1"); //need an event on client side to announce turn
+    console.log("move# "+ turnController);
     
-  player1.on('shot', function(shotObj){  
-    console.log(shotObj.id); 
-    io.emit('shot', shotObj);
-    hitOrMiss(shotObj.id,player2Fleet.carrier,player2Fleet);
-    hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
-    hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
-    hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
-    hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
-    //  io.emit('shot',"Hit!");
-    turnController++;
-  }); 
-}
-else{ 
-  // player2.emit('shot',"your turn, player2"); need an event to announe to player that it's their turn
-  console.log("move# "+ turnController);
-  player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
-    console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
-    io.emit('shot', shotObj); 
-    hitOrMiss(shotObj.id,player1Fleet.carrier,player1Fleet);
-    hitOrMiss(shotObj.id,player1Fleet.battleship,player1Fleet);
-    hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
-    hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Fleet);
-    hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
-    // io.emit('hit_confirmation',"Hit! at "+shot.obj); //some client event needed for announcing shot hits
-    turnController++;
-  });  
+    player1.on('shot', function(shotObj){  
+      console.log(shotObj.id); 
+      io.emit('shot', shotObj);
+      hitOrMiss(shotObj.id,player2Fleet.carrier,player2Fleet);
+      hitOrMiss(shotObj.id,player2Fleet.battleship,player2Fleet);
+      hitOrMiss(shotObj.id,player2Fleet.submarine,player2Fleet);
+      hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
+      //  io.emit('shot',"Hit!");
+      turnController++;
+      console.log("switching turns");
+    }); 
+  }
+  else{ 
+    // player2.emit('shot',"your turn, player2"); need an event to announe to player that it's their turn
+    console.log("player 2's turn");
+    player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+      console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
+      io.emit('shot', shotObj); 
+      hitOrMiss(shotObj.id,player1Fleet.carrier,player1Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.battleship,player1Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.submarine,player1Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Fleet);
+      hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Fleet);
+      // io.emit('hit_confirmation',"Hit! at "+shot.obj); //some client event needed for announcing shot hits
+      turnController++;
+      console.log("player 1's turn");
+    });
+  }  
 }
 
 function hitOrMiss(shotObj,ship,fleet){  
