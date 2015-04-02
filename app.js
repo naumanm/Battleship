@@ -65,6 +65,7 @@ io.on('connection', function(socket){  //step #1 connection
   if (playerPair===2){
     //client.HSETNX("opponent", socket.id, socket.id);  ? will we still need this...since player is being saved above as a player with session?
     // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
+    
     gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber,drydockA,drydockB));
     waitingRoom=[];
     roomNumber++;
@@ -83,8 +84,10 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   //Game Setup
   this.player1=player1;
   this.player2=player2;
-  this.player1Fleet=player1Fleet;
-  this.player2Fleet=player2Fleet;
+  this.player1Fleet=new Fleet(player1Fleet);
+  console.log(player1Fleet);
+  this.player2Fleet=new Fleet(player2Fleet);
+  console.log(player2Fleet);
   this.gameId=gameId;  //gameroom
   var gameOver=false,
   player1ReadyStatus=false,
@@ -124,7 +127,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       }
       if (name==="Battleship"){ 
         var battleship=[]; 
-        battleship[0]=[placedShipObj.cell];
+        battleship[0]=placedShipObj.cell;
         if (rotation===0){
           for (var j = 0; j < 3; j++) {
             secondLocation++;
@@ -144,7 +147,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       }
       if (name==="Submarine"){ 
         var submarine=[]; 
-        submarine[2]=[placedShipObj.cell];
+        submarine[2]=placedShipObj.cell;
         if (rotation===0){
           for (var k = 0; k < 2; k++) {
             secondLocation++; 
@@ -163,7 +166,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     }
     if (name==="Destroyer"){ 
       var destroyer=[]; 
-      destroyer[0]=[placedShipObj.cell];
+      destroyer[0]=placedShipObj.cell;
       if (rotation===0){
         for (var p = 0; p < 2; p++) {
           secondLocation++;
@@ -182,7 +185,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
     }
     if (name==="PtBoat"){ 
       var ptboat=[]; 
-      ptboat[0]=[placedShipObj.cell];
+      ptboat[0]=placedShipObj.cell;
       if (rotation===0){
         secondLocation++; 
         newloc=firstLocation+secondLocation; 
@@ -195,6 +198,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       }
       docklocation[4]=ptboat;
     }
+    console.log(docklocation);
   });
   }
 
@@ -219,6 +223,7 @@ player2.on("game_status", function(){
 
   
 //if(player2ReadyStatus && player1ReadyStatus){
+  console.log("player1 is "+player1.nickname);
   var turnController=1;
   if (turnController%2 !==0){
     // player1.emit('shot',"your turn, player1"); //need an event on client side to announce turn
