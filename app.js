@@ -55,7 +55,6 @@ io.on('connection', function(socket){  //step #1 connection
  
   socket.on('playerName', function(playerName) { 
     socket.nickname=playerName;
-    console.log(socket.id +"= "+socket.nickname);
   });
   //SAVE USERNAME FROM playername TO REDIS FOR WIN/LOSS KEEPING, ALSO SESSION KEEPING use SOCKET.ID FOR THAT PART
   //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
@@ -84,8 +83,8 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   //Game Setup
   this.player1=player1;
   this.player2=player2;
-  this.player1Fleet=new Fleet(player1Fleet);
-  this.player2Fleet=new Fleet(player2Fleet);
+  this.player1Fleet=player1Fleet;
+  this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
   var gameOver=false,
   player1ReadyStatus=false,
@@ -197,7 +196,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       docklocation[4]=ptboat;
     }
   });
-}
+  }
 
 shipMover(player1,drydockA);
 shipMover(player2,drydockB);
@@ -258,15 +257,21 @@ if(player2ReadyStatus && player1ReadyStatus){
 
 function hitOrMiss(shotObj,ship,fleet){  
   var hitFinder;
+  var shotresult = {}; //for sending back to client end
+    shotresult.location = shotObj.id;  //default behavior
+    shotresult.result = "Miss";
   if (ship!==[]){
     if (ship.indexOf(shotObj)!==-1){
       if(ship.length===1){ //last hit sinks ship
+        shotresult.result="{ship} Sunk!";
         fleet.shipcount--;
       }
+    shotresult.result="Hit";
     hitFinder=ship.indexOf(shotObj);
     ship.splice(hitFinder,1); //removes from ship's working "length"
     }
   }
+  io.emit('shot',shotresult);
 }
 
 function Fleet (carrier,battleship,submarine,destroyer,ptboat){
