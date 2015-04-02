@@ -442,7 +442,6 @@ if (player1Total===0){
   if (turnController % 2 ===0){
     player2.on('shot', function(shotObj){  
       console.log(shotObj.id); 
-      io.emit('shot', shotObj);
       hitOrMiss(shotObj.id,drydockA,player1Total);
       turnController++;
       console.log("switching turns");
@@ -452,7 +451,6 @@ if (player1Total===0){
     console.log("player 1's turn");
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
-      io.emit('shot', shotObj); 
       hitOrMiss(shotObj.id,drydockB,player2Total);
       turnController++;
       console.log("player 2's turn");
@@ -470,7 +468,7 @@ function hitOrMiss(shotObj,fleet,shipcount){
             shipcount--;
           }
           hitFinder=ship[i][j].indexOf(shotObj);
-          ship[i][j].splice(hitFinder,1); 
+          fleet[i][j].splice(hitFinder,1); 
           return true;
         }
       }
