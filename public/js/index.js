@@ -102,7 +102,7 @@ var socket = io(),
       var cellTable = $(this).closest("table").attr("class");
 
       if (cellState === "unselected" && cellTable === "opponent") {
-        $(this).css("background-color", "gray");  // if not selected change color back
+        $(this).css("background-color", "lightyellow");  // if not selected change color back
       }
     });  // end of revert color if not clicked
 
