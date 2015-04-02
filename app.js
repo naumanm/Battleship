@@ -423,7 +423,19 @@ player2.on("game_status", function(){
   }
 });
 
-  
+//rough game over conditions
+if (player2Total===0){
+  gameOver=true;
+  io.emit("game_status",gameOver);
+  console.log("player 1 won");
+}
+ 
+if (player1Total===0){
+  gameOver=true;
+  io.emit("game_status",gameOver);
+  console.log("player 2 won");
+}
+
 if(player2ReadyStatus && player1ReadyStatus){
   console.log("player1 is "+player1.nickname);
   var turnController=1;
