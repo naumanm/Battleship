@@ -93,6 +93,7 @@ function Game (player1,player2,gameId){
   player2ReadyStatus=false,
   readyToPlay=false,
   player1Total=5,
+  turnController=1,
   player2Total=5;
   
   console.log(gameId + " game #");
@@ -414,6 +415,7 @@ player1.on("game_status",function(){  //can be refactored in v2
     player1Fleet = new Fleet(drydockA[0],drydockA[1],drydockA[2],drydockA[3],drydockA[4]);
     console.log(player1Fleet);
     console.log("player1 is ready");
+    turnController++;
   }
 });
 
@@ -423,6 +425,7 @@ player2.on("game_status", function(){
     player2Fleet = new Fleet(drydockB[0],drydockB[1],drydockB[2],drydockB[3],drydockB[4]);
     console.log(player2Fleet);
     console.log("player2 is ready");
+    turnController++;
   }
 });
 
@@ -440,8 +443,8 @@ if (player1Total===0){
 }
 
   //firing mechanism
-  var turnController=1;
-  var result;
+ 
+
   if (turnController % 2 ===0){
     //player2.emit("turn",true);
     player2.on('shot', function(shotObj){  
@@ -455,7 +458,7 @@ if (player1Total===0){
       console.log("switching turns");
     }); 
   }
-  else{ 
+  else if (turnController>1) {
     console.log("player 1's turn");
     //player1.emit("turn",true);
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
