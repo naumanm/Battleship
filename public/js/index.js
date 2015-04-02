@@ -9,7 +9,12 @@ var socket = io(),
 // Christian thinks gameObj should be an object with key value pairs. gameObj['battleship']['name']  ==> "battleship"  THIS works. I tested it in console.
 // This way, the checkShipPlacement function can receive the ship name to check then use the global gameObj and work.
 // Once we do game persistance, we should have function here to check any existing game then add that to the gameObj
-var gameObj = {
+
+  var placedShipObj = {
+    rotation: 0
+  };
+
+  var gameObj = {
     AircraftCarrier: {
       name: "AircraftCarrier", // gameObj['aircraftCarrier']['name']
       rotation: 0 // gameObj['aircraftCarrier']['rotation']
@@ -36,8 +41,6 @@ var gameObj = {
 
   $("#readyToPlay").css("visibility","visible");
   $("#placeShips").css("visibility","visible");
-
-
 
   // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
   // gameObj.playerName = $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
@@ -146,7 +149,6 @@ var gameObj = {
 
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
-  // draggable
 
   $( "#draggableAircraftCarrier" ).draggable({ 
     containment: "#snaptarget",
@@ -171,6 +173,17 @@ var gameObj = {
   });
 
 
+function emitShip(name, cellId, rotation) {
+
+  placedShipObj.name = name;
+  placedShipObj.cell = cellId;
+  placedShipObj.rotation = rotation;
+
+  socket.emit('place_ship', placedShipObj);
+  console.log(placedShipObj);  
+}
+
+
 $( ".droppable" ).droppable({
   drop: function( event, ui ) {
 
@@ -180,18 +193,15 @@ $( ".droppable" ).droppable({
 
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable' from the ships name
 
-    placedShipObj.name = placedShip;
-    placedShipObj.cell = $(this).data("id");
-    placedShipObj.rotation = gameObj[placedShip].rotation;
+    name = placedShip;
+    cell = $(this).data("id");
+    rotation = gameObj[placedShip].rotation;
 
-    // console.log( "The", placedShip, "was dropped on", placedShipObj.cell, "and is at", gameObj[placedShip].rotation, "degrees rotation." ); // this is the ship that was placed and where
-    // console.log( "placedShipObj", placedShipObj );
-    
+    emitShip(name, cell, rotation);
+
+
     // checks if valid drop. if not, it corrects to closest valid grid space
-    checkShipPlacement( placedShipObj );
-
-    socket.emit('place_ship', gameObj);
-    console.log(gameObj);
+    //checkShipPlacement( placedShipObj );
 
   } // END of drop definition
 }); // END of droppable
