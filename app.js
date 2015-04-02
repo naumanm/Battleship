@@ -411,7 +411,8 @@ player2.on('place_ship', function(placedShipObj){
 player1.on("game_status",function(){  //can be refactored in v2
   if(drydockA.length===5){
     player1ReadyStatus=true;
-    console.log(drydockA);
+    player1Fleet = new Fleet(drydockA[0],drydockA[1],drydockA[2],drydockA[3],drydockA[4]);
+    console.log(player1Fleet);
     console.log("player1 is ready");
   }
 });
@@ -419,7 +420,8 @@ player1.on("game_status",function(){  //can be refactored in v2
 player2.on("game_status", function(){
   if(drydockB.length===5){
     player2ReadyStatus=true;
-    console.log(drydockB);
+    player2Fleet = new Fleet(drydockB[0],drydockB[1],drydockB[2],drydockB[3],drydockB[4]);
+    console.log(player2Fleet);
     console.log("player2 is ready");
   }
 });
@@ -439,11 +441,16 @@ if (player1Total===0){
 
   //firing mechanism
   var turnController=1;
+  var result;
   if (turnController % 2 ===0){
     //player2.emit("turn",true);
     player2.on('shot', function(shotObj){  
       console.log(shotObj.id); 
-      hitOrMiss(shotObj.id,drydockA,player1Total);
+      hitOrMiss(shotObj.id,player1Fleet.carrier,player1Total);
+      hitOrMiss(shotObj.id,player1Fleet.battleship,player1Total);
+      hitOrMiss(shotObj.id,player1Fleet.submarine,player1Total);
+      hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Total);
+      hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Total);
       turnController++;
       console.log("switching turns");
     }); 
@@ -453,40 +460,60 @@ if (player1Total===0){
     //player1.emit("turn",true);
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
-      hitOrMiss(shotObj.id,drydockB,player2Total);
+      hitOrMiss(shotObj.id,player2Fleet.carrier,player2Total);
+      hitOrMiss(shotObj.id,player2Fleet.battleship,player2Total);
+      hitOrMiss(shotObj.id,player2Fleet.submarine,player2Total);
+      hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Total);
+      hitOrMiss(shotObj.id,player2Fleet.destroyer,player2Total);
       turnController++;
       console.log("player 2's turn");
     });
   }  
 
-
-function hitOrMiss(shotObj,fleet,shipcount){  
-  var hitFinder;
-  for(var i=0;i<fleet.length;i++){
-    if (fleet[i]!==[]){
-      for (var j = 0; j < fleet[i][j].length; j++) {
-        if (fleet[i][j].indexOf(shotObj)!==-1){
-          if(fleet[i][j].length===1){ //last hit sinks ship
-            shipcount--;
-          }
-          hitFinder=fleet[i][j].indexOf(shotObj);
-          fleet[i][hitFinder]=null; 
-          return true;
+function hitOrMiss(shotObj,ship,fleet,total){  
+  if (ship!==[]){
+    if (ship.indexOf(shotObj)!==-1){
+      if(ship.length===1){ //last hit sinks ship
+        fleet.shipcount--;
+        console.log(ship+" sunk at "+shotObj);
+        if(total===0)
+        {
+         console.log("gameover"); //need to add game over functionality
         }
       }
+      hitFinder=ship.indexOf(shotObj);
+      ship.splice(hitFinder,1); //removes from ship's working "length"
+      console.log("hit detected at "+ shotObj); 
+      console.log(ship);
     }
   }
-  return false;
 }
+// function hitOrMiss(shotObj,fleet,shipcount){  
+//   var hitFinder;
+//   for(var i=0;i<fleet.length;i++){
+//     if (fleet[i]!==[]){
+//       for (var j = 0; j < fleet[i][j].length; j++) {
+//         if (fleet[i][j].indexOf(shotObj)!==-1){
+//           if(fleet[i][j].length===1){ //last hit sinks ship
+//             shipcount--;
+//           }
+//           hitFinder=fleet[i][j].indexOf(shotObj);
+//           fleet[i][hitFinder]=''; 
+//           return true;
+//         }
+//       }
+//     }
+//   }
+//   return false;
+// }
 
-// function Fleet (carrier,battleship,submarine,destroyer,ptboat){
-//   this.carrier=carrier;
-//   this.battleship=battleship;
-//   this.submarine=submarine;
-//   this.destroyer=destroyer;
-//   this.ptboat=ptboat;
-//   this.shipcount=5;
-// } 
+function Fleet (carrier,battleship,submarine,destroyer,ptboat){
+  this.carrier=carrier;
+  this.battleship=battleship;
+  this.submarine=submarine;
+  this.destroyer=destroyer;
+  this.ptboat=ptboat;
+} 
 
 
 function nextLetter(str) {
