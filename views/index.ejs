@@ -54,7 +54,7 @@
         <div class="modal-body">
           <form action="" name="person">
             <label for="person">Enter your game name:</label>
-            <input name="person" type="text" id="personsName" autofocus required placeholder="Your name..." autofocus>
+            <input name="person" type="text" id="personsName" required placeholder="Your name..." autofocus>
             <button type="button" class="btn btn-primary btn-sm">Submit</button>
           </form>
         </div><!-- /.modal-body -->
@@ -62,8 +62,8 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
-  <h4 id="userName">Player Name</h4>  <!-- Christian thinks these should go somewhere else on the page -->
-  <h4 id="shotPlayer"></h4>  <!-- Christian thinks these should go somewhere else on the page -->
+  <h2 id="userName">Player Name</h2>  <!-- Christian thinks these should go somewhere else on the page -->
+  <h2 id="shotPlayer"></h2>  <!-- Christian thinks these should go somewhere else on the page -->
   <!--Use these Bootstrap helper classes (text or background) for the game notifications
       class="text-muted"     text is grey
       class="text-primary"   text is blue
@@ -79,7 +79,7 @@
       class="bg-danger"      BG is red, white black
   -->
 
-  <button id="readyToPlay" class="btn btn-success" value="Ready To Play?">Ready To Play</button> 
+  <button id="readyToPlay" class="btn btn-success" value="Ready To Play">Ready To Play</button> 
 
   <div class="gameboard">
     <span id="placeShipsWrapper">

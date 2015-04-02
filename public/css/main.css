@@ -52,13 +52,13 @@ table td { /* only right and bottom so as not to double up on the borders per ta
 .player {
   position: absolute;
   z-index: 0;
-  top: 46px;
+  top: 47px;
   left: 66px;
 }
 
 .opponent {
   left: 420px;
-  top: 51px;
+  top: 52px;
   position: relative;
 }
 
