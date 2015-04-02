@@ -87,6 +87,7 @@ var socket = io(),
     var selectedArr = selectedArr || []; // array of all shots
 
 
+    //turn.on('turn', function(turnObj){
 
 
 
@@ -130,6 +131,7 @@ var socket = io(),
       });  // end of select to take a shot
 
 
+    
 
 
 
@@ -137,7 +139,11 @@ var socket = io(),
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
       // Updates the Header UI for who took a shot and the cell location
+
+      console.log(shotObj);
       if (shotObj.player !== person) {
+
+
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + ". It's your turn!";
         // gets the shot fired and updates the gameboard
         // this is klugy, needs a better way...
