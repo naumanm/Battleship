@@ -443,7 +443,7 @@ if (player1Total===0){
     player2.on('shot', function(shotObj){  
       console.log(shotObj.id); 
       io.emit('shot', shotObj);
-      hitOrMiss(shotObj.id,drydockB,player1Total);
+      hitOrMiss(shotObj.id,drydockA,player1Total);
       turnController++;
       console.log("switching turns");
     }); 
@@ -462,21 +462,21 @@ if (player1Total===0){
 
 function hitOrMiss(shotObj,fleet,shipcount){  
   var hitFinder;
-    shotObj.result = "Miss";
   for(var i=0;i<fleet.length;i++){
     if (fleet[i]!==[]){
-      if (fleet[i].indexOf(shotObj)!==-1){
-        if(fleet[i].length===1){ //last hit sinks ship
-        shotObj.result="Ship Sunk!";
-          shipcount--;
+      for (var j = 0; j < fleet[i][j].length; j++) {
+        if (fleet[i][j].indexOf(shotObj)!==-1){
+          if(fleet[i][j].length===1){ //last hit sinks ship
+            shipcount--;
+          }
+          hitFinder=ship[i][j].indexOf(shotObj);
+          ship[i][j].splice(hitFinder,1); 
+          return true;
         }
-    shotObj.result="Hit";
-    hitFinder=ship[i].indexOf(shotObj);
-    ship[i].splice(hitFinder,1); //removes from ship's working "length"
+      }
     }
-   }
   }
-  io.emit('shot',shotObj);
+  return false;
 }
 
 // function Fleet (carrier,battleship,submarine,destroyer,ptboat){
