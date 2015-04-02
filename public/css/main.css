@@ -154,12 +154,35 @@ wanted ease-in-out
   z-index: 100;
 }
 
-.hit {
-  /*color: red;*/
+.droppable span {
+  width: 25px;
+  height: 25px;
 }
 
-.notHit {
-  /*color: white;*/
+.droppable img {
+  margin: 0;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
+}
+
+.hit {
+  background-image: url("/images/explosion.png");
+  /*background-size: 25px;*/
+  /*height: 25px;*/
+  /*width: 25px;*/
+  background-color: red;
+  z-index: 100;
+}
+
+.miss {
+  background-color: blue;
+  z-index: 100;
+}
+
+.hide {
+  display: none;
 }
 
 .noLIDisk {
