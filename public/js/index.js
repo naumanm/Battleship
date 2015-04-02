@@ -42,6 +42,11 @@ var socket = io(),
   $("#readyToPlay").css("visibility","visible");
   $("#placeShips").css("visibility","visible");
 
+  $('#playerSignIn').on('shown.bs.modal', function () {
+      $('#personsName').focus();
+        console.log("test");
+  });
+
   // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
   // gameObj.playerName = $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
   /*var playerName = */
@@ -228,7 +233,7 @@ $( ".droppable" ).droppable({
     emitShip(name, cell, rotation);
 
     // checks if valid drop. if not, it corrects to closest valid grid space
-    //checkShipPlacement( placedShipObj );
+    checkShipPlacement( placedShipObj );
   }
 });
 
