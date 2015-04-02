@@ -86,53 +86,56 @@ var socket = io(),
 
     var selectedArr = selectedArr || []; // array of all shots
 
-    // color change on hover
-    $("td").mouseover(function(){
-      var cellState = $(this).data("state");
-      var cellId = $(this).data("id");
-      var cellTable = $(this).closest("table").attr("class");
-      if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
-        $(this).css("background-color", "red");
-      }
-    });  // end of color change on hover
-
-    // revert color if not clicked
-    $("td").mouseleave(function(){
-      var cellState = $(this).data("state");
-      var cellTable = $(this).closest("table").attr("class");
-
-      if (cellState === "unselected" && cellTable === "opponent") {
-        $(this).css("background-color", "lightyellow");  // if not selected change color back
-      }
-    });  // end of revert color if not clicked
 
 
-    // NEED logic in here to prevent the wrong person from shooting
-    // also need logic to prompt who's turn it is.  
 
-    // select to take a shot
-    $("td").click(function(){
-      var cellId = $(this).data("id"); // get the cellId for the current cell
-      var cellState = $(this).data("state");
-      var cellTable = $(this).closest("table").attr("class");
-      if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
-        $(this).css("background-color", "blue"); // add the hit/miss animation here?
-        $(this).data("state", "miss");
-        if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
-          selectedArr.push(cellId); // push the selected cell into the selectedArr
-          var shotObj = {};
-          shotObj.player = $('#personsName').val(); //person;
-          shotObj.id = cellId;
-          //console.log('\nshotObj (player name - cell ID)' , shotObj);
-          socket.emit('shot', shotObj);
-          console.log(shotObj);
-        } // END of (selectedArr.indexOf(cellId) === -1)
-      } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
-    });  // end of select to take a shot
+
+      // color change on hover
+      $("td").mouseover(function(){
+        var cellState = $(this).data("state");
+        var cellId = $(this).data("id");
+        var cellTable = $(this).closest("table").attr("class");
+        if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
+          $(this).css("background-color", "red");
+        }
+      });  // end of color change on hover
+
+      // revert color if not clicked
+      $("td").mouseleave(function(){
+        var cellState = $(this).data("state");
+        var cellTable = $(this).closest("table").attr("class");
+
+        if (cellState === "unselected" && cellTable === "opponent") {
+          $(this).css("background-color", "lightyellow");  // if not selected change color back
+        }
+      });  // end of revert color if not clicked
+
+      // select to take a shot
+      $("td").click(function(){
+        var cellId = $(this).data("id"); // get the cellId for the current cell
+        var cellState = $(this).data("state");
+        var cellTable = $(this).closest("table").attr("class");
+        if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
+          $(this).css("background-color", "blue"); // add the hit/miss animation here?
+          $(this).data("state", "miss");
+          if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
+            selectedArr.push(cellId); // push the selected cell into the selectedArr
+            var shotObj = {};
+            shotObj.player = $('#personsName').val(); //person;
+            shotObj.id = cellId;
+            //console.log('\nshotObj (player name - cell ID)' , shotObj);
+            socket.emit('shot', shotObj);
+          } // END of (selectedArr.indexOf(cellId) === -1)
+        } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
+      });  // end of select to take a shot
+
+
+
+
+
 
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
-      console.log(shotObj);
       // Updates the Header UI for who took a shot and the cell location
       if (shotObj.player !== person) {
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + ". It's your turn!";
@@ -152,18 +155,17 @@ var socket = io(),
         } else { // this block is the miss scenario
           $(hitArr[0]).removeClass("hide"); // the miss img
         }
-
       }
     }); // END of socket.on 'shot'
+
 
     // make this into game_status to start or end game
     socket.on('game_status', function( gameOver ){
       if ( gameOver ) {
         document.getElementById("shotPlayer").innerHTML = "Game Over. Thanks for playing."; // Add Play again?
       } else {
-        // Does something need to go here for gameOver = false???
       }
-    }); // END of socket.on 'game_status'
+    }); 
 
   } // End of gamePlay function
 
@@ -420,7 +422,7 @@ console.log("theShipStyle", theShipStyle);
         // get the draggable style and
         var getTheShip = "#draggable"+ placedShip.name;
         var theShipStyle = $(getTheShip).attr('style');
-console.log("theShipStyle", theShipStyle);
+        console.log("theShipStyle", theShipStyle);
         // subtract the fixed cell distance from the style's location
 
         // add that to the img style
