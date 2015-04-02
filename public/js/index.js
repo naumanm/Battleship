@@ -148,7 +148,7 @@ var socket = io(),
           // $(hitArr[0]).css("background-color", "red"); // Michael's original code to display background color
           $(hitArr[0]).removeClass("hide"); // the hit img
         } else { // this block is the miss scenario
-          $(hitArr[1]).removeClass("hide"); // the miss img
+          $(hitArr[0]).removeClass("hide"); // the miss img
         }
 
       }
@@ -406,7 +406,7 @@ $( ".droppable" ).droppable({
 
   }; // END of checkShipPlacement function
 
-// toggle ships droppable
+  // toggle ships droppable
   var gameReady = function( setTo ){
   // accepts val to set . gameStarted is a global var. Should only be called by player clicking "Ready To Play" button, by starting a new game
     setTo = setTo || gameStarted;
@@ -415,32 +415,33 @@ $( ".droppable" ).droppable({
     socket.emit('game_status', gameStarted);
   }; // END disable gameReady funct
 
-// "Ready To Play" button to dissable ship draggable and rotation.
+  // "Ready To Play" button to dissable ship draggable and rotation.
 
-// need to add check to see if all ships have a cell value if if so enable the button.
+  // need to add check to see if all ships have a cell value if if so enable the button.
 
-console.log(gameObj.AircraftCarrier.cell);
 
-function shipsPlaced () {
-  if ((gameObj.AircraftCarrier.cell !== undefined) &&
-      (gameObj.Battleship.cell !== undefined) &&
-      (gameObj.Destroyer.cell !== undefined) &&
-      (gameObj.Submarine.cell !== undefined) &&
-      (gameObj.PtBoat.cell !== undefined))
-  {
-    return true;  
+  function shipsPlaced () {
+    if ((gameObj.AircraftCarrier.cell !== undefined) &&
+        (gameObj.Battleship.cell !== undefined) &&
+        (gameObj.Destroyer.cell !== undefined) &&
+        (gameObj.Submarine.cell !== undefined) &&
+        (gameObj.PtBoat.cell !== undefined))
+    {
+      return true;  
+    }
   }
-}
 
   $('#readyToPlay').on({
     'click': function() {
       if (shipsPlaced()) {
         event.preventDefault();
+
         // disable droppable
         $('#shotPlayer').text("Game ON!");
         gameReady(true);
         // emit to server player is ready
         $("#readyToPlay").css("display","none");  
+        $('h4').text(''); 
       }
     }
   });
