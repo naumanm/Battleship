@@ -440,6 +440,7 @@ if (player1Total===0){
   //firing mechanism
   var turnController=1;
   if (turnController % 2 ===0){
+    //player2.emit("turn",true);
     player2.on('shot', function(shotObj){  
       console.log(shotObj.id); 
       hitOrMiss(shotObj.id,drydockA,player1Total);
@@ -449,6 +450,7 @@ if (player1Total===0){
   }
   else{ 
     console.log("player 1's turn");
+    //player1.emit("turn",true);
     player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
       hitOrMiss(shotObj.id,drydockB,player2Total);
