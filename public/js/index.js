@@ -353,15 +353,18 @@ $( ".droppable" ).droppable({
         //console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
         // count the difference from placed cell to fixed cell
-        var fixedDistance = 1;// index of place cell minus the index of the fixed cell
+        var fixedDistance = validHGrid[ placedShip ].indexOf( parseInt(placedHGrid, 10) ) - validHGrid[ placedShip ].indexOf( parseInt(lastValidElement, 10) );// index of place cell minus the index of the fixed cell
         // multiply by 25 px
-
+        fixedDistance = fixedDistance * 25;
         // get the draggable style and
+        
 
         // subtract the fixed cell distance from the style's location
 
         // add that to the img style
         // once working, add the companion fix to the else block
+// var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
+// var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
 
 
       } // END invalid HORIZONTAL placement with ship placement fix
