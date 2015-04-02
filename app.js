@@ -218,7 +218,7 @@ player2.on("game_status", function(){
 });
 
   
-if(player2ReadyStatus && player1ReadyStatus){
+//if(player2ReadyStatus && player1ReadyStatus){
   var turnController=1;
   if (turnController%2 !==0){
     // player1.emit('shot',"your turn, player1"); //need an event on client side to announce turn
@@ -253,25 +253,23 @@ if(player2ReadyStatus && player1ReadyStatus){
       console.log("player 1's turn");
     });
   }  
-}
+//}
 
 function hitOrMiss(shotObj,ship,fleet){  
   var hitFinder;
-  var shotresult = {}; //for sending back to client end
-    shotresult.location = shotObj.id;  //default behavior
-    shotresult.result = "Miss";
+    shotObj.result = "Miss";
   if (ship!==[]){
     if (ship.indexOf(shotObj)!==-1){
       if(ship.length===1){ //last hit sinks ship
-        shotresult.result="{ship} Sunk!";
+       shotObj.result="{ship} Sunk!";
         fleet.shipcount--;
       }
-    shotresult.result="Hit";
+    shotObj.result="Hit";
     hitFinder=ship.indexOf(shotObj);
     ship.splice(hitFinder,1); //removes from ship's working "length"
     }
   }
-  io.emit('shot',shotresult);
+  io.emit('shot',shotObj);
 }
 
 function Fleet (carrier,battleship,submarine,destroyer,ptboat){

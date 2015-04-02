@@ -199,25 +199,38 @@ function emitShip(name, cellId, rotation) {
 
 $( ".droppable" ).droppable({
   drop: function( event, ui ) {
-
-    var placedShipObj = {};
-
     var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
-
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable' from the ships name
-
     name = placedShip;
     cell = $(this).data("id");
-    rotation = gameObj[placedShip].rotation;
+
+    if (name === "AircraftCarrier"){
+      gameObj.AircraftCarrier.cell = cell;
+      rotation = gameObj.AircraftCarrier.rotation;
+    }
+    if (name === "Battleship"){
+      gameObj.Battleship.cell = cell;
+      rotation = gameObj.Battleship.rotation;
+    }
+    if (name === "Destroyer"){
+      gameObj.Destroyer.cell = cell;
+      rotation = gameObj.Destroyer.rotation;
+    }
+    if (name === "Submarine"){
+      gameObj.Submarine.cell = cell;
+      rotation = gameObj.Submarine.rotation;
+    }
+    if (name === "PtBoat"){
+      gameObj.PtBoat.cell = cell;
+      rotation = gameObj.PtBoat.rotation;
+    }
 
     emitShip(name, cell, rotation);
 
-
     // checks if valid drop. if not, it corrects to closest valid grid space
     //checkShipPlacement( placedShipObj );
-
-  } // END of drop definition
-}); // END of droppable
+  }
+});
 
   // ship rotation
   $('#draggableAircraftCarrier').on({
@@ -233,8 +246,7 @@ $( ".droppable" ).droppable({
           $('#draggableAircraftCarrier').addClass('hor');
           gameObj.AircraftCarrier.rotation = 0;
         }
-        socket.emit('place_ship', gameObj );
-        console.log(gameObj );
+        emitShip("AircraftCarrier", gameObj.AircraftCarrier.cell, gameObj.AircraftCarrier.rotation);
       }
      }
   });
@@ -252,8 +264,8 @@ $( ".droppable" ).droppable({
           gameObj.Battleship.rotation = 0;
         }
         // $(this).rotate({ animateTo:battleshipRotation});
-        socket.emit('place_ship', gameObj );
-        console.log(gameObj );
+        cell = $(this).data("id");
+        emitShip("Battleship", gameObj.Battleship.cell, gameObj.Battleship.rotation);
       }
     }
   });
@@ -270,8 +282,8 @@ $( ".droppable" ).droppable({
           $('#draggableDestroyer').addClass('hor');
           gameObj.Destroyer.rotation = 0;
         }
-        socket.emit('place_ship', gameObj );
-        console.log(gameObj);
+        cell = $(this).data("id");
+        emitShip("Destroyer", gameObj.Destroyer.cell, gameObj.Destroyer.rotation);
       }
     }
   });
@@ -288,8 +300,8 @@ $( ".droppable" ).droppable({
           $('#draggableSubmarine').addClass('hor');
           gameObj.Submarine.rotation = 0;
         }
-        socket.emit('place_ship', gameObj );
-        console.log(gameObj);
+        cell = $(this).data("id");
+        emitShip("Submarine", gameObj.Submarine.cell, gameObj.Submarine.rotation);
       }
     }
   });
@@ -306,8 +318,8 @@ $( ".droppable" ).droppable({
           $('#draggablePtBoat').addClass('hor');
           gameObj.PtBoat.rotation = 0;
         }
-        socket.emit('place_ship', gameObj );
-        console.log(gameObj);
+        cell = $(this).data("id");
+        emitShip("PtBoat", gameObj.PtBoat.cell, gameObj.PtBoat.rotation);
       }
     }
   });
