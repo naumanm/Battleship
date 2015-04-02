@@ -474,6 +474,11 @@ console.log("theShipStyle", theShipStyle);
         $("#readyToPlay").css("display","none");  
         $('h4').text(''); 
       }
+      else {
+
+        console.log("should prompt user");
+      }
+
     }
   });
 
