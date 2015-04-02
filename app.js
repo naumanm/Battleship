@@ -55,6 +55,7 @@ io.on('connection', function(socket){  //step #1 connection
  
   socket.on('playerName', function(playerName) { 
     socket.nickname=playerName;
+    console.log(socket.id +"= "+socket.nickname);
   });
   //SAVE USERNAME FROM playername TO REDIS FOR WIN/LOSS KEEPING, ALSO SESSION KEEPING use SOCKET.ID FOR THAT PART
   //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
