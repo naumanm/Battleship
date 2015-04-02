@@ -410,8 +410,9 @@ player2.on('place_ship', function(placedShipObj){
 
 
 player1.on("game_status",function(){  //can be refactored in v2
-  if(drydockA.lenght===5){
+  if(drydockA.length===5){
     player1ReadyStatus=true;
+    console.log(drydockA);
     console.log("player1 is ready");
   }
 });
@@ -419,6 +420,7 @@ player1.on("game_status",function(){  //can be refactored in v2
 player2.on("game_status", function(){
   if(drydockB.length===5){
     player2ReadyStatus=true;
+    console.log(drydockB);
     console.log("player2 is ready");
   }
 });
@@ -437,7 +439,6 @@ if (player1Total===0){
 }
 
 if(player2ReadyStatus && player1ReadyStatus){
-  console.log("player1 is "+player1.nickname);
   var turnController=1;
   if (turnController%2 !==0){
     // player1.emit('shot',"your turn, player1"); //need an event on client side to announce turn
