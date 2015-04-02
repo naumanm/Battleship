@@ -147,7 +147,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       }
       if (name==="Submarine"){ 
         var submarine=[]; 
-        submarine[2]=placedShipObj.cell;
+        submarine[0]=placedShipObj.cell;
         if (rotation===0){
           for (var k = 0; k < 2; k++) {
             secondLocation++; 
