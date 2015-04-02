@@ -462,23 +462,21 @@ if (player1Total===0){
 
 function hitOrMiss(shotObj,fleet,shipcount){  
   var hitFinder;
-    shotObj.result = "Miss";
   for(var i=0;i<fleet.length;i++){
     if (fleet[i]!==[]){
       for (var j = 0; j < fleet[i][j].length; j++) {
         if (fleet[i][j].indexOf(shotObj)!==-1){
           if(fleet[i][j].length===1){ //last hit sinks ship
-            shotObj.result="Ship Sunk!";
             shipcount--;
           }
-          shotObj.result="Hit";
           hitFinder=ship[i][j].indexOf(shotObj);
-          ship[i][j].splice(hitFinder,1); //removes from ship's working "length"
+          ship[i][j].splice(hitFinder,1); 
+          return true;
         }
       }
     }
   }
-  io.emit('shot',shotObj);
+  return false;
 }
 
 // function Fleet (carrier,battleship,submarine,destroyer,ptboat){
