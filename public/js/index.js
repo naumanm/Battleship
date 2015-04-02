@@ -131,8 +131,21 @@ var socket = io(),
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + ". It's your turn!";
         // gets the shot fired and updates the gameboard
         // this is klugy, needs a better way...
-        var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + ']');
-        $(hitArr[1]).css("background-color", "red");
+
+        var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
+        // the above returns an array...
+        // hitArr[0] = player's grid hit
+        // hitArr[1] = player's grid miss
+        // hitArr[2] = opponent's grid hit DON'T USE HERE
+        // hitArr[3] = opponent's grid miss DON'T USE HERE
+        // $(hitArr[0]).css("background-color", "red"); // data-id=d4
+        if( shotObj.hitORmiss ){ // change the conditional based on what Will sends but the first block is the hit scenario
+          // $(hitArr[0]).css("background-color", "red"); // Michael's original code to display background color
+          $(hitArr[0]).removeClass("hide"); // the hit img
+        } else { // this block is the miss scenario
+          $(hitArr[1]).removeClass("hide"); // the miss img
+        }
+
       }
     }); // END of socket.on 'shot'
 
@@ -351,6 +364,17 @@ $( ".droppable" ).droppable({
         var fixedCell = placedVGrid + lastValidElement.toString(); // add that after the current placedVGrid
         //console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
+        // count the difference from placed cell to fixed cell
+        var fixedDistance = 1;// index of place cell minus the index of the fixed cell
+        // multiply by 25 px
+
+        // get the draggable style and
+
+        // subtract the fixed cell distance from the style's location
+
+        // add that to the img style
+        // once working, add the companion fix to the else block
+
 
       } // END invalid HORIZONTAL placement with ship placement fix
 
@@ -362,10 +386,11 @@ $( ".droppable" ).droppable({
         //console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
         // correct the grid location here
         // get the last array element of the given ships validVGrid
-        var lastValidElement = validVGrid[ placedShip ][ validVGrid[ placedShip ].length-1 ];
+        var lastValidElement = validVGrid[ placedShip ][ validVGrid[ placedShip ].length-1 ]; // the linter incorrectly thinks this var has already been defined. There is another assignment but inside the conditional. The logic will only use one or the other.
         // console.log( "lastValidElement", lastValidElement );
+        // var fixedCell = lastValidElement + placedHGrid; // I think this is the incorrect code. Suspect needs placedVGrid which is next line
         var fixedCell = lastValidElement + placedVGrid; // add that after the current placedVGrid
-        //console.log( "fixedCell", fixedCell );
+        console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
       } // END invalid VERTICAL placement with ship placement fix
 
