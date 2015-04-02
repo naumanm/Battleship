@@ -443,7 +443,7 @@ if (player1Total===0){
     player2.on('shot', function(shotObj){  
       console.log(shotObj.id); 
       io.emit('shot', shotObj);
-      hitOrMiss(shotObj.id,drydockB,player1Total);
+      hitOrMiss(shotObj.id,drydockA,player1Total);
       turnController++;
       console.log("switching turns");
     }); 
