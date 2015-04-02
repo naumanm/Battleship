@@ -79,7 +79,7 @@ io.on('connection', function(socket){  //step #1 connection
 });
 
 //game logic 
-function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
+function Game (player1,player2,gameId){  
   // shipMover(player1,drydockA);
   // shipMover(player2,drydockB);
   //Game Setup
@@ -93,8 +93,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   player2ReadyStatus=false,
   readyToPlay=false,
   player1Total=5,
-  player2Total=5,
-  turnComplete=false;
+  player2Total=5;
   
   console.log(gameId + " game #");
   console.log("matchmaking complete, waiting for player ready and ship lockdown");
@@ -438,13 +437,10 @@ if (player1Total===0){
   console.log("player 2 won");
 }
 
-if(player2ReadyStatus && player1ReadyStatus){
+  //firing mechanism
   var turnController=1;
-  if (turnController%2 !==0){
-    // player1.emit('shot',"your turn, player1"); //need an event on client side to announce turn
-    console.log("move# "+ turnController);
-    
-    player1.on('shot', function(shotObj){  
+  if (turnController % 2 ===0){
+    player2.on('shot', function(shotObj){  
       console.log(shotObj.id); 
       io.emit('shot', shotObj);
       hitOrMiss(shotObj.id,drydockB,player1Total);
@@ -453,17 +449,16 @@ if(player2ReadyStatus && player1ReadyStatus){
     }); 
   }
   else{ 
-    // player2.emit('shot',"your turn, player2"); need an event to announe to player that it's their turn
-    console.log("player 2's turn");
-    player2.on('shot', function(shotObj){  //#step 3 firing a shot in the game
+    console.log("player 1's turn");
+    player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
       console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
       io.emit('shot', shotObj); 
-      hitOrMiss(shotObj.id,drydockA,player1Total);
+      hitOrMiss(shotObj.id,drydockB,player2Total);
       turnController++;
-      console.log("player 1's turn");
+      console.log("player 2's turn");
     });
   }  
-}
+
 
 function hitOrMiss(shotObj,fleet,shipcount){  
   var hitFinder;
