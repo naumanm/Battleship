@@ -80,13 +80,14 @@ io.on('connection', function(socket){  //step #1 connection
 
 //game logic 
 function Game (player1,player2,gameId,player1Fleet,player2Fleet){  
-  
+  shipMover(player1,drydockA);
+  shipMover(player2,drydockB);
   //Game Setup
   this.player1=player1;
   this.player2=player2;
-  this.player1Fleet=new Fleet(player1Fleet);
+  this.player1Fleet=player1Fleet;
   console.log(player1Fleet);
-  this.player2Fleet=new Fleet(player2Fleet);
+  this.player2Fleet=player2Fleet;
   console.log(player2Fleet);
   this.gameId=gameId;  //gameroom
   var gameOver=false,
@@ -98,14 +99,12 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
   console.log(gameId + " game #");
   console.log("matchmaking complete, waiting for player ready and ship lockdown");
   
-  function shipMover (playersocket,docklocation){
-    playersocket.on('place_ship', function(placedShipObj){  //to be refactored in v2
-      console.log(placedShipObj);
+  function shipMover (playersocket,docklocation){  //DO NOT TOUCH!
+    playersocket.on('place_ship', function(placedShipObj){  
       var name=placedShipObj.name;
       var firstLocation = placedShipObj.cell.charAt(0);
       var secondLocation = placedShipObj.cell.charAt(1);
       var rotation=placedShipObj.rotation;
-      //to be refactored in v2
       if (name==="AircraftCarrier"){ 
         var carrier=[]; 
         carrier[0]=placedShipObj.cell;
@@ -122,6 +121,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
             newloc=firstLocation+secondLocation; 
             carrier.push(newloc);
           }
+          console.log(carrier);
         }
         docklocation[0]=carrier;
       }
@@ -161,6 +161,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
             newloc=firstLocation+secondLocation; 
             submarine.push(newloc);
           }
+          console.log(submarine);
         }
       docklocation[2]=submarine;
     }
@@ -180,6 +181,7 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
           newloc=firstLocation+secondLocation; 
           destroyer.push(newloc);
         }
+        console.log(destroyer);
       }
       docklocation[3]=destroyer;
     }
@@ -198,12 +200,9 @@ function Game (player1,player2,gameId,player1Fleet,player2Fleet){
       }
       docklocation[4]=ptboat;
     }
-    console.log(docklocation);
   });
   }
 
-shipMover(player1,drydockA);
-shipMover(player2,drydockB);
 
 player1.on("game_status",function(){  //can be refactored in v2
   if(player1Fleet.length===4){
@@ -222,7 +221,7 @@ player2.on("game_status", function(){
 });
 
   
-//if(player2ReadyStatus && player1ReadyStatus){
+if(player2ReadyStatus && player1ReadyStatus){
   console.log("player1 is "+player1.nickname);
   var turnController=1;
   if (turnController%2 !==0){
@@ -258,7 +257,7 @@ player2.on("game_status", function(){
       console.log("player 1's turn");
     });
   }  
-//}
+}
 
 function hitOrMiss(shotObj,ship,fleet){  
   var hitFinder;
