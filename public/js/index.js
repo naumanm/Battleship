@@ -9,35 +9,38 @@ var socket = io(),
 // Christian thinks gameObj should be an object with key value pairs. gameObj['battleship']['name']  ==> "battleship"  THIS works. I tested it in console.
 // This way, the checkShipPlacement function can receive the ship name to check then use the global gameObj and work.
 // Once we do game persistance, we should have function here to check any existing game then add that to the gameObj
-var gameObj = {
+
+  var placedShipObj = {
+    rotation: 0
+  };
+
+  var gameObj = {
     AircraftCarrier: {
       name: "AircraftCarrier", // gameObj['aircraftCarrier']['name']
-      cell: "",      // gameObj['aircraftCarrier']['cell']
       rotation: 0 // gameObj['aircraftCarrier']['rotation']
       },
     Battleship: {
       name: "Battleship",
-      cell: "",
       rotation: 0
       },
     Destroyer: {
       name: "Destroyer",
-      cell: "",
       rotation: 0
       },
     Submarine: {
       name: "Submarine",
-      cell: "",
       rotation: 0
       },
     PtBoat: {
       name: "PtBoat",
-      cell: "",
       rotation: 0
       },
     gameStarted: false, // gameStarted: gameObj['gameStarted'] || false   <== doesn't seem to work. Tried several options in console.
     playerName: ""    
   };
+
+  $("#readyToPlay").css("visibility","visible");
+  $("#placeShips").css("visibility","visible");
 
   // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
   // gameObj.playerName = $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
@@ -57,6 +60,8 @@ var gameObj = {
 
     socket.emit('playerName', /* playerName */ gameObj.playerName );
 
+
+
     return /* playerName */ gameObj.playerName;
     // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
     // 1) Player already connected to the game and refreshed.
@@ -69,7 +74,7 @@ var gameObj = {
 // *******************UN-COMMENT ONCE DONE WITH TESTING**************************
 //TEMPORARY DISABLE SINCE IT'S SO ANNOYING WHILE TESTING
   var isNameEmpty = function(a){
-  // $('#playerSignIn').modal('show'); // shows the get player's name modal
+    $('#playerSignIn').modal('show'); // shows the get player's name modal
   }();
 
   function gamePlay(){
@@ -113,7 +118,7 @@ var gameObj = {
           var shotObj = {};
           shotObj.player = $('#personsName').val(); //person;
           shotObj.id = cellId;
-          console.log('\nshotObj (player name - cell ID)' , shotObj);
+          //console.log('\nshotObj (player name - cell ID)' , shotObj);
           socket.emit('shot', shotObj);
         } // END of (selectedArr.indexOf(cellId) === -1)
       } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
@@ -157,7 +162,6 @@ var gameObj = {
 
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
-  // draggable
 
   $( "#draggableAircraftCarrier" ).draggable({ 
     containment: "#snaptarget",
@@ -181,13 +185,16 @@ var gameObj = {
     grid: [25, 25]
   });
 
-// ******************* relocate this? *****************************************
-  // function to consolidate and emit ship object 
-  function emitShip(shipObj) {
-    socket.emit('shipObj', shipObj);
-    console.log("emitting " + shipObj);
-  }
-// ****************************************************************************
+
+function emitShip(name, cellId, rotation) {
+
+  placedShipObj.name = name;
+  placedShipObj.cell = cellId;
+  placedShipObj.rotation = rotation;
+
+  socket.emit('place_ship', placedShipObj);
+  console.log(placedShipObj);  
+}
 
 
 $( ".droppable" ).droppable({
@@ -199,17 +206,15 @@ $( ".droppable" ).droppable({
 
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable' from the ships name
 
-    placedShipObj.name = placedShip;
-    placedShipObj.cell = $(this).data("id");
-    placedShipObj.rotation = gameObj[placedShip].rotation;
+    name = placedShip;
+    cell = $(this).data("id");
+    rotation = gameObj[placedShip].rotation;
 
-    // console.log( "The", placedShip, "was dropped on", placedShipObj.cell, "and is at", gameObj[placedShip].rotation, "degrees rotation." ); // this is the ship that was placed and where
-    // console.log( "placedShipObj", placedShipObj );
-    
+    emitShip(name, cell, rotation);
+
+
     // checks if valid drop. if not, it corrects to closest valid grid space
-    checkShipPlacement( placedShipObj );
-
-    socket.emit('place_ship', placedShipObj);
+    //checkShipPlacement( placedShipObj );
 
   } // END of drop definition
 }); // END of droppable
@@ -229,17 +234,9 @@ $( ".droppable" ).droppable({
           gameObj.AircraftCarrier.rotation = 0;
         }
         socket.emit('place_ship', gameObj );
-        console.log('AircraftCarrier Rotation', gameObj.AircraftCarrier.rotation );
+        console.log(gameObj );
       }
-     }//,
-    // 'mouseover': function(){      // this highlights the ship when hover but it adds pixels to border which makes the ships shift.
-    //   $('#draggableAircraftCarrier').addClass('highlight');
-      
-    // },
-    // 'mouseout': function(){
-    //   $('#draggableAircraftCarrier').removeClass('highlight');
-      
-    // }
+     }
   });
 
   $('#draggableBattleship').on({
@@ -256,7 +253,7 @@ $( ".droppable" ).droppable({
         }
         // $(this).rotate({ animateTo:battleshipRotation});
         socket.emit('place_ship', gameObj );
-        console.log('Battleship Rotation', gameObj.Battleship.rotation );
+        console.log(gameObj );
       }
     }
   });
@@ -274,7 +271,7 @@ $( ".droppable" ).droppable({
           gameObj.Destroyer.rotation = 0;
         }
         socket.emit('place_ship', gameObj );
-        console.log('Destroyer Rotation', gameObj.Destroyer.rotation );
+        console.log(gameObj);
       }
     }
   });
@@ -292,7 +289,7 @@ $( ".droppable" ).droppable({
           gameObj.Submarine.rotation = 0;
         }
         socket.emit('place_ship', gameObj );
-        console.log('Submarine Rotation', gameObj.Submarine.rotation );
+        console.log(gameObj);
       }
     }
   });
@@ -310,7 +307,7 @@ $( ".droppable" ).droppable({
           gameObj.PtBoat.rotation = 0;
         }
         socket.emit('place_ship', gameObj );
-        console.log('PtBoat Rotation', gameObj.PtBoat.rotation );
+        console.log(gameObj);
       }
     }
   });
@@ -320,11 +317,11 @@ $( ".droppable" ).droppable({
     placedShip = placedShipObj.name;
     placedLocation = placedShipObj.cell;
     placedOrientation = placedShipObj.rotation;
-    console.log("placedShip",placedShip,"placedLocation",placedLocation,"placedOrientation",placedOrientation);
+    //console.log("placedShip",placedShip,"placedLocation",placedLocation,"placedOrientation",placedOrientation);
 
     var placedHGrid = placedLocation.substr(1, 2).toString(); //check the 2nd (and maybe the 3rd) char of the grid location
     var placedVGrid = placedLocation.substr(0, 1).toString(); //check the 1st char of the grid location
-console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
+    //console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
 
     var validHGrid = { // use with rotation === 0
       "AircraftCarrier": [1,2,3,4,5,6],
@@ -345,15 +342,15 @@ console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
     if( placedOrientation === 0 ){ // HORIZONTAL
       // use validHGrid
       var validH = validHGrid[ placedShip ].indexOf( parseInt(placedHGrid, 10) ); // .toString()
-      console.log(placedShip, "is at", parseInt(placedHGrid, 10), "and can be in",validHGrid[ placedShip ]);
+      //console.log(placedShip, "is at", parseInt(placedHGrid, 10), "and can be in",validHGrid[ placedShip ]);
       if ( validH === -1 ) {
-        console.log("not valid Horiz placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+        //console.log("not valid Horiz placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
         // correct the grid location here
         // get the last array element of the given ships validHGrid
         var lastValidElement = validHGrid[ placedShip ][ validHGrid[ placedShip ].length-1 ];
         // console.log( "lastValidElement", lastValidElement );
         var fixedCell = placedVGrid + lastValidElement.toString(); // add that after the current placedVGrid
-        console.log( "fixedCell", fixedCell );
+        //console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
         // count the difference from placed cell to fixed cell
         var fixedDistance = 1;// index of place cell minus the index of the fixed cell
@@ -372,14 +369,15 @@ console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
     } else { // VERTICAL
       // use validVGrid
       var validV = validVGrid[ placedShip ].indexOf( placedVGrid );
-      console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
+      //console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
       if ( validV === -1 ) {
-        console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+        //console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
         // correct the grid location here
         // get the last array element of the given ships validVGrid
         var lastValidElement = validVGrid[ placedShip ][ validVGrid[ placedShip ].length-1 ]; // the linter incorrectly thinks this var has already been defined. There is another assignment but inside the conditional. The logic will only use one or the other.
         // console.log( "lastValidElement", lastValidElement );
-        var fixedCell = lastValidElement + placedHGrid; // the linter incorrectly thinks this var has already been defined. There is another assignment but inside the conditional. The logic will only use one or the other.
+        // var fixedCell = lastValidElement + placedHGrid; // I think this is the incorrect code. Suspect needs placedVGrid which is next line
+        var fixedCell = lastValidElement + placedVGrid; // add that after the current placedVGrid
         console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
       } // END invalid VERTICAL placement with ship placement fix
@@ -401,13 +399,32 @@ console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
   }; // END disable gameReady funct
 
 // "Ready To Play" button to dissable ship draggable and rotation.
+
+// need to add check to see if all ships have a cell value if if so enable the button.
+
+console.log(gameObj.AircraftCarrier.cell);
+
+function shipsPlaced () {
+  if ((gameObj.AircraftCarrier.cell !== undefined) &&
+      (gameObj.Battleship.cell !== undefined) &&
+      (gameObj.Destroyer.cell !== undefined) &&
+      (gameObj.Submarine.cell !== undefined) &&
+      (gameObj.PtBoat.cell !== undefined))
+  {
+    return true;  
+  }
+}
+
   $('#readyToPlay').on({
     'click': function() {
-      event.preventDefault();
-      // disable droppable
-      $('#shotPlayer').text("Game ON!");
-      gameReady(true);
-      // emit to server player is ready
+      if (shipsPlaced()) {
+        event.preventDefault();
+        // disable droppable
+        $('#shotPlayer').text("Game ON!");
+        gameReady(true);
+        // emit to server player is ready
+        $("#readyToPlay").css("display","none");  
+      }
     }
   });
 
