@@ -392,7 +392,7 @@ console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
       gameReady(true);
       // emit to server player is ready
 
-      $("#readyToPlay").css("visibility","hidden");  
+      $("#readyToPlay").css("display","none");  
       //$("#placeShips").css("visibility","hidden");
     }
   });
