@@ -93,7 +93,7 @@ function Game (player1,player2,gameId){
   player2ReadyStatus=false,
   readyToPlay=false,
   player1Total=5,
-  turnController=1,
+  turnController=0,
   player2Total=5;
   
   console.log(gameId + " game #");
@@ -455,6 +455,7 @@ if (player1Total===0){
       hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Total);
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Total);
       turnController++;
+      io.emit('shot',shotObj);
       console.log("switching turns");
     }); 
   }
@@ -469,6 +470,7 @@ if (player1Total===0){
       hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Total);
       hitOrMiss(shotObj.id,player2Fleet.destroyer,player2Total);
       turnController++;
+      io.emit('shot,shotObj');
       console.log("player 2's turn");
     });
   }  
