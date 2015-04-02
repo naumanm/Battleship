@@ -455,7 +455,8 @@ if (player1Total===0){
       hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Total);
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Total);
       turnController++;
-      io.emit('shot',shotObj);
+      ios.emit('shot',shotObj);
+      console.log(shotObj);
       console.log("switching turns");
     }); 
   }
@@ -471,6 +472,7 @@ if (player1Total===0){
       hitOrMiss(shotObj.id,player2Fleet.destroyer,player2Total);
       turnController++;
       io.emit('shot,shotObj');
+      console.log(shotObj);
       console.log("player 2's turn");
     });
   }  
