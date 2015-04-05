@@ -455,7 +455,7 @@ if (player1Total===0){
       hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Total);
       hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Total);
       turnController++;
-      ios.emit('shot',shotObj);
+      io.emit('shot',shotObj);
       console.log(shotObj);
       console.log("switching turns");
     }); 
@@ -491,7 +491,11 @@ function hitOrMiss(shotObj,ship,fleet,total){
       hitFinder=ship.indexOf(shotObj);
       ship.splice(hitFinder,1); //removes from ship's working "length"
       console.log("hit detected at "+ shotObj); 
+      shotObj.hitOrmiss=true;
       console.log(ship);
+    }
+    else{
+      shotObj.hitOrmiss=false;
     }
   }
 }
