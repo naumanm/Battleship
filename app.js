@@ -425,6 +425,7 @@ player2.on("game_status", function(){
     player2Fleet = new Fleet(drydockB[0],drydockB[1],drydockB[2],drydockB[3],drydockB[4]);
     console.log(player2Fleet);
     console.log("player2"+ player2.nickname+" is ready");
+   // player1turn=true;
   }
 });
 
@@ -444,7 +445,7 @@ if (player1Total===0){
 
   //firing mechanism
  
-
+  //if (player1turn===true){
   player1.on('shot', function(shotObj){
     shotObj.player=player1.nickname;
     shotObj.hitORmiss=false;
@@ -456,8 +457,12 @@ if (player1Total===0){
     io.emit('shot',shotObj);
     ++turnController;
     console.log(shotObj);
+ //   player2.emit('turn',true);
+ //   player1.emit('turn',false);
   });
-
+  //}
+  
+  //if (player2turn===true)
   player2.on('shot', function(shotObj){  
     shotObj.player=player2.nickname;
     shotObj.hitORmiss=false;
@@ -469,8 +474,10 @@ if (player1Total===0){
     io.emit('shot',shotObj);
     ++turnController;
     console.log(shotObj);
+ //   player1.emit('turn',true);
+ //   player2.emit('turn',false);
   }); 
-
+  //}
 
 
 
