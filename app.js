@@ -80,13 +80,9 @@ io.on('connection', function(socket){  //step #1 connection
 
 //game logic 
 function Game (player1,player2,gameId){  
-  // shipMover(player1,drydockA);
-  // shipMover(player2,drydockB);
   //Game Setup
   this.player1=player1;
   this.player2=player2;
-  // this.player1Fleet=player1Fleet;
-  // this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
   var gameOver=false,
   player1ReadyStatus=false,
