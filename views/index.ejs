@@ -62,8 +62,8 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
-  <h2 id="userName">Player Name</h2>  <!-- Christian thinks these should go somewhere else on the page -->
-  <h2 id="shotPlayer"></h2>  <!-- Christian thinks these should go somewhere else on the page -->
+  <h2 id="userName">Player Name</h2>
+  <h2 id="shotPlayer"></h2>
   <!--Use these Bootstrap helper classes (text or background) for the game notifications
       class="text-muted"     text is grey
       class="text-primary"   text is blue
@@ -85,13 +85,22 @@
 
   <div class="gameboard">
     <span id="placeShipsWrapper">
+<!-- ****************************************************************************** -->
+<!-- CHRISTIAN'S WORK ON GRID PLACEMENT -->
+<!-- FIX MERGE CONFLICTS BUT KEEP MY WORK ON SHIP'S GRID PLACEMENT... GOOD CASE FOR BRANCHES!! -->
+<!-- <<<<<<< HEAD  which is mine and which is theres?? -->
     <div id="placeShips">
       <h4>Place your ships by dragging them to the left grid. Double click a ship to rotate it.</h4><br>
       <span class="ui-widget-content draggableAircraftCarrier">
-<!--       <img src="/images/wholeCarrier.png"
+<!--       <img src="/images/wholeCarrier.png" -->
+<!-- ======= -->
+    <!-- <div id="placeShips"> -->
+      <h4>Place your ships by dragging them to the left grid. Double click a ship to rotate it.</h4>
+      <img src="/images/wholeCarrier.png"
+<!-- >>>>>>> 7feede9ee441de7d1731699f53843e8da20f7975 -->
            alt="Drag your Aircraft Carrier to Your Ships Board"
            id="draggableAircraftCarrier"
-           class="aircraftCarrier, ship"> <!- - ui-widget-content,  -->
+           class="aircraftCarrier, ship"> <!-- ui-widget-content,  -->
            </span>
       
       <img src="/images/wholeBattleship.png"
@@ -116,7 +125,7 @@
 
       <!-- <input id="readyToPlay" class="btn btn-success" type="submit" value="Ready To Play"> -->
       <!-- jQuery UI is overridding Bootstrap's styling -->
-    </div> <!-- END #placeShips -->
+    <!-- </div>  END #placeShips -->
     </span> <!-- END #placeShipsWrapper -->
 
     <!-- <span class="ui-widget-header"> -->
