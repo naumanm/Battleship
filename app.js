@@ -491,7 +491,11 @@ function hitOrMiss(shotObj,ship,fleet,total){
       hitFinder=ship.indexOf(shotObj);
       ship.splice(hitFinder,1); //removes from ship's working "length"
       console.log("hit detected at "+ shotObj); 
+      shotObj.hitOrmiss=true;
       console.log(ship);
+    }
+    else{
+      shotObj.hitOrmiss=false;
     }
   }
 }
