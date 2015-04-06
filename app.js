@@ -13,6 +13,7 @@ io = require('socket.io')(http),
 methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
+
 bodyParser = require("body-parser"),
 waitingRoom =[], 
 gameRooms=[],
@@ -415,7 +416,7 @@ player1.on("game_status",function(){  //can be refactored in v2
     player1ReadyStatus=true;
     player1Fleet = new Fleet(drydockA[0],drydockA[1],drydockA[2],drydockA[3],drydockA[4]);
     console.log(player1Fleet);
-    console.log("player1 is ready");
+    console.log("player1 "+player1.nickname+" is ready");
   }
 });
 
@@ -424,7 +425,7 @@ player2.on("game_status", function(){
     player2ReadyStatus=true;
     player2Fleet = new Fleet(drydockB[0],drydockB[1],drydockB[2],drydockB[3],drydockB[4]);
     console.log(player2Fleet);
-    console.log("player2 is ready");
+    console.log("player2"+ player2.nickname+" is ready");
   }
 });
 
@@ -448,11 +449,11 @@ if (player1Total===0){
   player1.on('shot', function(shotObj){
     shotObj.player=player1.nickname;
     shotObj.hitORmiss=false;
-    hitOrMiss(shotObj,player2Fleet.carrier,player2Total);
-    hitOrMiss(shotObj,player2Fleet.battleship,player2Total);
-    hitOrMiss(shotObj,player2Fleet.submarine,player2Total);
-    hitOrMiss(shotObj,player2Fleet.ptboat,player2Total);
-    hitOrMiss(shotObj,player2Fleet.destroyer,player2Total);
+    hitOrMiss(shotObj,player2Fleet.carrier,player2Fleet);
+    hitOrMiss(shotObj,player2Fleet.battleship,player2Fleet);
+    hitOrMiss(shotObj,player2Fleet.submarine,player2Fleet);
+    hitOrMiss(shotObj,player2Fleet.ptboat,player2Fleet);
+    hitOrMiss(shotObj,player2Fleet.destroyer,player2Fleet);
     io.emit('shot',shotObj);
     ++turnController;
     console.log(shotObj);
@@ -461,11 +462,11 @@ if (player1Total===0){
   player2.on('shot', function(shotObj){  
     shotObj.player=player2.nickname;
     shotObj.hitORmiss=false;
-    hitOrMiss(shotObj,player1Fleet.carrier,player1Total);
-    hitOrMiss(shotObj,player1Fleet.battleship,player1Total);
-    hitOrMiss(shotObj,player1Fleet.submarine,player1Total);
-    hitOrMiss(shotObj,player1Fleet.ptboat,player1Total);
-    hitOrMiss(shotObj,player1Fleet.destroyer,player1Total);
+    hitOrMiss(shotObj,player1Fleet.carrier,player1Fleet); //can be cleaned up
+    hitOrMiss(shotObj,player1Fleet.battleship,player1Fleet);
+    hitOrMiss(shotObj,player1Fleet.submarine,player1Fleet);
+    hitOrMiss(shotObj,player1Fleet.ptboat,player1Fleet);
+    hitOrMiss(shotObj,player1Fleet.destroyer,player1Fleet);
     io.emit('shot',shotObj);
     ++turnController;
     console.log(shotObj);
@@ -474,15 +475,18 @@ if (player1Total===0){
 
 
 
-function hitOrMiss(shotObj,ship,fleet,total){  
+function hitOrMiss(shotObj,ship,fleet){  
   if (ship!==[]){
     if (ship.indexOf(shotObj.id)!==-1){
       if(ship.length===1){ //last hit sinks ship
-        fleet.shipcount--;
-        console.log("ship sunk at "+shotObj.id);
-        if(total===0)
+        console.log(ship.length);
+        fleet.shipcount--; //why was -- not working, good question...
+        console.log(fleet.shipcount);
+        console.log(ship+" ship sunk at "+shotObj.id);
+        if(fleet.shipcount===0)
         {
-         console.log("gameover"); //need to add game over functionality
+         io.emit("game_status",gameOver); 
+         console.log("gameover");
         }
       }
       hitFinder=ship.indexOf(shotObj.id);
@@ -517,6 +521,7 @@ function Fleet (carrier,battleship,submarine,destroyer,ptboat){
   this.submarine=submarine;
   this.destroyer=destroyer;
   this.ptboat=ptboat;
+  this.shipcount=5;
 } 
 
 
