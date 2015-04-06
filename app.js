@@ -445,6 +445,7 @@ if (player1Total===0){
  
 
   player1.on('shot', function(shotObj){
+    shotObj.player=player1.nickname;
     console.log(shotObj.id);
     console.log(shotObj);
     hitOrMiss(shotObj.id,player2Fleet.carrier,player2Total);
@@ -457,6 +458,7 @@ if (player1Total===0){
   });
 
   player2.on('shot', function(shotObj){  
+    shotObj.player=player2.nickname;
     console.log(shotObj.id); 
     console.log(shotObj);
     hitOrMiss(shotObj.id,player1Fleet.carrier,player1Total);
