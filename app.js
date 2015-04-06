@@ -415,7 +415,6 @@ player1.on("game_status",function(){  //can be refactored in v2
     player1Fleet = new Fleet(drydockA[0],drydockA[1],drydockA[2],drydockA[3],drydockA[4]);
     console.log(player1Fleet);
     console.log("player1 is ready");
-    turnController++;
   }
 });
 
@@ -425,7 +424,6 @@ player2.on("game_status", function(){
     player2Fleet = new Fleet(drydockB[0],drydockB[1],drydockB[2],drydockB[3],drydockB[4]);
     console.log(player2Fleet);
     console.log("player2 is ready");
-    turnController++;
   }
 });
 
@@ -442,40 +440,36 @@ if (player1Total===0){
   console.log("player 2 won");
 }
 
+
   //firing mechanism
  
 
-  if (turnController % 2 ===0){
-    //player2.emit("turn",true);
-    player2.on('shot', function(shotObj){  
-      console.log(shotObj.id); 
-      hitOrMiss(shotObj.id,player1Fleet.carrier,player1Total);
-      hitOrMiss(shotObj.id,player1Fleet.battleship,player1Total);
-      hitOrMiss(shotObj.id,player1Fleet.submarine,player1Total);
-      hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Total);
-      hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Total);
-      turnController++;
-      io.emit('shot',shotObj);
-      console.log(shotObj);
-      console.log(turnController);
-    }); 
-  }
-  else if (turnController>1) {
-    console.log("player 1's turn");
-    //player1.emit("turn",true);
-    player1.on('shot', function(shotObj){  //#step 3 firing a shot in the game
-      console.log(shotObj.id); //this is the actual targeted square, but will have to 'stringify'
-      hitOrMiss(shotObj.id,player2Fleet.carrier,player2Total);
-      hitOrMiss(shotObj.id,player2Fleet.battleship,player2Total);
-      hitOrMiss(shotObj.id,player2Fleet.submarine,player2Total);
-      hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Total);
-      hitOrMiss(shotObj.id,player2Fleet.destroyer,player2Total);
-      turnController++;
-      io.emit('shot,shotObj');
-      console.log(shotObj);
-      console.log("player 2's turn");
-    });
-  }  
+  player1.on('shot', function(shotObj){
+    console.log(shotObj.id);
+    console.log(shotObj);
+    hitOrMiss(shotObj.id,player2Fleet.carrier,player2Total);
+    hitOrMiss(shotObj.id,player2Fleet.battleship,player2Total);
+    hitOrMiss(shotObj.id,player2Fleet.submarine,player2Total);
+    hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Total);
+    hitOrMiss(shotObj.id,player2Fleet.destroyer,player2Total);
+    io.emit('shot',shotObj);
+    ++turnController;
+  });
+
+  player2.on('shot', function(shotObj){  
+    console.log(shotObj.id); 
+    console.log(shotObj);
+    hitOrMiss(shotObj.id,player1Fleet.carrier,player1Total);
+    hitOrMiss(shotObj.id,player1Fleet.battleship,player1Total);
+    hitOrMiss(shotObj.id,player1Fleet.submarine,player1Total);
+    hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Total);
+    hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Total);
+    io.emit('shot',shotObj);
+    ++turnController;
+  }); 
+
+
+
 
 function hitOrMiss(shotObj,ship,fleet,total){  
   if (ship!==[]){

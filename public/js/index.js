@@ -16,8 +16,8 @@ var socket = io(),
 
   var gameObj = {
     AircraftCarrier: {
-      name: "AircraftCarrier", // gameObj['aircraftCarrier']['name']
-      rotation: 0 // gameObj['aircraftCarrier']['rotation']
+      name: "AircraftCarrier",
+      rotation: 0
       },
     Battleship: {
       name: "Battleship",
@@ -133,18 +133,20 @@ var socket = io(),
 
     
 
-
-
-
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
       // Updates the Header UI for who took a shot and the cell location
 
-      console.log(shotObj);
-      if (shotObj.player !== person) {
-          console.log(shotObj.player);
+      console.log("shot player: " + shotObj.player);
+      console.log("game object player: " + gameObj.playerName);
 
-        document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + ". It's your turn!";
+      // this is where the client side shooting control will go
+
+      document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id;
+
+      if (shotObj.player !== gameObj.playerName) {
+
+        document.getElementById("userName").innerHTML =  "FIRE! " + gameObj.playerName;
         // gets the shot fired and updates the gameboard
         // this is klugy, needs a better way...
 
@@ -156,12 +158,16 @@ var socket = io(),
         // hitArr[3] = opponent's grid miss DON'T USE HERE
         // $(hitArr[0]).css("background-color", "red"); // data-id=d4
         if( shotObj.hitORmiss ){ // change the conditional based on what Will sends but the first block is the hit scenario
-          // $(hitArr[0]).css("background-color", "red"); // Michael's original code to display background color
           $(hitArr[0]).removeClass("hide"); // the hit img
         } else { // this block is the miss scenario
           $(hitArr[0]).removeClass("hide"); // the miss img
         }
+      } else {
+
+          document.getElementById("userName").innerHTML =  "Not " + gameObj.playerName + "'s turn";
+
       }
+  
     }); // END of socket.on 'shot'
 
 
