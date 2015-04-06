@@ -146,7 +146,7 @@ var socket = io(),
 
       if (shotObj.player !== gameObj.playerName) {
 
-        document.getElementById("userName").innerHTML =  "FIRE! " + gameObj.playerName;
+        document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
         // gets the shot fired and updates the gameboard
         // this is klugy, needs a better way...
 
@@ -158,8 +158,10 @@ var socket = io(),
         // hitArr[3] = opponent's grid miss DON'T USE HERE
         // $(hitArr[0]).css("background-color", "red"); // data-id=d4
         if( shotObj.hitORmiss ){ // change the conditional based on what Will sends but the first block is the hit scenario
+          console.log("HIT");
           $(hitArr[0]).removeClass("hide"); // the hit img
         } else { // this block is the miss scenario
+          console.log("MISS");
           $(hitArr[0]).removeClass("hide"); // the miss img
         }
       } else {
