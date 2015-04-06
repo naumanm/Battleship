@@ -446,27 +446,29 @@ if (player1Total===0){
  
 
   player1.on('shot', function(shotObj){
-    console.log(shotObj.id);
-    console.log(shotObj);
-    hitOrMiss(shotObj.id,player2Fleet.carrier,player2Total);
-    hitOrMiss(shotObj.id,player2Fleet.battleship,player2Total);
-    hitOrMiss(shotObj.id,player2Fleet.submarine,player2Total);
-    hitOrMiss(shotObj.id,player2Fleet.ptboat,player2Total);
-    hitOrMiss(shotObj.id,player2Fleet.destroyer,player2Total);
+    shotObj.player=player1.nickname;
+    shotObj.hitORmiss=false;
+    hitOrMiss(shotObj,player2Fleet.carrier,player2Total);
+    hitOrMiss(shotObj,player2Fleet.battleship,player2Total);
+    hitOrMiss(shotObj,player2Fleet.submarine,player2Total);
+    hitOrMiss(shotObj,player2Fleet.ptboat,player2Total);
+    hitOrMiss(shotObj,player2Fleet.destroyer,player2Total);
     io.emit('shot',shotObj);
     ++turnController;
+    console.log(shotObj);
   });
 
   player2.on('shot', function(shotObj){  
-    console.log(shotObj.id); 
-    console.log(shotObj);
-    hitOrMiss(shotObj.id,player1Fleet.carrier,player1Total);
-    hitOrMiss(shotObj.id,player1Fleet.battleship,player1Total);
-    hitOrMiss(shotObj.id,player1Fleet.submarine,player1Total);
-    hitOrMiss(shotObj.id,player1Fleet.ptboat,player1Total);
-    hitOrMiss(shotObj.id,player1Fleet.destroyer,player1Total);
+    shotObj.player=player2.nickname;
+    shotObj.hitORmiss=false;
+    hitOrMiss(shotObj,player1Fleet.carrier,player1Total);
+    hitOrMiss(shotObj,player1Fleet.battleship,player1Total);
+    hitOrMiss(shotObj,player1Fleet.submarine,player1Total);
+    hitOrMiss(shotObj,player1Fleet.ptboat,player1Total);
+    hitOrMiss(shotObj,player1Fleet.destroyer,player1Total);
     io.emit('shot',shotObj);
     ++turnController;
+    console.log(shotObj);
   }); 
 
 
@@ -474,23 +476,19 @@ if (player1Total===0){
 
 function hitOrMiss(shotObj,ship,fleet,total){  
   if (ship!==[]){
-    if (ship.indexOf(shotObj)!==-1){
+    if (ship.indexOf(shotObj.id)!==-1){
       if(ship.length===1){ //last hit sinks ship
         fleet.shipcount--;
-        console.log(ship+" sunk at "+shotObj);
+        console.log("ship sunk at "+shotObj.id);
         if(total===0)
         {
          console.log("gameover"); //need to add game over functionality
         }
       }
-      hitFinder=ship.indexOf(shotObj);
+      hitFinder=ship.indexOf(shotObj.id);
       ship.splice(hitFinder,1); //removes from ship's working "length"
-      console.log("hit detected at "+ shotObj); 
-      shotObj.hitOrmiss=true;
-      console.log(ship);
-    }
-    else{
-      shotObj.hitOrmiss=false;
+      shotObj.hitORmiss=true;
+      console.log("hit detected at "+ shotObj.id); 
     }
   }
 }
