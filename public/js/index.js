@@ -139,35 +139,57 @@ var socket = io(),
 
       console.log("shot player: " + shotObj.player);
       console.log("game object player: " + gameObj.playerName);
+      console.log(shotObj);
 
       // this is where the client side shooting control will go
 
-      document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id;
+
+      if (shotObj.hitORmiss){
+        document.getElementById("shotPlayer").innerHTML = shotObj.player + " HIT at " + shotObj.id;
+      }
+      else {
+        document.getElementById("shotPlayer").innerHTML = shotObj.player + " missed at " + shotObj.id;        
+      }
+
+      var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
+
 
       if (shotObj.player !== gameObj.playerName) {
+        // this is the current shooter
 
-        document.getElementById("userName").innerHTML =  "FIRE! " + gameObj.playerName;
+        document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
         // gets the shot fired and updates the gameboard
         // this is klugy, needs a better way...
 
-        var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
         // the above returns an array...
         // hitArr[0] = player's grid hit
         // hitArr[1] = player's grid miss
         // hitArr[2] = opponent's grid hit DON'T USE HERE
         // hitArr[3] = opponent's grid miss DON'T USE HERE
         // $(hitArr[0]).css("background-color", "red"); // data-id=d4
-        if( shotObj.hitORmiss ){ // change the conditional based on what Will sends but the first block is the hit scenario
+
+        if( shotObj.hitORmiss ){
           $(hitArr[0]).removeClass("hide"); // the hit img
         } else { // this block is the miss scenario
-          $(hitArr[0]).removeClass("hide"); // the miss img
+          $(hitArr[1]).removeClass("hide"); // the miss img
         }
-      } else {
+      } 
+  
 
-          document.getElementById("userName").innerHTML =  "Not " + gameObj.playerName + "'s turn";
+      if (shotObj.player === gameObj.playerName) {
+        // this is NOT the current shooter
+
+        document.getElementById("userName").innerHTML =  "Not " + gameObj.playerName + "'s turn";
+        //var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
+        if( shotObj.hitORmiss ){
+          $(hitArr[2]).removeClass("hide"); // the hit img
+        } else { // this block is the miss scenario
+          $(hitArr[3]).removeClass("hide"); // the miss img
+        }
+
 
       }
-  
+
     }); // END of socket.on 'shot'
 
 

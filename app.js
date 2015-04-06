@@ -6,16 +6,13 @@ var express = require('express'),
 app = express(),
 http = require('http').Server(app),
 io = require('socket.io')(http),
-redis = require("redis"),
-url = require('url'),
-redisURL = url.parse(process.env.REDISCLOUD_URL),
-client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-client.auth(redisURL.auth.split(":")[1]);
-// client = redis.createClient(),
-var methodOverride = require("method-override"),
+//redis = require("redis"),
+//url = require('url'),
+//redisURL = url.parse(process.env.REDISCLOUD_URL),
+//client = redis.createClient(),
+methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
-
 bodyParser = require("body-parser"),
 waitingRoom =[], 
 gameRooms=[],
@@ -24,7 +21,10 @@ drydockB=[];
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
-console.log(process.env.REDISCLOUD_URL);
+//client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+//client.auth(redisURL.auth.split(":")[1]);
+
+//console.log(process.env.REDISCLOUD_URL);
 
 // more middleware  Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
 app.use(bodyParser.urlencoded({extended: true}));
@@ -81,22 +81,16 @@ io.on('connection', function(socket){  //step #1 connection
 
 //game logic 
 function Game (player1,player2,gameId){  
-  // shipMover(player1,drydockA);
-  // shipMover(player2,drydockB);
   //Game Setup
   this.player1=player1;
   this.player2=player2;
-  // this.player1Fleet=player1Fleet;
-  // this.player2Fleet=player2Fleet;
   this.gameId=gameId;  //gameroom
   var gameOver=false,
   player1ReadyStatus=false,
   player2ReadyStatus=false,
   readyToPlay=false,
-  player1Total=5,
-  turnController=0,
-  player2Total=5;
-  
+  player1turn=false,
+  player2turn=false;
   console.log(gameId + " game #");
   console.log("matchmaking complete, waiting for player ready and ship lockdown");
   
@@ -429,20 +423,6 @@ player2.on("game_status", function(){
   }
 });
 
-//rough game over conditions
-if (player2Total===0){
-  gameOver=true;
-  io.emit("game_status",gameOver);
-  console.log("player 1 won");
-}
- 
-if (player1Total===0){
-  gameOver=true;
-  io.emit("game_status",gameOver);
-  console.log("player 2 won");
-}
-
-
   //firing mechanism
  
   //if (player1turn===true){
@@ -455,7 +435,6 @@ if (player1Total===0){
     hitOrMiss(shotObj,player2Fleet.ptboat,player2Fleet);
     hitOrMiss(shotObj,player2Fleet.destroyer,player2Fleet);
     io.emit('shot',shotObj);
-    ++turnController;
     console.log(shotObj);
  //   player2.emit('turn',true);
  //   player1.emit('turn',false);
@@ -472,14 +451,11 @@ if (player1Total===0){
     hitOrMiss(shotObj,player1Fleet.ptboat,player1Fleet);
     hitOrMiss(shotObj,player1Fleet.destroyer,player1Fleet);
     io.emit('shot',shotObj);
-    ++turnController;
     console.log(shotObj);
  //   player1.emit('turn',true);
  //   player2.emit('turn',false);
   }); 
   //}
-
-
 
 function hitOrMiss(shotObj,ship,fleet){  
   if (ship!==[]){
@@ -491,6 +467,7 @@ function hitOrMiss(shotObj,ship,fleet){
         console.log(ship+" ship sunk at "+shotObj.id);
         if(fleet.shipcount===0)
         {
+         gameOver=true;
          io.emit("game_status",gameOver); 
          console.log("gameover");
         }
