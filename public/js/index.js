@@ -142,7 +142,7 @@ var socket = io(),
 
       console.log(shotObj);
       if (shotObj.player !== person) {
-
+          console.log(shotObj.player);
 
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " took a shot at " + shotObj.id + ". It's your turn!";
         // gets the shot fired and updates the gameboard
