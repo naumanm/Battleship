@@ -15,7 +15,6 @@ client.auth(redisURL.auth.split(":")[1]);
 var methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
-
 bodyParser = require("body-parser"),
 waitingRoom =[], 
 gameRooms=[],
@@ -455,7 +454,6 @@ if (player1Total===0){
     hitOrMiss(shotObj,player2Fleet.ptboat,player2Fleet);
     hitOrMiss(shotObj,player2Fleet.destroyer,player2Fleet);
     io.emit('shot',shotObj);
-    ++turnController;
     console.log(shotObj);
  //   player2.emit('turn',true);
  //   player1.emit('turn',false);
@@ -472,14 +470,11 @@ if (player1Total===0){
     hitOrMiss(shotObj,player1Fleet.ptboat,player1Fleet);
     hitOrMiss(shotObj,player1Fleet.destroyer,player1Fleet);
     io.emit('shot',shotObj);
-    ++turnController;
     console.log(shotObj);
  //   player1.emit('turn',true);
  //   player2.emit('turn',false);
   }); 
   //}
-
-
 
 function hitOrMiss(shotObj,ship,fleet){  
   if (ship!==[]){
