@@ -414,7 +414,7 @@ player1.on("game_status",function(){  //can be refactored in v2
     player1ReadyStatus=true;
     player1Fleet = new Fleet(drydockA[0],drydockA[1],drydockA[2],drydockA[3],drydockA[4]);
     console.log(player1Fleet);
-    console.log("player1 is ready");
+    console.log("player1 "+player1.nickname+" is ready");
   }
 });
 
@@ -423,7 +423,7 @@ player2.on("game_status", function(){
     player2ReadyStatus=true;
     player2Fleet = new Fleet(drydockB[0],drydockB[1],drydockB[2],drydockB[3],drydockB[4]);
     console.log(player2Fleet);
-    console.log("player2 is ready");
+    console.log("player2"+ player2.nickname+" is ready");
   }
 });
 
@@ -478,10 +478,11 @@ function hitOrMiss(shotObj,ship,fleet,total){
     if (ship.indexOf(shotObj.id)!==-1){
       if(ship.length===1){ //last hit sinks ship
         fleet.shipcount--;
-        console.log("ship sunk at "+shotObj.id);
-        if(total===0)
+        console.log(ship+" ship sunk at "+shotObj.id);
+        if(fleet.shipcount===0)
         {
-         console.log("gameover"); //need to add game over functionality
+         io.emit("game_status",gameOver); 
+         console.log("gameover");
         }
       }
       hitFinder=ship.indexOf(shotObj.id);
