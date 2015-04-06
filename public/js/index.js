@@ -151,6 +151,7 @@ var socket = io(),
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " missed at " + shotObj.id;        
       }
 
+      var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
 
 
       if (shotObj.player !== gameObj.playerName) {
@@ -160,7 +161,6 @@ var socket = io(),
         // gets the shot fired and updates the gameboard
         // this is klugy, needs a better way...
 
-        var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
         // the above returns an array...
         // hitArr[0] = player's grid hit
         // hitArr[1] = player's grid miss
@@ -171,14 +171,22 @@ var socket = io(),
         if( shotObj.hitORmiss ){
           $(hitArr[0]).removeClass("hide"); // the hit img
         } else { // this block is the miss scenario
-          $(hitArr[0]).removeClass("hide"); // the miss img
+          $(hitArr[1]).removeClass("hide"); // the miss img
         }
       } 
   
 
       if (shotObj.player === gameObj.playerName) {
         // this is NOT the current shooter
+
         document.getElementById("userName").innerHTML =  "Not " + gameObj.playerName + "'s turn";
+        //var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
+        if( shotObj.hitORmiss ){
+          $(hitArr[2]).removeClass("hide"); // the hit img
+        } else { // this block is the miss scenario
+          $(hitArr[3]).removeClass("hide"); // the miss img
+        }
+
 
       }
 
