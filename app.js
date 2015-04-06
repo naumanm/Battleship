@@ -88,8 +88,9 @@ function Game (player1,player2,gameId){
   var gameOver=false,
   player1ReadyStatus=false,
   player2ReadyStatus=false,
-  readyToPlay=false;
-  
+  readyToPlay=false,
+  player1turn=false,
+  player2turn=false;
   console.log(gameId + " game #");
   console.log("matchmaking complete, waiting for player ready and ship lockdown");
   
