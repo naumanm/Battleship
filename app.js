@@ -6,13 +6,11 @@ var express = require('express'),
 app = express(),
 http = require('http').Server(app),
 io = require('socket.io')(http),
-redis = require("redis"),
-url = require('url'),
-redisURL = url.parse(process.env.REDISCLOUD_URL),
-client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-client.auth(redisURL.auth.split(":")[1]);
-// client = redis.createClient(),
-var methodOverride = require("method-override"),
+//redis = require("redis"),
+//url = require('url'),
+//redisURL = url.parse(process.env.REDISCLOUD_URL),
+//client = redis.createClient(),
+methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
@@ -23,7 +21,10 @@ drydockB=[];
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
 
-console.log(process.env.REDISCLOUD_URL);
+//client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+//client.auth(redisURL.auth.split(":")[1]);
+
+//console.log(process.env.REDISCLOUD_URL);
 
 // more middleware  Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
 app.use(bodyParser.urlencoded({extended: true}));
