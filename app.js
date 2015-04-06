@@ -87,10 +87,7 @@ function Game (player1,player2,gameId){
   var gameOver=false,
   player1ReadyStatus=false,
   player2ReadyStatus=false,
-  readyToPlay=false,
-  player1Total=5,
-  turnController=0,
-  player2Total=5;
+  readyToPlay=false;
   
   console.log(gameId + " game #");
   console.log("matchmaking complete, waiting for player ready and ship lockdown");
@@ -468,6 +465,7 @@ function hitOrMiss(shotObj,ship,fleet){
         console.log(ship+" ship sunk at "+shotObj.id);
         if(fleet.shipcount===0)
         {
+         gameOver=true;
          io.emit("game_status",gameOver); 
          console.log("gameover");
         }
