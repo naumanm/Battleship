@@ -85,7 +85,7 @@ function Game (player1,player2,gameId){
   this.player1=player1;
   this.player2=player2;
   this.gameId=gameId;  //gameroom
-  var gameOver=false,
+  var gameOver={},
   player1ReadyStatus=false,
   player2ReadyStatus=false,
   readyToPlay=false,
@@ -442,6 +442,12 @@ player2.on("game_status", function(){
       hitOrMiss(shotObj,player2Fleet.destroyer,player2Fleet);
       io.emit('shot',shotObj);
       console.log(shotObj);
+      if(player2Fleet.shipcount===0){
+        gameOver.result=true;
+        gameover.winner=player1.nickname;
+        gameOver.loser=player2.nickname;
+        io.emit("game_status",gameOver);
+      }
       io.emit('player1Turn', false);
       io.emit('player2Turn', true);
     }
@@ -458,6 +464,12 @@ player2.on("game_status", function(){
       hitOrMiss(shotObj,player1Fleet.destroyer,player1Fleet);
       io.emit('shot',shotObj);
       console.log(shotObj);
+      if(player1Fleet.shipcount===0){
+        gameOver.result=true;
+        gameover.winner=player2.nickname;
+        gameOver.loser=player1.nickname;
+        io.emit("game_status",gameOver);
+      }
       io.emit('player1Turn', true);
       io.emit('player2Turn', false);
     }
@@ -471,12 +483,6 @@ function hitOrMiss(shotObj,ship,fleet){
         fleet.shipcount--; //why was -- not working, good question...
         console.log(fleet.shipcount);
         console.log(ship+" ship sunk at "+shotObj.id);
-        if(fleet.shipcount===0)
-        {
-         gameOver=true;
-         io.emit("game_status",gameOver); 
-         console.log("gameover");
-        }
       }
       hitFinder=ship.indexOf(shotObj.id);
       ship.splice(hitFinder,1); //removes from ship's working "length"
