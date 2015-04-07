@@ -59,25 +59,12 @@ var socket = io(),
   $('form').submit(function(e){
     e.preventDefault();
     var playerName = document.getElementsByTagName("input")[0].value; // wasn't working using same code from above function like like 10 (  var playerName = $('#personsName').val();  )
-
     $('#playerSignIn').modal('hide'); // shows the get player's name modal
     console.log("playerName", /* playerName */ gameObj.playerName );
-
     socket.emit('playerName', /* playerName */ gameObj.playerName );
-
-
-
     return /* playerName */ gameObj.playerName;
-    // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
-    // 1) Player already connected to the game and refreshed.
-    // 2) Player started a new game (using a different player name)
-    // 3) New player but their entered name already exists with another player. I think the socet ID needs to be the "PK" of the player's data
-
   }); // END listener for the form submit
 
-
-// *******************UN-COMMENT ONCE DONE WITH TESTING**************************
-//TEMPORARY DISABLE SINCE IT'S SO ANNOYING WHILE TESTING
   var isNameEmpty = function(a){
     $('#playerSignIn').modal('show'); // shows the get player's name modal
   }();
@@ -87,7 +74,6 @@ var socket = io(),
     var selectedArr = selectedArr || []; // array of all shots
     var isTrue;
 
-
     socket.on('turn', function(controller){ 
       if (controller===true){
         //jquery magic to allow clickable spaces, shoudl be off by default
@@ -95,7 +81,6 @@ var socket = io(),
         isTrue = true;
         $(".opponent").prop('disabled', false);
       }
-
 
       if(controller===false){
         //jquery magic to not allow client to click on squares
@@ -105,57 +90,53 @@ var socket = io(),
       }
     });
 
-
-
-
-
-
-      // color change on hover
-      $("td").mouseover(function(){
-        var cellState = $(this).data("state");
-        var cellId = $(this).data("id");
-        var cellTable = $(this).closest("table").attr("class");
-        if (isTrue){
-          if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
-            $(this).css("background-color", "red");
-          }
+    // color change on hover
+    $("td").mouseover(function(){
+      var cellState = $(this).data("state");
+      var cellId = $(this).data("id");
+      var cellTable = $(this).closest("table").attr("class");
+      if (isTrue){
+        if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
+          $(this).css("background-color", "red");
         }
-      });  // end of color change on hover
+      }
+    });  // end of color change on hover
 
-      // revert color if not clicked
-      $("td").mouseleave(function(){
-        var cellState = $(this).data("state");
-        var cellTable = $(this).closest("table").attr("class");
-        if (isTrue){
-          if (cellState === "unselected" && cellTable === "opponent") {
-            $(this).css("background-color", "lightyellow");  // if not selected change color back
-          }
+    // revert color if not clicked
+    $("td").mouseleave(function(){
+      var cellState = $(this).data("state");
+      var cellTable = $(this).closest("table").attr("class");
+      if (isTrue){
+        if (cellState === "unselected" && cellTable === "opponent") {
+          $(this).css("background-color", "lightyellow");  // if not selected change color back
         }
-      });  // end of revert color if not clicked
+      }
+    });  // end of revert color if not clicked
 
-      // select to take a shot
-      $("td").click(function(){
-        var cellId = $(this).data("id"); // get the cellId for the current cell
-        var cellState = $(this).data("state");
-        var cellTable = $(this).closest("table").attr("class");
+    // select to take a shot
+    $("td").click(function(){
+      var cellId = $(this).data("id"); // get the cellId for the current cell
+      var cellState = $(this).data("state");
+      var cellTable = $(this).closest("table").attr("class");
 
-        if (isTrue){
+      // if (isTrue){
 
-          if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
-            $(this).css("background-color", "blue"); // add the hit/miss animation here?
-            $(this).data("state", "miss");
-            if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
-              selectedArr.push(cellId); // push the selected cell into the selectedArr
-              var shotObj = {};
-              shotObj.player = $('#personsName').val(); //person;
-              shotObj.id = cellId;
-              //console.log('\nshotObj (player name - cell ID)' , shotObj);
-              socket.emit('shot', shotObj);
-            } // END of (selectedArr.indexOf(cellId) === -1)
-          } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
-        }
+        if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
+          $(this).css("background-color", "blue"); // add the hit/miss animation here?
+          $(this).data("state", "miss");
+          if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
+            selectedArr.push(cellId); // push the selected cell into the selectedArr
+            var shotObj = {};
+            shotObj.player = $('#personsName').val(); //person;
+            shotObj.id = cellId;
+            //console.log('\nshotObj (player name - cell ID)' , shotObj);
+            socket.emit('shot', shotObj);
+          } // END of (selectedArr.indexOf(cellId) === -1)
+        } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
 
-      });  // end of select to take a shot
+      // }
+
+    });  // end of select to take a shot
 
 
     
