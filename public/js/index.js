@@ -85,9 +85,28 @@ var socket = io(),
   function gamePlay(){
 
     var selectedArr = selectedArr || []; // array of all shots
+    var isTrue;
 
 
-    //turn.on('turn', function(turnObj){
+    socket.on('turn', function(controller){ 
+      if (controller===true){
+        //jquery magic to allow clickable spaces, shoudl be off by default
+        console.log("Controller is TRUE");
+        isTrue = true;
+        $(".opponent").prop('disabled', false);
+      }
+
+
+      if(controller===false){
+        //jquery magic to not allow client to click on squares
+        console.log("Controller is FALSE");
+        isTrue = false;
+        $(".opponent").prop('disabled', true);
+      }
+    });
+
+
+
 
 
 
@@ -96,8 +115,10 @@ var socket = io(),
         var cellState = $(this).data("state");
         var cellId = $(this).data("id");
         var cellTable = $(this).closest("table").attr("class");
-        if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
-          $(this).css("background-color", "red");
+        if (isTrue){
+          if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
+            $(this).css("background-color", "red");
+          }
         }
       });  // end of color change on hover
 
@@ -105,9 +126,10 @@ var socket = io(),
       $("td").mouseleave(function(){
         var cellState = $(this).data("state");
         var cellTable = $(this).closest("table").attr("class");
-
-        if (cellState === "unselected" && cellTable === "opponent") {
-          $(this).css("background-color", "lightyellow");  // if not selected change color back
+        if (isTrue){
+          if (cellState === "unselected" && cellTable === "opponent") {
+            $(this).css("background-color", "lightyellow");  // if not selected change color back
+          }
         }
       });  // end of revert color if not clicked
 
@@ -116,18 +138,23 @@ var socket = io(),
         var cellId = $(this).data("id"); // get the cellId for the current cell
         var cellState = $(this).data("state");
         var cellTable = $(this).closest("table").attr("class");
-        if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
-          $(this).css("background-color", "blue"); // add the hit/miss animation here?
-          $(this).data("state", "miss");
-          if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
-            selectedArr.push(cellId); // push the selected cell into the selectedArr
-            var shotObj = {};
-            shotObj.player = $('#personsName').val(); //person;
-            shotObj.id = cellId;
-            //console.log('\nshotObj (player name - cell ID)' , shotObj);
-            socket.emit('shot', shotObj);
-          } // END of (selectedArr.indexOf(cellId) === -1)
-        } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
+
+        if (isTrue){
+
+          if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
+            $(this).css("background-color", "blue"); // add the hit/miss animation here?
+            $(this).data("state", "miss");
+            if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
+              selectedArr.push(cellId); // push the selected cell into the selectedArr
+              var shotObj = {};
+              shotObj.player = $('#personsName').val(); //person;
+              shotObj.id = cellId;
+              //console.log('\nshotObj (player name - cell ID)' , shotObj);
+              socket.emit('shot', shotObj);
+            } // END of (selectedArr.indexOf(cellId) === -1)
+          } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
+        }
+
       });  // end of select to take a shot
 
 
@@ -135,15 +162,8 @@ var socket = io(),
 
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
+
       // Updates the Header UI for who took a shot and the cell location
-
-      console.log("shot player: " + shotObj.player);
-      console.log("game object player: " + gameObj.playerName);
-      console.log(shotObj);
-
-      // this is where the client side shooting control will go
-
-
       if (shotObj.hitORmiss){
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " HIT at " + shotObj.id;
       }
@@ -153,21 +173,10 @@ var socket = io(),
 
       var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
 
-
       if (shotObj.player !== gameObj.playerName) {
         // this is the current shooter
 
         document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
-        // gets the shot fired and updates the gameboard
-        // this is klugy, needs a better way...
-
-        // the above returns an array...
-        // hitArr[0] = player's grid hit
-        // hitArr[1] = player's grid miss
-        // hitArr[2] = opponent's grid hit DON'T USE HERE
-        // hitArr[3] = opponent's grid miss DON'T USE HERE
-        // $(hitArr[0]).css("background-color", "red"); // data-id=d4
-
         if( shotObj.hitORmiss ){
           $(hitArr[0]).removeClass("hide"); // the hit img
         } else { // this block is the miss scenario
@@ -175,7 +184,6 @@ var socket = io(),
         }
       } 
   
-
       if (shotObj.player === gameObj.playerName) {
         // this is NOT the current shooter
 
@@ -186,8 +194,6 @@ var socket = io(),
         } else { // this block is the miss scenario
           $(hitArr[3]).removeClass("hide"); // the miss img
         }
-
-
       }
 
     }); // END of socket.on 'shot'
@@ -197,8 +203,8 @@ var socket = io(),
       console.log("player1Turn = " + test);
     });
 
-
-
+    //  from server code, need to catch this
+    //  socket.broadcast.to(player1).emit('turn',controller)
 
     // make this into game_status to start or end game
     socket.on('game_status', function( gameOver ){
