@@ -7,6 +7,7 @@ body {
 
 table {
   margin: 5px;
+  z-index: -100;
 }
 
 td {
@@ -17,6 +18,7 @@ td {
   text-align: center;
   /* only right and bottom so as not to double up on the borders per table cell */
   border: 1px solid black;
+  z-index: -100 !important;
 }
 
 /* -- Classes --*/
@@ -67,7 +69,7 @@ td {
 .gameboard, .noColor {
   /*text-align: middle;*/
   text-align: center;
-
+  z-index: -100 !important;
   /*position-align: center;*/
 
 }
@@ -159,6 +161,8 @@ img.droppable { /* these are the ships */
   height: 25px;
   width: 25px;
   overflow: visible;
+  z-index: 50 !important;
+
   
   /* set width height: to 25  px */
   /* the image overflow is visible */
@@ -209,7 +213,7 @@ img.droppable { /* these are the ships */
   top: -10px;
 }
 
-#placeShips {
+#placeShips { /* This DIV was commenented out. The DIV was arround the ships before being placed. */
   background: lightyellow;
   padding: 8px 8px;
   border: 1px solid black;
