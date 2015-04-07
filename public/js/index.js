@@ -193,6 +193,13 @@ var socket = io(),
     }); // END of socket.on 'shot'
 
 
+    socket.on('player1Turn', function(test){
+      console.log("player1Turn = " + test);
+    });
+
+
+
+
     // make this into game_status to start or end game
     socket.on('game_status', function( gameOver ){
       if ( gameOver ) {
@@ -200,21 +207,6 @@ var socket = io(),
       } else {
       }
     }); 
-
-
-
-    socket.on('player1Turn', function(test){
-      console.log("player1Turn = " + test);
-    });
-
-    // socket.on('player2Turn', function(player2Turn){
-    //   console.log("player2Trun = " + player2Turn);
-    // });
-
-
-
-
-
 
   } // End of gamePlay function
 
