@@ -203,9 +203,9 @@ var socket = io(),
 
 
 
-    // socket.on('player1Turn', function(player1Turn){
-    //   console.log("player1Trun = " + player1Turn);
-    // });
+    socket.on('player1Turn', function(test){
+      console.log("player1Turn = " + test);
+    });
 
     // socket.on('player2Turn', function(player2Turn){
     //   console.log("player2Trun = " + player2Turn);
