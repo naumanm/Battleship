@@ -177,13 +177,13 @@ img.droppable { /* these are the ships */
   /*height: 25px;*/
   /*width: 25px;*/
   background-color: red;
-  z-index: 200;
+  z-index: 250;
 }
 
 .miss {
   background-image: url("/images/miss.png");
   background-color: blue;
-  z-index: 200;
+  z-index: 250;
 }
 
 .hide {
