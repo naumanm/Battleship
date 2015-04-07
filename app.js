@@ -73,6 +73,7 @@ io.on('connection', function(socket){  //step #1 connection
     roomNumber++;
     playerPair=0;
   }
+    
 
   socket.on('disconnect', function(){
     console.log(socket.id + " disconnected");            
@@ -421,6 +422,8 @@ player2.on("game_status", function(){
     console.log(player2Fleet);
     console.log("player2"+ player2.nickname+" is ready");
     player1turn=true;  //activating turn switch mechanism
+    controller=true;
+    player1.emit('turn',controller);
   }
 });
   
