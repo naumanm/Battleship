@@ -446,7 +446,7 @@ player2.on("game_status", function(){
       console.log(shotObj);
       if(player2Fleet.shipcount===0){
         gameOver.result=true;
-        gameover.winner=player1.nickname;
+        gameOver.winner=player1.nickname;
         gameOver.loser=player2.nickname;
         io.emit("game_status",gameOver);
       }
@@ -474,7 +474,7 @@ player2.on("game_status", function(){
       console.log(shotObj);
       if(player1Fleet.shipcount===0){
         gameOver.result=true;
-        gameover.winner=player2.nickname;
+        gameOver.winner=player2.nickname;
         gameOver.loser=player1.nickname;
         io.emit("game_status",gameOver);
       }
