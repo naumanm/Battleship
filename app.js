@@ -15,6 +15,7 @@ roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
+controller, //for turns
 gameRooms=[],
 drydockA=[], 
 drydockB=[]; 
@@ -410,7 +411,6 @@ player1.on("game_status",function(){  //can be refactored in v2
     player1Fleet = new Fleet(drydockA[0],drydockA[1],drydockA[2],drydockA[3],drydockA[4]);
     console.log(player1Fleet);
     console.log("player1 "+player1.nickname+" is ready");
-    player1turn=true;
   }
 });
 
@@ -420,15 +420,16 @@ player2.on("game_status", function(){
     player2Fleet = new Fleet(drydockB[0],drydockB[1],drydockB[2],drydockB[3],drydockB[4]);
     console.log(player2Fleet);
     console.log("player2"+ player2.nickname+" is ready");
-    player2turn=true;
+    player1turn=true;  //activating turn switch mechanism
   }
 });
   
   //check to see if both one and two are working and then emit game start to both ()
+  //should we have an announcement saying 'you're player 1, and you're player 2 in this game start emitting...?
   //firing mechanism
  
-  console.log(player1turn);
-  console.log(player2turn);
+  console.log(player1turn);  //should be true
+  console.log(player2turn);  //should be false - only player 1 to shoot at the beginning!
 
 
   player1.on('shot', function(shotObj){
@@ -448,8 +449,12 @@ player2.on("game_status", function(){
         gameOver.loser=player2.nickname;
         io.emit("game_status",gameOver);
       }
-      io.emit('player1Turn', false);
-      io.emit('player2Turn', true);
+      controller=false;
+      socket.broadcast.to(player1).emit('turn',controller); //sending next turn info to respective clients
+      controller=true;
+      socket.broadcast.to(player2).emit('turn',controller);
+      player1turn=false;  //switching turn 'receptor' on server, now waiting for client
+      player2turn=true;
     }
   });
 
@@ -470,8 +475,12 @@ player2.on("game_status", function(){
         gameOver.loser=player1.nickname;
         io.emit("game_status",gameOver);
       }
-      io.emit('player1Turn', true);
-      io.emit('player2Turn', false);
+      controller=true;
+      socket.broadcast.to(player1).emit('turn',controller); //sending turn info to client
+      controller=false;
+      socket.broadcast.to(player2).emit('turn',controller);
+      player1turn=true;  //switching turn info to server, now waiting for client
+      player2turn=false;
     }
   }); 
 
