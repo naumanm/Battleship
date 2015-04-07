@@ -15,6 +15,7 @@ roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
+controller, //for turns
 gameRooms=[],
 drydockA=[], 
 drydockB=[]; 
@@ -448,8 +449,10 @@ player2.on("game_status", function(){
         gameOver.loser=player2.nickname;
         io.emit("game_status",gameOver);
       }
-      socket.broadcast.to(player1).emit('turn',false); //sending next turn info to respective clients
-      socket.broadcast.to(player2).emit('turn',true);
+      controller=false;
+      socket.broadcast.to(player1).emit('turn',controller); //sending next turn info to respective clients
+      controller=true;
+      socket.broadcast.to(player2).emit('turn',controller);
       player1turn=false;  //switching turn 'receptor' on server, now waiting for client
       player2turn=true;
     }
@@ -472,8 +475,10 @@ player2.on("game_status", function(){
         gameOver.loser=player1.nickname;
         io.emit("game_status",gameOver);
       }
-      socket.broadcast.to(player1).emit('turn',true); //sending turn info to client
-      socket.broadcast.to(player2).emit('turn',false);
+      controller=true;
+      socket.broadcast.to(player1).emit('turn',controller); //sending turn info to client
+      controller=false;
+      socket.broadcast.to(player2).emit('turn',controller);
       player1turn=true;  //switching turn info to server, now waiting for client
       player2turn=false;
     }
