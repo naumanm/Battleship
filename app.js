@@ -424,14 +424,12 @@ player2.on("game_status", function(){
   }
 });
   
-  //check to see if both one and two are working and then emit game start to both ()
-  //should we have an announcement saying 'you're player 1, and you're player 2 in this game start emitting...?
-  //firing mechanism
- 
-  console.log(player1turn);  //should be true
-  console.log(player2turn);  //should be false - only player 1 to shoot at the beginning!
+  //these notices will go to the players upon connection, so they know who is who
+  //will not have any impact, it's just a notification
+ // socket.broadcast.to(player1).emit('identity',"You will be Player 1");
+ // socket.broadcast.to(player2).emit('identity',"You will Player 2");
 
-
+ //firing mechanism, turn controller, and game over emitter
   player1.on('shot', function(shotObj){
     if (player1turn===true){
       shotObj.player=player1.nickname;
@@ -450,9 +448,11 @@ player2.on("game_status", function(){
         io.emit("game_status",gameOver);
       }
       controller=false;
-      socket.broadcast.to(player1).emit('turn',controller); //sending next turn info to respective clients
+      console.log(player1);
+      player1.emit('turn',controller);
       controller=true;
-      socket.broadcast.to(player2).emit('turn',controller);
+      console.log(player2);
+      player2.emit('turn',controller);
       player1turn=false;  //switching turn 'receptor' on server, now waiting for client
       player2turn=true;
     }
@@ -476,9 +476,9 @@ player2.on("game_status", function(){
         io.emit("game_status",gameOver);
       }
       controller=true;
-      socket.broadcast.to(player1).emit('turn',controller); //sending turn info to client
+      player1.emit('turn',controller);
       controller=false;
-      socket.broadcast.to(player2).emit('turn',controller);
+      player2.emit('turn',controller);
       player1turn=true;  //switching turn info to server, now waiting for client
       player2turn=false;
     }
@@ -500,14 +500,14 @@ function hitOrMiss(shotObj,ship,fleet){
     }
   }
 }
-// function hitOrMiss(shotObj,fleet,shipcount){  
+// function hitOrMiss(shotObj,fleet,){  
 //   var hitFinder;
 //   for(var i=0;i<fleet.length;i++){
 //     if (fleet[i]!==[]){
 //       for (var j = 0; j < fleet[i][j].length; j++) {
 //         if (fleet[i][j].indexOf(shotObj)!==-1){
 //           if(fleet[i][j].length===1){ //last hit sinks ship
-//             shipcount--;
+//             fleet.shipcount--;
 //           }
 //           hitFinder=fleet[i][j].indexOf(shotObj);
 //           fleet[i][hitFinder]=''; 
