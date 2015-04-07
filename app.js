@@ -15,6 +15,7 @@ roomNumber=1,
 playerPair=0,
 bodyParser = require("body-parser"),
 waitingRoom =[], 
+controller, //for turns
 gameRooms=[],
 drydockA=[], 
 drydockB=[]; 
@@ -85,7 +86,7 @@ function Game (player1,player2,gameId){
   this.player1=player1;
   this.player2=player2;
   this.gameId=gameId;  //gameroom
-  var gameOver=false,
+  var gameOver={},
   player1ReadyStatus=false,
   player2ReadyStatus=false,
   readyToPlay=false,
@@ -419,43 +420,69 @@ player2.on("game_status", function(){
     player2Fleet = new Fleet(drydockB[0],drydockB[1],drydockB[2],drydockB[3],drydockB[4]);
     console.log(player2Fleet);
     console.log("player2"+ player2.nickname+" is ready");
-   // player1turn=true;
+    player1turn=true;  //activating turn switch mechanism
   }
 });
-
+  
+  //check to see if both one and two are working and then emit game start to both ()
+  //should we have an announcement saying 'you're player 1, and you're player 2 in this game start emitting...?
   //firing mechanism
  
-  //if (player1turn===true){
+  console.log(player1turn);  //should be true
+  console.log(player2turn);  //should be false - only player 1 to shoot at the beginning!
+
+
   player1.on('shot', function(shotObj){
-    shotObj.player=player1.nickname;
-    shotObj.hitORmiss=false;
-    hitOrMiss(shotObj,player2Fleet.carrier,player2Fleet);
-    hitOrMiss(shotObj,player2Fleet.battleship,player2Fleet);
-    hitOrMiss(shotObj,player2Fleet.submarine,player2Fleet);
-    hitOrMiss(shotObj,player2Fleet.ptboat,player2Fleet);
-    hitOrMiss(shotObj,player2Fleet.destroyer,player2Fleet);
-    io.emit('shot',shotObj);
-    console.log(shotObj);
- //   player2.emit('turn',true);
- //   player1.emit('turn',false);
+    if (player1turn===true){
+      shotObj.player=player1.nickname;
+      shotObj.hitORmiss=false;
+      hitOrMiss(shotObj,player2Fleet.carrier,player2Fleet);
+      hitOrMiss(shotObj,player2Fleet.battleship,player2Fleet);
+      hitOrMiss(shotObj,player2Fleet.submarine,player2Fleet);
+      hitOrMiss(shotObj,player2Fleet.ptboat,player2Fleet);
+      hitOrMiss(shotObj,player2Fleet.destroyer,player2Fleet);
+      io.emit('shot',shotObj);
+      console.log(shotObj);
+      if(player2Fleet.shipcount===0){
+        gameOver.result=true;
+        gameover.winner=player1.nickname;
+        gameOver.loser=player2.nickname;
+        io.emit("game_status",gameOver);
+      }
+      controller=false;
+      socket.broadcast.to(player1).emit('turn',controller); //sending next turn info to respective clients
+      controller=true;
+      socket.broadcast.to(player2).emit('turn',controller);
+      player1turn=false;  //switching turn 'receptor' on server, now waiting for client
+      player2turn=true;
+    }
   });
-  //}
-  
-  //if (player2turn===true)
+
   player2.on('shot', function(shotObj){  
-    shotObj.player=player2.nickname;
-    shotObj.hitORmiss=false;
-    hitOrMiss(shotObj,player1Fleet.carrier,player1Fleet); //can be cleaned up
-    hitOrMiss(shotObj,player1Fleet.battleship,player1Fleet);
-    hitOrMiss(shotObj,player1Fleet.submarine,player1Fleet);
-    hitOrMiss(shotObj,player1Fleet.ptboat,player1Fleet);
-    hitOrMiss(shotObj,player1Fleet.destroyer,player1Fleet);
-    io.emit('shot',shotObj);
-    console.log(shotObj);
- //   player1.emit('turn',true);
- //   player2.emit('turn',false);
+    if (player2turn===true){
+      shotObj.player=player2.nickname;
+      shotObj.hitORmiss=false;
+      hitOrMiss(shotObj,player1Fleet.carrier,player1Fleet); //can be cleaned up
+      hitOrMiss(shotObj,player1Fleet.battleship,player1Fleet);
+      hitOrMiss(shotObj,player1Fleet.submarine,player1Fleet);
+      hitOrMiss(shotObj,player1Fleet.ptboat,player1Fleet);
+      hitOrMiss(shotObj,player1Fleet.destroyer,player1Fleet);
+      io.emit('shot',shotObj);
+      console.log(shotObj);
+      if(player1Fleet.shipcount===0){
+        gameOver.result=true;
+        gameover.winner=player2.nickname;
+        gameOver.loser=player1.nickname;
+        io.emit("game_status",gameOver);
+      }
+      controller=true;
+      socket.broadcast.to(player1).emit('turn',controller); //sending turn info to client
+      controller=false;
+      socket.broadcast.to(player2).emit('turn',controller);
+      player1turn=true;  //switching turn info to server, now waiting for client
+      player2turn=false;
+    }
   }); 
-  //}
 
 function hitOrMiss(shotObj,ship,fleet){  
   if (ship!==[]){
@@ -465,12 +492,6 @@ function hitOrMiss(shotObj,ship,fleet){
         fleet.shipcount--; //why was -- not working, good question...
         console.log(fleet.shipcount);
         console.log(ship+" ship sunk at "+shotObj.id);
-        if(fleet.shipcount===0)
-        {
-         gameOver=true;
-         io.emit("game_status",gameOver); 
-         console.log("gameover");
-        }
       }
       hitFinder=ship.indexOf(shotObj.id);
       ship.splice(hitFinder,1); //removes from ship's working "length"
