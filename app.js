@@ -448,9 +448,11 @@ player2.on("game_status", function(){
         io.emit("game_status",gameOver);
       }
       controller=false;
-      socket.broadcast.to(player1).emit('turn',controller); //sending next turn info to respective clients
+      console.log(player1);
+      player1.emit('turn',controller);
       controller=true;
-      socket.broadcast.to(player2).emit('turn',controller);
+      console.log(player2);
+      player2.emit('turn',controller);
       player1turn=false;  //switching turn 'receptor' on server, now waiting for client
       player2turn=true;
     }
@@ -474,9 +476,9 @@ player2.on("game_status", function(){
         io.emit("game_status",gameOver);
       }
       controller=true;
-      socket.broadcast.to(player1).emit('turn',controller); //sending turn info to client
+      player1.emit('turn',controller);
       controller=false;
-      socket.broadcast.to(player2).emit('turn',controller);
+      player2.emit('turn',controller);
       player1turn=true;  //switching turn info to server, now waiting for client
       player2turn=false;
     }
@@ -498,14 +500,14 @@ function hitOrMiss(shotObj,ship,fleet){
     }
   }
 }
-// function hitOrMiss(shotObj,fleet,shipcount){  
+// function hitOrMiss(shotObj,fleet,){  
 //   var hitFinder;
 //   for(var i=0;i<fleet.length;i++){
 //     if (fleet[i]!==[]){
 //       for (var j = 0; j < fleet[i][j].length; j++) {
 //         if (fleet[i][j].indexOf(shotObj)!==-1){
 //           if(fleet[i][j].length===1){ //last hit sinks ship
-//             shipcount--;
+//             fleet.shipcount--;
 //           }
 //           hitFinder=fleet[i][j].indexOf(shotObj);
 //           fleet[i][hitFinder]=''; 
