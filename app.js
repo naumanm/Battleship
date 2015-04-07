@@ -422,7 +422,8 @@ player2.on("game_status", function(){
    // player1turn=true;
   }
 });
-
+  
+  //check to see if both one and two are working and then emit game start to both ()
   //firing mechanism
  
   //if (player1turn===true){
