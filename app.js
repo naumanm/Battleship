@@ -440,12 +440,7 @@ player2.on("game_status", function(){
       hitOrMiss(shotObj,player2Fleet);
       io.emit('shot',shotObj);
       console.log(shotObj);
-      if(player2Fleet.shipcount===0){
-        gameOver.result=true;
-        gameOver.winner=player1.nickname;
-        gameOver.loser=player2.nickname;
-        io.emit("game_status",gameOver);
-      }
+      endGameCheck(player2Fleet,player1,player2);
       controller=false;
       console.log(player1);
       player1.emit('turn',controller);
@@ -464,12 +459,7 @@ player2.on("game_status", function(){
       hitOrMiss(shotObj,player1Fleet);
       io.emit('shot',shotObj);
       console.log(shotObj);
-      if(player1Fleet.shipcount===0){
-        gameOver.result=true;
-        gameOver.winner=player2.nickname;
-        gameOver.loser=player1.nickname;
-        io.emit("game_status",gameOver);
-      }
+      endGameCheck(player1Fleet,player2,player1);
       controller=true;
       player1.emit('turn',controller);
       controller=false;
@@ -494,6 +484,15 @@ function hitOrMiss(shotObj,fleet){
       }
     }
   }
+}
+
+function endGameCheck(targetedFleet,shooter,target){
+  if(targetedFleet.shipcount===0){
+        gameOver.result=true;
+        gameOver.winner=shooter.nickname;
+        gameOver.loser=target.nickname;
+        io.emit("game_status",gameOver);
+      }
 }
 
 function Fleet (carrier,battleship,submarine,destroyer,ptboat){
