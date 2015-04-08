@@ -437,11 +437,7 @@ player2.on("game_status", function(){
     if (player1turn===true){
       shotObj.player=player1.nickname;
       shotObj.hitORmiss=false;
-      hitOrMiss(shotObj,player2Fleet.carrier,player2Fleet);
-      hitOrMiss(shotObj,player2Fleet.battleship,player2Fleet);
-      hitOrMiss(shotObj,player2Fleet.submarine,player2Fleet);
-      hitOrMiss(shotObj,player2Fleet.ptboat,player2Fleet);
-      hitOrMiss(shotObj,player2Fleet.destroyer,player2Fleet);
+      hitOrMiss(shotObj,player2Fleet);
       io.emit('shot',shotObj);
       console.log(shotObj);
       if(player2Fleet.shipcount===0){
@@ -465,11 +461,7 @@ player2.on("game_status", function(){
     if (player2turn===true){
       shotObj.player=player2.nickname;
       shotObj.hitORmiss=false;
-      hitOrMiss(shotObj,player1Fleet.carrier,player1Fleet); //can be cleaned up
-      hitOrMiss(shotObj,player1Fleet.battleship,player1Fleet);
-      hitOrMiss(shotObj,player1Fleet.submarine,player1Fleet);
-      hitOrMiss(shotObj,player1Fleet.ptboat,player1Fleet);
-      hitOrMiss(shotObj,player1Fleet.destroyer,player1Fleet);
+      hitOrMiss(shotObj,player1Fleet);
       io.emit('shot',shotObj);
       console.log(shotObj);
       if(player1Fleet.shipcount===0){
@@ -487,48 +479,26 @@ player2.on("game_status", function(){
     }
   }); 
 
-function hitOrMiss(shotObj,ship,fleet){  
-  if (ship!==[]){
-    if (ship.indexOf(shotObj.id)!==-1){
-      if(ship.length===1){ //last hit sinks ship
-        console.log(ship.length);
-        fleet.shipcount--; //why was -- not working, good question...
-        console.log(fleet.shipcount);
-        console.log(ship+" ship sunk at "+shotObj.id);
+function hitOrMiss(shotObj,fleet){  
+  for (var i = 0; i < fleet.formation.length; i++) {  //iterates through targed fleet
+    if (fleet.formation[i]!==[]){  //iterates through each non-sunk ship
+      if (fleet.formation[i].indexOf(shotObj.id)!==-1){
+        if(fleet.formation[i].length===1){ //last hit sinks ship
+          fleet.shipcount--;
+          console.log(fleet.formation[i]+" sunk at "+shotObj.id);
+        }
+        hitFinder=fleet.formation[i].indexOf(shotObj.id);
+        fleet.formation[i].splice(hitFinder,1); //removes from ship's working "length"
+        shotObj.hitORmiss=true;
+        console.log("hit detected at "+ shotObj.id); 
       }
-      hitFinder=ship.indexOf(shotObj.id);
-      ship.splice(hitFinder,1); //removes from ship's working "length"
-      shotObj.hitORmiss=true;
-      console.log("hit detected at "+ shotObj.id); 
     }
   }
 }
-// function hitOrMiss(shotObj,fleet,){  
-//   var hitFinder;
-//   for(var i=0;i<fleet.length;i++){
-//     if (fleet[i]!==[]){
-//       for (var j = 0; j < fleet[i][j].length; j++) {
-//         if (fleet[i][j].indexOf(shotObj)!==-1){
-//           if(fleet[i][j].length===1){ //last hit sinks ship
-//             fleet.shipcount--;
-//           }
-//           hitFinder=fleet[i][j].indexOf(shotObj);
-//           fleet[i][hitFinder]=''; 
-//           return true;
-//         }
-//       }
-//     }
-//   }
-//   return false;
-// }
 
 function Fleet (carrier,battleship,submarine,destroyer,ptboat){
-  this.carrier=carrier;
-  this.battleship=battleship;
-  this.submarine=submarine;
-  this.destroyer=destroyer;
-  this.ptboat=ptboat;
   this.shipcount=5;
+  this.formation=[carrier,battleship,submarine,destroyer,ptboat];
 } 
 
 
