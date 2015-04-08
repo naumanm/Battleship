@@ -22,7 +22,7 @@ td {
 }
 
 /* -- Classes --*/
-
+/* -- Table styles --*/
 .headerTop {
   position: absolute;
   left: 66px;
@@ -74,6 +74,7 @@ td {
 
 }
 
+/* -- No longer used --*/
 .dashboard {
   /*background: blue;*/
   width: 400px;
@@ -88,16 +89,7 @@ td {
   top: 3px;
 }
 
-.aircraftCarrier,
-.battleship,
-.destroyer,
-.submarine,
-.ptBoat,
-.dashboardTitle {
-  position: absolute;
-  z-index: 100;
-}
-
+/* -- to rotate --*/
 .hor {
   transform: rotate(0deg);
 }
@@ -106,11 +98,6 @@ td {
   transform: rotate(90deg);
 }
 
-/*
-rotates correctly in codepen but not here!!!
-http://codepen.io/anon/pen/jERroO?editors=011
-wanted ease-in-out
-*/
 .ship {
   -webkit-transition: transform 300ms linear;
   -webkit-transform-origin: 13px 50%;
@@ -141,17 +128,28 @@ wanted ease-in-out
 }
 
 /* These left: settings on the ships are for the starting location of the ships to look nice in a row prior to placing them on the board */
-.aircraftCarrier { left: 240px; top: 8px; z-index: 100;}
-.battleship { left: 370px; top: 8px; z-index: 100;}
-.destroyer { left: 475px; top: 8px; z-index: 100;}
-.submarine { left: 555px; top: 8px; z-index: 100;}
-.ptBoat { left: 635px; top: 8px; z-index: 100;}
+.aircraftCarrier { left: 240px;}
+.battleship { left: 370px;}
+.destroyer { left: 475px;}
+.submarine { left: 555px;}
+.ptBoat { left: 635px;}
 
-.aircraftCarrier {
-  offset: 100px;
+/* -- Ships for droppable and stay on top --*/
+.aircraftCarrier,
+.battleship,
+.destroyer,
+.submarine,
+.ptBoat,
+.dashboardTitle {
+  position: absolute;
   z-index: 100;
+  top: 8px;
 }
 
+/*.aircraftCarrier {
+  offset: 100px;
+}
+*/
 .droppable  {
   width: 25px;
   height: 25px;
@@ -229,6 +227,7 @@ img.droppable { /* these are the ships */
 
 }
 
+/* no longer used */
 #stats {
   margin-top: 15px;
   padding: 4px 8px;
@@ -246,10 +245,7 @@ img.droppable { /* these are the ships */
 #draggableDestroyer,
 #draggableSubmarine,
 #draggablePtBoat {
-  z-index: 100;
-  
+  z-index: 100; 
 }
 
-#gameWrapper {
-  #wrapper { margin: 0px auto; }
-}
+#gameWrapper { margin: 0px auto; }

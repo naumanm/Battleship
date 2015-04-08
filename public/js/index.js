@@ -268,6 +268,7 @@ function emitShip(name, cellId, rotation) {
 $( ".droppable" ).droppable({
   drop: function( event, ui ) {
     var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
+    console.log("placedShip", placedShip);
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable' from the ships name
     name = placedShip;
     cell = $(this).data("id");
