@@ -439,13 +439,10 @@ player2.on("game_status", function(){
       shotObj.hitORmiss=false;
       hitOrMiss(shotObj,player2Fleet);
       io.emit('shot',shotObj);
-      console.log(shotObj);
       endGameCheck(player2Fleet,player1,player2);
       controller=false;
-      console.log(player1);
       player1.emit('turn',controller);
       controller=true;
-      console.log(player2);
       player2.emit('turn',controller);
       player1turn=false;  //switching turn 'receptor' on server, now waiting for client
       player2turn=true;
@@ -458,7 +455,6 @@ player2.on("game_status", function(){
       shotObj.hitORmiss=false;
       hitOrMiss(shotObj,player1Fleet);
       io.emit('shot',shotObj);
-      console.log(shotObj);
       endGameCheck(player1Fleet,player2,player1);
       controller=true;
       player1.emit('turn',controller);
