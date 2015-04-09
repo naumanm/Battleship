@@ -74,7 +74,6 @@ io.on('connection', function(socket){  //step #1 connection
     playerPair=0;
   }
     
-
   socket.on('disconnect', function(){
     console.log(socket.id + " disconnected");            
   });
@@ -341,6 +340,22 @@ function buildPtBoat(shipStart,rotation,docklocation,first,second){
   }
   docklocation[4]= ptboat;   //placing completed ship in correct drydocklocation
 }
+
+//game over in case of accidental disconnect
+player1.on('disconnect', function(){
+        gameOver.result=true;
+        gameOver.winner="You";
+        gameOver.loser="Disconnected";
+        io.emit("game_status",gameOver);
+});
+
+player2.on('disconnect', function(){
+        gameOver.result=true;
+        gameOver.winner="You";
+        gameOver.loser="Disconnected";
+        io.emit("game_status",gameOver);
+});
+
 
 } //game object ending
 

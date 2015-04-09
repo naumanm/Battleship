@@ -214,7 +214,7 @@ var socket = io(),
     // make this into game_status to start or end game
     socket.on('game_status', function( gameOver ){
       if ( gameOver ) {
-        document.getElementById("shotPlayer").innerHTML = "Game Over. " +gameOver.winner+" has won, " +gameOver.loser+ " has been defeated. Thanks for playing."; // Add Play again?
+        document.getElementById("shotPlayer").innerHTML = "Game Over. " +gameOver.winner+" won, " +gameOver.loser+ " lost. Thanks for playing."; // Add Play again?
       } else {
       }
     }); 
