@@ -66,12 +66,8 @@ td {
   text-align: center;
 }
 
-.gameboard, .noColor {
-  /*text-align: middle;*/
+.gameboard {
   text-align: center;
-  z-index: -100 !important;
-  /*position-align: center;*/
-
 }
 
 /* -- No longer used --*/
@@ -199,10 +195,6 @@ img.droppable { /* this was attempt at making the img element one grid HxW but l
   height: 200px;
 }
 
-.gameboard h4 {
-  display: inline;
-}
-
 
 /* -- IDs --*/
 
@@ -211,25 +203,9 @@ img.droppable { /* this was attempt at making the img element one grid HxW but l
   top: -10px;
 }
 
-#placeShips { /* This DIV was commenented out. The DIV was arround the ships before being placed. */
-  background: lightyellow;
-  padding: 8px 8px;
-  border: 1px solid black;
-  width: 760px;
-  position: relative;
-}
-
 #placeShipsWrapper span {
   border: 0;
   background-color: transparent;
-}
-
-/* no longer used */
-#stats {
-  margin-top: 15px;
-  padding: 4px 8px;
-  border: 1px solid black;
-  width: 234px;
 }
 
 #playerBoard,
@@ -247,4 +223,7 @@ img.droppable { /* this was attempt at making the img element one grid HxW but l
   height: 25px;
 }
 
-#gameWrapper { margin: 0px auto; }
+#gameWrapper {
+  margin: 0px auto;
+  z-index: -100;
+}

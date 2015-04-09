@@ -18,26 +18,31 @@ var socket = io(),
     AircraftCarrier: {
       name: "AircraftCarrier",
       cell: "",
+      occupiedCells: [],
       rotation: 0
       },
     Battleship: {
       name: "Battleship",
       cell: "",
+      occupiedCells: [],
       rotation: 0
       },
     Destroyer: {
       name: "Destroyer",
       cell: "",
+      occupiedCells: [],
       rotation: 0
       },
     Submarine: {
       name: "Submarine",
       cell: "",
+      occupiedCells: [],
       rotation: 0
       },
     PtBoat: {
       name: "PtBoat",
       cell: "",
+      occupiedCells: [],
       rotation: 0
       },
     gameStarted: false, // gameStarted: gameObj['gameStarted'] || false   <== doesn't seem to work. Tried several options in console.
@@ -160,12 +165,7 @@ var socket = io(),
 
       // Updates the Header UI for who took a shot and the cell location
       if (shotObj.hitORmiss){
-        if(shotObj.sunk!==null){
-          document.getElementById("shotPlayer").innerHTML = shotObj.player + " sunk "+shotObj.sunk+ " at " + shotObj.id;
-        }
-        else{
-          document.getElementById("shotPlayer").innerHTML = shotObj.player + " HIT at " + shotObj.id;
-        }
+        document.getElementById("shotPlayer").innerHTML = shotObj.player + " HIT at " + shotObj.id;
       }
       else {
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " missed at " + shotObj.id;        
@@ -209,7 +209,7 @@ var socket = io(),
     // make this into game_status to start or end game
     socket.on('game_status', function( gameOver ){
       if ( gameOver ) {
-        document.getElementById("shotPlayer").innerHTML = "Game Over. " +gameOver.winner+" won, " +gameOver.loser+ " lost. Thanks for playing."; // Add Play again?
+        document.getElementById("shotPlayer").innerHTML = "Game Over. Thanks for playing."; // Add Play again?
       } else {
       }
     }); 

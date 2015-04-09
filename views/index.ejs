@@ -56,7 +56,7 @@
           <form action="" name="person">
             <label for="person">Enter your game name:</label>
             <input name="person" type="text" id="personsName" required placeholder="Your name..." autofocus>
-            <button type="button" class="btn btn-primary btn-sm">Submit</button>
+            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
           </form>
         </div><!-- /.modal-body -->
       </div><!-- /.modal-content -->
@@ -82,13 +82,10 @@
 
   <button id="readyToPlay" class="btn btn-success" value="Ready To Play">Ready To Play</button> 
 
-  <!-- <div id="status-area"></div> -->
 
   <div class="gameboard">
     <span id="placeShipsWrapper">
       <h4>Place your ships by dragging them to the left grid.<br>Double click a ship to rotate it 90 degrees.</h4><br>
-<!-- ****************************************************************************** -->
-<!-- CHRISTIAN'S work on ship's bow is point of grid placement -->
       <span id="draggableAircraftCarrier" class="ui-widget-content draggableAircraftCarrier aircraftCarrier ship" >
         <img src="/images/wholeCarrier.png" alt="Drag your Aircraft Carrier to 'Your Ships' Grid">
       </span>
@@ -111,40 +108,7 @@
 
       <br><br><br>
 
-<!-- ****************************************************************************** -->
-    <!-- <div id="placeShips"> -->
-
-<!--       <img src="/images/wholeCarrier.png"
-           alt="Drag your Aircraft Carrier to Your Ships Board"
-           id="draggableAircraftCarrier"
-           class="ui-widget-content aircraftCarrier ship">
-      
-      <img src="/images/wholeBattleship.png"
-           alt="Drag your Battleship to Your Ships Board"
-           id="draggableBattleship"
-           class="ui-widget-content battleship ship">
-      
-      <img src="/images/wholeCruiser.png"
-           alt="Drag your Destroyer to Your Ships Board"
-           id="draggableDestroyer"
-           class="ui-widget-content destroyer ship">
-
-      <img src="/images/wholeSub.png"
-           alt="Drag your Submarine to Your Ships Board"
-           id="draggableSubmarine"
-           class="ui-widget-content submarine ship">
-      
-      <img src="/images/wholePatrol.png"
-           alt="Drag your Patrol Boat to Your Ships Board"
-           id="draggablePtBoat"
-           class="ui-widget-content ptBoat ship"> -->
-
-      <!-- <input id="readyToPlay" class="btn btn-success" type="submit" value="Ready To Play"> -->
-      <!-- jQuery UI is overridding Bootstrap's styling -->
-    <!-- </div>  END #placeShips -->
     </span> <!-- END #placeShipsWrapper -->
-
-    <!-- <span class="ui-widget-header"> -->
 
   </div> <!-- end game board -->
 
