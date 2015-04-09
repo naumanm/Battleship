@@ -126,19 +126,19 @@ player2.on('place_ship', function(placedShipObj){
   var rotation=placedShipObj.rotation;
   switch(name){
     case "AircraftCarrier":
-      buildCarrier(placedShipObj,rotation,drydockA,firstLocation,secondLocation);
+      buildCarrier(placedShipObj,rotation,drydockB,firstLocation,secondLocation);
       break;
     case "Battleship":
-      buildBattleship(placedShipObj,rotation,drydockA,firstLocation,secondLocation);
+      buildBattleship(placedShipObj,rotation,drydockB,firstLocation,secondLocation);
       break;
     case "Submarine": 
-      buildSubmarine(placedShipObj,rotation,drydockA,firstLocation,secondLocation);
+      buildSubmarine(placedShipObj,rotation,drydockB,firstLocation,secondLocation);
       break;
     case "Destroyer":
-      buildDestroyer(placedShipObj,rotation,drydockA,firstLocation,secondLocation);
+      buildDestroyer(placedShipObj,rotation,drydockB,firstLocation,secondLocation);
       break;
     case "PtBoat": 
-      buildPtBoat(placedShipObj,rotation,drydockA,firstLocation,secondLocation);
+      buildPtBoat(placedShipObj,rotation,drydockB,firstLocation,secondLocation);
       break;
   }
 });
