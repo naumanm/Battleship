@@ -143,7 +143,7 @@ td {
 .dashboardTitle {
   position: absolute;
   z-index: 100;
-  top: 8px;
+  /*top: 8px;*/
 }
 
 /*.aircraftCarrier {
@@ -219,12 +219,9 @@ img.droppable { /* this was attempt at making the img element one grid HxW but l
   position: relative;
 }
 
-#placeShips span {
-  z-index: 110;
-  width: 24px;
-  height: 24px;
-  background-color: blue;
-
+#placeShipsWrapper span {
+  border: 0;
+  background-color: transparent;
 }
 
 /* no longer used */

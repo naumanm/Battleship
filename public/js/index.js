@@ -17,22 +17,27 @@ var socket = io(),
   var gameObj = {
     AircraftCarrier: {
       name: "AircraftCarrier",
+      cell: "",
       rotation: 0
       },
     Battleship: {
       name: "Battleship",
+      cell: "",
       rotation: 0
       },
     Destroyer: {
       name: "Destroyer",
+      cell: "",
       rotation: 0
       },
     Submarine: {
       name: "Submarine",
+      cell: "",
       rotation: 0
       },
     PtBoat: {
       name: "PtBoat",
+      cell: "",
       rotation: 0
       },
     gameStarted: false, // gameStarted: gameObj['gameStarted'] || false   <== doesn't seem to work. Tried several options in console.
@@ -44,7 +49,7 @@ var socket = io(),
 
   $('#playerSignIn').on('shown.bs.modal', function () {
       $('#personsName').focus();
-        console.log("test");
+        console.log("focus on the Player sign in modal");
   });
 
   // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
@@ -207,43 +212,42 @@ var socket = io(),
   } // End of gamePlay function
 
 
-  // -----   SHIP PLACEMENT AND ROTATION   ----
-
+// *********************************
+//   Makes the ships draggable
+// *********************************
   $( ".draggableAircraftCarrier" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
-    // grid: [13, 13] 
+    snapMode: "inner",
+    containment: "#snaptarget"
   });
 
   $( "#draggableBattleship" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
-    // grid: [25, 25] 
+    snapMode: "inner",
+    containment: "#snaptarget"
   });
+
   $( "#draggableDestroyer" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
-    // grid: [25, 25] 
+    snapMode: "inner",
+    containment: "#snaptarget"
   });
+
   $( "#draggableSubmarine" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
-    // grid: [25, 25] 
+    snapMode: "inner",
+    containment: "#snaptarget"
   });
+
   $( "#draggablePtBoat" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
-    // grid: [25, 25]
+    snapMode: "inner",
+    containment: "#snaptarget"
   });
 
 
 function emitShip(name, cellId, rotation) {
-
+// *********** change to gameObj['battleship']['one of the three: name  cell  rotation']
   placedShipObj.name = name;
   placedShipObj.cell = cellId;
   placedShipObj.rotation = rotation;
@@ -319,10 +323,12 @@ console.log("placedShip ID", placedShip);
 
     emitShip(name, cell, rotation);
 
-  }
-});
+  }  // END drop: function( event, ui )...
+}); // END $( ".droppable" ).droppable...
 
-  // ship rotation
+// *********************************
+//   SHIP ROTATION
+// *********************************
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
       if( !gameStarted ){
@@ -337,9 +343,9 @@ console.log("placedShip ID", placedShip);
           gameObj.AircraftCarrier.rotation = 0;
         }
         emitShip("AircraftCarrier", gameObj.AircraftCarrier.cell, gameObj.AircraftCarrier.rotation);
-      }
-     }
-  });
+      } // END if( !gameStarted ){
+    } // END 'dblclick': function() {
+  }); // END #draggableAircraftCarrier
 
   $('#draggableBattleship').on({
     'dblclick': function() {
@@ -356,8 +362,8 @@ console.log("placedShip ID", placedShip);
         // $(this).rotate({ animateTo:battleshipRotation});
         cell = $(this).data("id");
         emitShip("Battleship", gameObj.Battleship.cell, gameObj.Battleship.rotation);
-      }
-    }
+      } // END if( !gameStarted ){
+    } // END 'dblclick': function() {
   });
 
   $('#draggableDestroyer').on({
@@ -374,8 +380,8 @@ console.log("placedShip ID", placedShip);
         }
         cell = $(this).data("id");
         emitShip("Destroyer", gameObj.Destroyer.cell, gameObj.Destroyer.rotation);
-      }
-    }
+      } // END if( !gameStarted ){
+    } // END 'dblclick': function() {
   });
 
   $('#draggableSubmarine').on({
@@ -392,8 +398,8 @@ console.log("placedShip ID", placedShip);
         }
         cell = $(this).data("id");
         emitShip("Submarine", gameObj.Submarine.cell, gameObj.Submarine.rotation);
-      }
-    }
+      } // END if( !gameStarted ){
+    } // END 'dblclick': function() {
   });
 
   $('#draggablePtBoat').on({
@@ -410,11 +416,13 @@ console.log("placedShip ID", placedShip);
         }
         cell = $(this).data("id");
         emitShip("PtBoat", gameObj.PtBoat.cell, gameObj.PtBoat.rotation);
-      }
-    }
+      } // END if( !gameStarted ){
+    } // END 'dblclick': function() {
   });
 
-// checks each ship's placement on the grid if it is a valid location. i.e. a ship isn't off the grid.
+// *********************************
+//   Checks each ship's placement on the grid if it is a valid location. i.e. a ship isn't off the grid.
+// *********************************
   var checkShipPlacement = function( placedShipObj ){
     placedShip = placedShipObj.name;
     placedLocation = placedShipObj.cell;
@@ -433,7 +441,7 @@ console.log("placedShip",placedShip,"placedLocation",placedLocation,"placedOrien
       "PtBoat": [1,2,3,4,5,6,7,8,9],
     };
 
-    var alphaMap = { "a":1, "b":2, "c":3, "d":4, "e":5, "f":6, "g":7, "h":8, "i":9 }; // associates a number to each character to later calculate the distance of one grid space to another
+    var alphaMap = { "a":1, "b":2, "c":3, "d":4, "e":5, "f":6, "g":7, "h":8, "i":9, "j":10 }; // associates a number to each character to later calculate the distance of one grid space to another
 
     var validVGrid = { // use with rotation === 90
       "AircraftCarrier": ["a","b","c","d","e","f"],
@@ -503,28 +511,29 @@ console.log("not valid Vert placement");//invalid drop. change change ship_grid 
         // correct the grid location here
         // get the last array element of the given ships validVGrid
         var lastValidElement = validVGrid[ placedShip ][ validVGrid[ placedShip ].length-1 ]; // the linter incorrectly thinks this var has already been defined. There is another assignment but inside the conditional. The logic will only use one or the other.
-// console.log( "lastValidElement", lastValidElement );
+console.log( "lastValidElement", lastValidElement );
         // var fixedCell = lastValidElement + placedHGrid; // I think this is the incorrect code. Suspect needs placedVGrid which is next line
         var fixedCell = lastValidElement + placedHGrid; // add that after the current placedVGrid
-// console.log( "fixedCell", fixedCell );
+console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell; // placedLocation is a global variable
         // calculate the grid distance of placed cell minus the grid distance of the fixed cell. Needed to relocate the ship on screen's grid
         var placedIndex = alphaMap[placedVGrid];
         var fixedIndex = alphaMap[lastValidElement];
+console.log("placedIndex", placedIndex, "fixedIndex", fixedIndex);
         var fixedDistance = placedIndex - fixedIndex;
         // multiply by 25 px
         fixedDistance = fixedDistance * 25;
-// console.log("fixedDistance", fixedDistance);
+console.log("fixedDistance", fixedDistance);
         // get the draggable style and
         var getTheShip = "#draggable"+ placedShip;
-// console.log("getTheShip", getTheShip);
+console.log("getTheShip", getTheShip);
         var theShipStyle = $(getTheShip).attr('style');
-// console.log("theShipStyle", theShipStyle);
+console.log("theShipStyle", theShipStyle);
 
         // capture the left value within the style string
         var indexTop = theShipStyle.indexOf("top:");
         var indexLeft = theShipStyle.indexOf("left:");
-// console.log("indexTop", indexTop, "indexLeft", indexLeft);
+console.log("indexTop", indexTop, "indexLeft", indexLeft);
         if( indexTop < indexLeft ){
           var topString = theShipStyle.slice( indexTop, indexLeft-1);  // gets the whole sub-string ex. "top: 311px;"
           var topValue = theShipStyle.slice( indexTop+5, indexLeft-4);  // gets just the value... +5 to not take the "top: " and -4 to not take the "px;"
@@ -532,11 +541,11 @@ console.log("not valid Vert placement");//invalid drop. change change ship_grid 
           var topString = theShipStyle.slice( indexTop, theShipStyle.length-1);  // gets the whole sub-string ex. "top: 311px;"
           var topValue = theShipStyle.slice( indexTop+5, theShipStyle.length-3);
         }
-// console.log("topString", topString, "topValue", topValue);
+console.log("topString", topString, "topValue", topValue);
 
         var newTopValue = "top: " + (topValue - fixedDistance).toString() + "px;";
         theShipStyle = theShipStyle.replace(topString, newTopValue);  // replace the old "top: xxxpx;" with the new value
-// console.log("new theShipStyle", theShipStyle);
+console.log("new theShipStyle", theShipStyle);
 
         // add the corrected style back to the elements so as to reposition it on the page
         $(getTheShip).attr('style', theShipStyle);
@@ -554,7 +563,9 @@ console.log("not valid Vert placement");//invalid drop. change change ship_grid 
 
   }; // END of checkShipPlacement function
 
-  // toggle ships droppable
+// *********************************
+//   Toggle ships droppable
+// *********************************
   var gameReady = function( setTo ){
   // accepts val to set . gameStarted is a global var. Should only be called by player clicking "Ready To Play" button, by starting a new game
     setTo = setTo || gameStarted;
