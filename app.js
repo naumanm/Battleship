@@ -207,7 +207,7 @@ function hitOrMiss(shotObj,fleet){
       if (fleet.formation[i].indexOf(shotObj.id)!==-1){
         if(fleet.formation[i].length===1){ //last hit sinks ship
           fleet.shipcount--;
-          shotObj.sunk=fleet.formation.indexOf(fleet.formation[i]); //which ship is sunk
+          shotObj.sunk=fleet.names[fleet.formation.indexOf(fleet.formation[i])]; //which ship is sunk
           console.log(shotObj.sunk+" sunk at "+shotObj.id);
         }
         hitFinder=fleet.formation[i].indexOf(shotObj.id);
@@ -230,6 +230,7 @@ function endGameCheck(targetedFleet,shooter,target){
 
 function Fleet (carrier,battleship,submarine,destroyer,ptboat){
   this.shipcount=5;
+  this.names=["Carrier","Battleship","Submarine","Destroyer","PT Boat"];
   this.formation=[carrier,battleship,submarine,destroyer,ptboat];
 } 
 

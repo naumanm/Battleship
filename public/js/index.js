@@ -165,7 +165,12 @@ var socket = io(),
 
       // Updates the Header UI for who took a shot and the cell location
       if (shotObj.hitORmiss){
-        document.getElementById("shotPlayer").innerHTML = shotObj.player + " HIT at " + shotObj.id;
+        if(shotObj.sunk!==null){
+          document.getElementById("shotPlayer").innerHTML = shotObj.player + " sunk "+shotObj.sunk+ " at " + shotObj.id;
+        }
+        else{
+          document.getElementById("shotPlayer").innerHTML = shotObj.player + " HIT at " + shotObj.id;
+        }
       }
       else {
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " missed at " + shotObj.id;        
