@@ -52,7 +52,7 @@ var socket = io(),
   /*var playerName = */
   $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
       gameObj.playerName = $('#personsName').val();  // var playerName = $('#personsName').val();
-      $( "#userName" ).text( "Hello " + /* playerName */ gameObj.playerName );
+      $( "#userName" ).text( "Hello " + /* playerName */ gameObj.playerName + ", place your ships!");
   }).keyup();
 
   // listener for the form submit
@@ -72,21 +72,16 @@ var socket = io(),
   function gamePlay(){
 
     var selectedArr = selectedArr || []; // array of all shots
-    var isTrue;
+    var controllerIsTrue;
 
+    // catch turn controller and set controllerIsTrue
     socket.on('turn', function(controller){ 
       if (controller===true){
-        //jquery magic to allow clickable spaces, shoudl be off by default
         console.log("Controller is TRUE");
-        isTrue = true;
-        $(".opponent").prop('disabled', false);
-      }
-
-      if(controller===false){
-        //jquery magic to not allow client to click on squares
+        controllerIsTrue = true;
+      } else if (controller===false){
         console.log("Controller is FALSE");
-        isTrue = false;
-        $(".opponent").prop('disabled', true);
+        controllerIsTrue = false;
       }
     });
 
@@ -95,7 +90,7 @@ var socket = io(),
       var cellState = $(this).data("state");
       var cellId = $(this).data("id");
       var cellTable = $(this).closest("table").attr("class");
-      if (isTrue){
+      if (controllerIsTrue){
         if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "red");
         }
@@ -106,7 +101,7 @@ var socket = io(),
     $("td").mouseleave(function(){
       var cellState = $(this).data("state");
       var cellTable = $(this).closest("table").attr("class");
-      if (isTrue){
+      if (controllerIsTrue){
         if (cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "lightyellow");  // if not selected change color back
         }
@@ -115,12 +110,10 @@ var socket = io(),
 
     // select to take a shot
     $("td").click(function(){
-      var cellId = $(this).data("id"); // get the cellId for the current cell
-      var cellState = $(this).data("state");
-      var cellTable = $(this).closest("table").attr("class");
-
-      // if (isTrue){
-
+      // if (controllerIsTrue){
+        var cellId = $(this).data("id"); // get the cellId for the current cell
+        var cellState = $(this).data("state");
+        var cellTable = $(this).closest("table").attr("class");
         if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "blue"); // add the hit/miss animation here?
           $(this).data("state", "miss");
@@ -133,12 +126,8 @@ var socket = io(),
             socket.emit('shot', shotObj);
           } // END of (selectedArr.indexOf(cellId) === -1)
         } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
-
       // }
-
     });  // end of select to take a shot
-
-
     
 
     // update the ship board with other players shots
@@ -500,11 +489,20 @@ console.log("theShipStyle", theShipStyle);
         event.preventDefault();
 
         // disable droppable
-        $('#shotPlayer').text("Game ON!");
+        $('#shotPlayer').text("Game ON (standby...)!");
         gameReady(true);
         // emit to server player is ready
-        $("#readyToPlay").css("display","none");  
-        $('h4').text(''); 
+        $("#readyToPlay").css("display","none");  // this is the ready to play button
+        $('h4').text(''); // this is the dragging instructions going blank 
+
+        // this needs a check to see who the current player is and
+
+        if (gameObj.gameStarted) {
+          $('#shotPlayer').text("Game starts NOW!");
+          $( "#userName" ).text("");
+          console.log(gameObj);
+          console.log("game starts here!");
+        }
       }
       else {
 
