@@ -171,6 +171,7 @@ player2.on("game_status", function(){
     if (player1turn===true){
       shotObj.player=player1.nickname;
       shotObj.hitORmiss=false;
+      shotObj.sunk=null;
       hitOrMiss(shotObj,player2Fleet);
       io.emit('shot',shotObj);
       endGameCheck(player2Fleet,player1,player2);
@@ -187,6 +188,7 @@ player2.on("game_status", function(){
     if (player2turn===true){
       shotObj.player=player2.nickname;
       shotObj.hitORmiss=false;
+      shotObj.sunk=null;
       hitOrMiss(shotObj,player1Fleet);
       io.emit('shot',shotObj);
       endGameCheck(player1Fleet,player2,player1);
@@ -205,7 +207,8 @@ function hitOrMiss(shotObj,fleet){
       if (fleet.formation[i].indexOf(shotObj.id)!==-1){
         if(fleet.formation[i].length===1){ //last hit sinks ship
           fleet.shipcount--;
-          console.log(fleet.formation[i]+" sunk at "+shotObj.id);
+          shotObj.sunk=fleet.formation.indexOf(fleet.formation[i]); //which ship is sunk
+          console.log(shotObj.sunk+" sunk at "+shotObj.id);
         }
         hitFinder=fleet.formation[i].indexOf(shotObj.id);
         fleet.formation[i].splice(hitFinder,1); //removes from ship's working "length"
