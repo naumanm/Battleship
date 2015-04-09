@@ -248,18 +248,50 @@ function emitShip(name, cellId, rotation) {
   placedShipObj.cell = cellId;
   placedShipObj.rotation = rotation;
 
-  console.log("placedShipObj", placedShipObj);  
+console.log("placedShipObj", placedShipObj);  
   socket.emit('place_ship', placedShipObj);
 }
 
 $( ".droppable" ).droppable({
   drop: function( event, ui ) {
     var placedShip = ui.draggable.attr('id'); // at this point it is in the form of "draggableAircraftCarrier"
-    console.log("placedShip", placedShip);
+console.log("placedShip ID", placedShip);
+
     placedShip = placedShip.slice( 9, placedShip.length ); //  remove 'draggable' from the ships name
     name = placedShip;
-    cell = $(this).data("id");
 
+    // checks if valid drop. if not, it corrects to closest valid grid space
+    placedShipObj.name = name;
+
+    cell = $(this).data("id");
+    placedShipObj.cell = cell;
+
+    checkShipPlacement( placedShipObj );
+    // switch ( name ){
+    //   case "AircraftCarrier":
+    //     gameObj.AircraftCarrier.cell = cell;
+    //     rotation = gameObj.AircraftCarrier.rotation;
+    //     break;
+    //   case "Battleship":
+    //     gameObj.Battleship.cell = cell;
+    //     rotation = gameObj.Battleship.rotation;
+    //     break;
+    //   case "Destroyer":
+    //     gameObj.Destroyer.cell = cell;
+    //     rotation = gameObj.Destroyer.rotation;
+    //     break;
+    //   case "Submarine":
+    //     gameObj.Submarine.cell = cell;
+    //     rotation = gameObj.Submarine.rotation;
+    //     break;
+    //   case "PtBoat":
+    //     gameObj.PtBoat.cell = cell;
+    //     rotation = gameObj.PtBoat.rotation;
+    //     break;
+    // }
+// above is new way. it is NOT tested -----
+
+// below is old way. it is tested and works-----
     if (name === "AircraftCarrier"){
       gameObj.AircraftCarrier.cell = cell;
       rotation = gameObj.AircraftCarrier.rotation;
@@ -287,8 +319,6 @@ $( ".droppable" ).droppable({
 
     emitShip(name, cell, rotation);
 
-    // checks if valid drop. if not, it corrects to closest valid grid space
-    checkShipPlacement( placedShipObj );
   }
 });
 
@@ -389,7 +419,7 @@ $( ".droppable" ).droppable({
     placedShip = placedShipObj.name;
     placedLocation = placedShipObj.cell;
     placedOrientation = placedShipObj.rotation;
-    //console.log("placedShip",placedShip,"placedLocation",placedLocation,"placedOrientation",placedOrientation);
+console.log("placedShip",placedShip,"placedLocation",placedLocation,"placedOrientation",placedOrientation);
 
     var placedHGrid = placedLocation.substr(1, 2).toString(); //check the 2nd (and maybe the 3rd) char of the grid location
     var placedVGrid = placedLocation.substr(0, 1).toString(); //check the 1st char of the grid location
@@ -413,7 +443,8 @@ $( ".droppable" ).droppable({
       "PtBoat": ["a","b","c","d","e","f","g","h","i"],
     };
 
-    if( placedOrientation === 0 ){ // HORIZONTAL
+// HORIZONTAL ****************
+    if( placedOrientation === 0 ){
       // use validHGrid
       var validH = validHGrid[ placedShip ].indexOf( parseInt(placedHGrid, 10) ); // .toString()
 // console.log(placedShip, "is at", parseInt(placedHGrid, 10), "and can be in",validHGrid[ placedShip ]);
@@ -432,12 +463,12 @@ console.log("not valid Horiz placement");//invalid drop. change change ship_grid
         var fixedDistance = placedIndex - fixedIndex;
         // multiply by 25 px
         fixedDistance = fixedDistance * 25;
-console.log("fixedDistance", fixedDistance);
+// console.log("fixedDistance", fixedDistance);
         // get the draggable style and
         var getTheShip = "#draggable"+ placedShip; //.name;
 // console.log("getTheShip", getTheShip);
         var theShipStyle = $(getTheShip).attr('style');
-console.log("theShipStyle", theShipStyle);
+// console.log("theShipStyle", theShipStyle);
 
         // capture the left value within the style string
         var indexLeft = theShipStyle.indexOf("left:");
@@ -446,59 +477,73 @@ console.log("theShipStyle", theShipStyle);
           var leftString = theShipStyle.slice( indexLeft, indexTop-1);  // gets the whole sub-string ex. "left: 311px;"
           var leftValue = theShipStyle.slice( indexLeft+6, indexTop-4);  // gets just the value... +6 to not take the "left: " and -4 to not take the "px;"
         } else {
-          var leftValue = theShipStyle.slice( indexLeft+6, theShipStyle.length-4);
+          var leftString = theShipStyle.slice( indexLeft, theShipStyle.length-1);  // gets the whole sub-string ex. "left: 311px;"
+          var leftValue = theShipStyle.slice( indexLeft+6, theShipStyle.length-3);
         }
+
         var newLeftValue = "left: " + (leftValue - fixedDistance).toString() + "px;";
         theShipStyle = theShipStyle.replace(leftString, newLeftValue);  // replace the old "left: xxxpx;" with the new value
 
         // add the corrected style back to the elements so as to reposition it on the page
         $(getTheShip).attr('style', theShipStyle);
 
-
-
-
-        // once working, add the companion fix to the else block
-// var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
-
+        // fancy regex replacement method but doesn't save any lines of code. I still need to capture the old style's value to subtract the corrected distance producing the new value
+        // var newLeftValue = leftValue - fixedDistance;
+        // for horizontal     var theShipStyle = theShipStyle.replace(/left: -?\d+/, "left: " + newLeftValue.toString() ); // works
 
       } // END invalid HORIZONTAL placement with ship placement fix
 
-    } else { // VERTICAL
+// VERTICAL *******************
+    } else {
       // use validVGrid
       var validV = validVGrid[ placedShip ].indexOf( placedVGrid );
-console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
+// console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
       if ( validV === -1 ) {
 console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
         // correct the grid location here
         // get the last array element of the given ships validVGrid
         var lastValidElement = validVGrid[ placedShip ][ validVGrid[ placedShip ].length-1 ]; // the linter incorrectly thinks this var has already been defined. There is another assignment but inside the conditional. The logic will only use one or the other.
-console.log( "lastValidElement", lastValidElement );
+// console.log( "lastValidElement", lastValidElement );
         // var fixedCell = lastValidElement + placedHGrid; // I think this is the incorrect code. Suspect needs placedVGrid which is next line
         var fixedCell = lastValidElement + placedHGrid; // add that after the current placedVGrid
-console.log( "fixedCell", fixedCell );
-        placedLocation = fixedCell;
-        // count the difference from placed cell to fixed cell
-        var fixedDistance = alphaMap;
-console.log( "alphaMap", alphaMap[placedVGrid] );
-
-        // not valid code      validVGrid[ placedShip ].indexOf( parseInt(placedVGrid, 10) ) - validVGrid[ placedShip ].indexOf( parseInt(lastValidElement, 10) );// index of place cell minus the index of the fixed cell
+// console.log( "fixedCell", fixedCell );
+        placedLocation = fixedCell; // placedLocation is a global variable
+        // calculate the grid distance of placed cell minus the grid distance of the fixed cell. Needed to relocate the ship on screen's grid
+        var placedIndex = alphaMap[placedVGrid];
+        var fixedIndex = alphaMap[lastValidElement];
+        var fixedDistance = placedIndex - fixedIndex;
         // multiply by 25 px
         fixedDistance = fixedDistance * 25;
+// console.log("fixedDistance", fixedDistance);
         // get the draggable style and
-        var getTheShip = "#draggable"+ placedShip.name;
-console.log("getTheShip", getTheShip);
+        var getTheShip = "#draggable"+ placedShip;
+// console.log("getTheShip", getTheShip);
         var theShipStyle = $(getTheShip).attr('style');
-console.log("theShipStyle", theShipStyle);
-        // subtract the fixed cell distance from the style's location
+// console.log("theShipStyle", theShipStyle);
 
-        //*********          var rightValue = theShipStyle.slice( indexTop, indexLeft-1);
+        // capture the left value within the style string
+        var indexTop = theShipStyle.indexOf("top:");
+        var indexLeft = theShipStyle.indexOf("left:");
+// console.log("indexTop", indexTop, "indexLeft", indexLeft);
+        if( indexTop < indexLeft ){
+          var topString = theShipStyle.slice( indexTop, indexLeft-1);  // gets the whole sub-string ex. "top: 311px;"
+          var topValue = theShipStyle.slice( indexTop+5, indexLeft-4);  // gets just the value... +5 to not take the "top: " and -4 to not take the "px;"
+        } else {
+          var topString = theShipStyle.slice( indexTop, theShipStyle.length-1);  // gets the whole sub-string ex. "top: 311px;"
+          var topValue = theShipStyle.slice( indexTop+5, theShipStyle.length-3);
+        }
+// console.log("topString", topString, "topValue", topValue);
 
-        // add that to the img style
-        // once working, add the companion fix to the else block
-// var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
-// var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
+        var newTopValue = "top: " + (topValue - fixedDistance).toString() + "px;";
+        theShipStyle = theShipStyle.replace(topString, newTopValue);  // replace the old "top: xxxpx;" with the new value
+// console.log("new theShipStyle", theShipStyle);
 
+        // add the corrected style back to the elements so as to reposition it on the page
+        $(getTheShip).attr('style', theShipStyle);
 
+        // fancy regex replacement method but doesn't save any lines of code. I still need to capture the old style's value to subtract the corrected distance producing the new value
+        // var newTopValue = topValue - fixedDistance;
+        // for vertical      var theShipStyle = theShipStyle.replace(/top: -?\d+/, "top: " + newTopValue.toString() ); // works
 
       } // END invalid VERTICAL placement with ship placement fix
 
