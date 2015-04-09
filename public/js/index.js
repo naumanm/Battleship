@@ -69,19 +69,15 @@ var socket = io(),
 
 
     socket.on('turn', function(controller){ 
+      var controllerIndex = 
+
+
+      console.log("controller = " + controller);
       if (controller===true){
         //jquery magic to allow clickable spaces, shoudl be off by default
         console.log("Controller is TRUE");
         isTrue = true;
         $(".opponent").prop('disabled', false);
-      }
-
-
-      if(controller===false){
-        //jquery magic to not allow client to click on squares
-        console.log("Controller is FALSE");
-        isTrue = false;
-        $(".opponent").prop('disabled', true);
       }
     });
 
@@ -175,18 +171,13 @@ var socket = io(),
 
     }); // END of socket.on 'shot'
 
-
-    socket.on('player1Turn', function(test){
-      console.log("player1Turn = " + test);
-    });
-
-    //  from server code, need to catch this
-    //  socket.broadcast.to(player1).emit('turn',controller)
-
     // make this into game_status to start or end game
     socket.on('game_status', function( gameOver ){
       if ( gameOver ) {
-        document.getElementById("shotPlayer").innerHTML = "Game Over. " +gameOver.winner+" won, " +gameOver.loser+ " lost. Thanks for playing."; // Add Play again?
+        document.getElementById("shotPlayer").innerHTML = gameOver.winner+" won, " +gameOver.loser+ " lost. Thanks for playing."; // Add Play again?
+        document.getElementById("userName").innerHTML =  "Game Over!";
+
+        alert("Game Over");
       } else {
       }
     }); 
