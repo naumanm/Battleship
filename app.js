@@ -17,7 +17,7 @@ bodyParser = require("body-parser"),
 waitingRoom =[], 
 controller, //for turns
 gameRooms=[],
-drydockA=[], 
+drydockA=[],   //ship placeholders
 drydockB=[]; 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
@@ -51,7 +51,7 @@ app.get('/instructions', function(req, res){
 
 // game communication. ALL game emit events need to be handled within this block
 io.on('connection', function(socket){  //step #1 connection
-  socket.join(roomNumber);
+  socket.join(roomNumber);  //each game gets a room 
   console.log(roomNumber);
   console.log(socket.id + " connected");
  
@@ -69,12 +69,12 @@ io.on('connection', function(socket){  //step #1 connection
     // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
     
     gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber));
-    waitingRoom=[];
+    waitingRoom=[];   //outside of the game object, socket controller is ready to add more players
     roomNumber++;
     playerPair=0;
   }
     
-  socket.on('disconnect', function(){
+  socket.on('disconnect', function(){   //disconnections for outside of "game"
     console.log(socket.id + " disconnected");            
   });
 
@@ -96,11 +96,11 @@ function Game (player1,player2,gameId){
   console.log("matchmaking complete, waiting for player ready and ship lockdown");
   
 player1.on('place_ship', function(placedShipObj){  
-  var name=placedShipObj.name;
+  var name=placedShipObj.name;      //dropped ships from client
   var firstLocation = placedShipObj.cell.charAt(0);
   var secondLocation = placedShipObj.cell.charAt(1);
   var rotation=placedShipObj.rotation;
-  switch(name){
+  switch(name){   //location calculated based on which ship and rotation
     case "AircraftCarrier":
       buildCarrier(placedShipObj,rotation,drydockA,firstLocation,secondLocation);
       break;
@@ -143,9 +143,10 @@ player2.on('place_ship', function(placedShipObj){
   }
 });
 
-player1.on("game_status",function(){  //can be refactored in v2
+//game setup for gameboard logic
+player1.on("game_status",function(){  
   if(drydockA.length===5){
-    player1ReadyStatus=true;
+    player1ReadyStatus=true;    
     player1Fleet = new Fleet(drydockA[0],drydockA[1],drydockA[2],drydockA[3],drydockA[4]);
     console.log(player1Fleet);
     console.log("player1 "+player1.nickname+" is ready");
@@ -164,11 +165,6 @@ player2.on("game_status", function(){
   }
 });
   
-  //these notices will go to the players upon connection, so they know who is who
-  //will not have any impact, it's just a notification
- // socket.broadcast.to(player1).emit('identity',"You will be Player 1");
- // socket.broadcast.to(player2).emit('identity',"You will Player 2");
-
  //firing mechanism, turn controller, and game over emitter
   player1.on('shot', function(shotObj){
     if (player1turn===true){
@@ -204,6 +200,7 @@ player2.on("game_status", function(){
     }
   }); 
 
+//game is dependent on the following functions
 function hitOrMiss(shotObj,fleet){  
   for (var i = 0; i < fleet.formation.length; i++) {  //iterates through targed fleet
     if (fleet.formation[i]!==[]){  //iterates through each non-sunk ship
@@ -230,20 +227,21 @@ function endGameCheck(targetedFleet,shooter,target){
         io.emit("game_status",gameOver);
       }
 }
-
+//used for determining what got sank and for hit/miss
 function Fleet (carrier,battleship,submarine,destroyer,ptboat){
   this.shipcount=5;
   this.names=["Carrier","Battleship","Submarine","Destroyer","PT Boat"];
   this.formation=[carrier,battleship,submarine,destroyer,ptboat];
 } 
 
-
+//assists with vertical adjustments by droppable ships
 function nextLetter(str) {
   return str.replace(/[a-j]/, function(c){
     return String.fromCharCode(c.charCodeAt(0)+1);
   });
 }
 
+//ship builder functions, sligthly different depending on class of ship
 function buildCarrier(shipStart,rotation,docklocation,first,second){
   var carrier=[];             //ship 'container'
   var newloc; //where the next coordinates will go
