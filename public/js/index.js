@@ -87,7 +87,6 @@ var socket = io(),
     var selectedArr = selectedArr || []; // array of all shots
     var isTrue;
 
-
     socket.on('turn', function(controller){ 
       if (controller===true){
         //jquery magic to allow clickable spaces, shoudl be off by default
@@ -96,7 +95,6 @@ var socket = io(),
         $(".opponent").prop('disabled', false);
       }
 
-
       if(controller===false){
         //jquery magic to not allow client to click on squares
         console.log("Controller is FALSE");
@@ -104,11 +102,6 @@ var socket = io(),
         $(".opponent").prop('disabled', true);
       }
     });
-
-
-
-
-
 
       // color change on hover
       $("td").mouseover(function(){
@@ -156,9 +149,6 @@ var socket = io(),
         }
 
       });  // end of select to take a shot
-
-
-    
 
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
@@ -258,10 +248,9 @@ function emitShip(name, cellId, rotation) {
   placedShipObj.cell = cellId;
   placedShipObj.rotation = rotation;
 
+  console.log("placedShipObj", placedShipObj);  
   socket.emit('place_ship', placedShipObj);
-  console.log(placedShipObj);  
 }
-
 
 $( ".droppable" ).droppable({
   drop: function( event, ui ) {
@@ -275,18 +264,22 @@ $( ".droppable" ).droppable({
       gameObj.AircraftCarrier.cell = cell;
       rotation = gameObj.AircraftCarrier.rotation;
     }
+
     if (name === "Battleship"){
       gameObj.Battleship.cell = cell;
       rotation = gameObj.Battleship.rotation;
     }
+
     if (name === "Destroyer"){
       gameObj.Destroyer.cell = cell;
       rotation = gameObj.Destroyer.rotation;
     }
+
     if (name === "Submarine"){
       gameObj.Submarine.cell = cell;
       rotation = gameObj.Submarine.rotation;
     }
+
     if (name === "PtBoat"){
       gameObj.PtBoat.cell = cell;
       rotation = gameObj.PtBoat.rotation;
@@ -410,6 +403,8 @@ $( ".droppable" ).droppable({
       "PtBoat": [1,2,3,4,5,6,7,8,9],
     };
 
+    var alphaMap = { "a":1, "b":2, "c":3, "d":4, "e":5, "f":6, "g":7, "h":8, "i":9 }; // associates a number to each character to later calculate the distance of one grid space to another
+
     var validVGrid = { // use with rotation === 90
       "AircraftCarrier": ["a","b","c","d","e","f"],
       "Battleship": ["a","b","c","d","e","f","g"],
@@ -421,30 +416,49 @@ $( ".droppable" ).droppable({
     if( placedOrientation === 0 ){ // HORIZONTAL
       // use validHGrid
       var validH = validHGrid[ placedShip ].indexOf( parseInt(placedHGrid, 10) ); // .toString()
-      //console.log(placedShip, "is at", parseInt(placedHGrid, 10), "and can be in",validHGrid[ placedShip ]);
+// console.log(placedShip, "is at", parseInt(placedHGrid, 10), "and can be in",validHGrid[ placedShip ]);
       if ( validH === -1 ) {
-        //console.log("not valid Horiz placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+console.log("not valid Horiz placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
         // correct the grid location here
         // get the last array element of the given ships validHGrid
         var lastValidElement = validHGrid[ placedShip ][ validHGrid[ placedShip ].length-1 ];
-        // console.log( "lastValidElement", lastValidElement );
+// console.log( "lastValidElement", lastValidElement );
         var fixedCell = placedVGrid + lastValidElement.toString(); // add that after the current placedVGrid
-        console.log( "fixedCell", fixedCell );
-        placedLocation = fixedCell;
-        // count the difference from placed cell to fixed cell
-        var fixedDistance = validHGrid[ placedShip ].indexOf( parseInt(placedHGrid, 10) ) - validHGrid[ placedShip ].indexOf( parseInt(lastValidElement, 10) );// index of place cell minus the index of the fixed cell
+// console.log( "fixedCell", fixedCell );
+        placedLocation = fixedCell; // placedLocation is a global variable
+        // calculate the grid distance of placed cell minus the grid distance of the fixed cell. Needed to relocate the ship on screen's grid
+        var placedIndex = parseInt(placedHGrid, 10);
+        var fixedIndex = parseInt(lastValidElement, 10);
+        var fixedDistance = placedIndex - fixedIndex;
         // multiply by 25 px
         fixedDistance = fixedDistance * 25;
+console.log("fixedDistance", fixedDistance);
         // get the draggable style and
-        var getTheShip = "#draggable"+ placedShip.name;
+        var getTheShip = "#draggable"+ placedShip; //.name;
+// console.log("getTheShip", getTheShip);
         var theShipStyle = $(getTheShip).attr('style');
 console.log("theShipStyle", theShipStyle);
-        // subtract the fixed cell distance from the style's location
 
-        // add that to the img style
+        // capture the left value within the style string
+        var indexLeft = theShipStyle.indexOf("left:");
+        var indexTop = theShipStyle.indexOf("top:");
+        if( indexLeft < indexTop ){
+          var leftString = theShipStyle.slice( indexLeft, indexTop-1);  // gets the whole sub-string ex. "left: 311px;"
+          var leftValue = theShipStyle.slice( indexLeft+6, indexTop-4);  // gets just the value... +6 to not take the "left: " and -4 to not take the "px;"
+        } else {
+          var leftValue = theShipStyle.slice( indexLeft+6, theShipStyle.length-4);
+        }
+        var newLeftValue = "left: " + (leftValue - fixedDistance).toString() + "px;";
+        theShipStyle = theShipStyle.replace(leftString, newLeftValue);  // replace the old "left: xxxpx;" with the new value
+
+        // add the corrected style back to the elements so as to reposition it on the page
+        $(getTheShip).attr('style', theShipStyle);
+
+
+
+
         // once working, add the companion fix to the else block
 // var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
-// var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
 
 
       } // END invalid HORIZONTAL placement with ship placement fix
@@ -452,26 +466,32 @@ console.log("theShipStyle", theShipStyle);
     } else { // VERTICAL
       // use validVGrid
       var validV = validVGrid[ placedShip ].indexOf( placedVGrid );
-      console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
+console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
       if ( validV === -1 ) {
-        //console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
+console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
         // correct the grid location here
         // get the last array element of the given ships validVGrid
         var lastValidElement = validVGrid[ placedShip ][ validVGrid[ placedShip ].length-1 ]; // the linter incorrectly thinks this var has already been defined. There is another assignment but inside the conditional. The logic will only use one or the other.
-        // console.log( "lastValidElement", lastValidElement );
+console.log( "lastValidElement", lastValidElement );
         // var fixedCell = lastValidElement + placedHGrid; // I think this is the incorrect code. Suspect needs placedVGrid which is next line
         var fixedCell = lastValidElement + placedHGrid; // add that after the current placedVGrid
-        console.log( "fixedCell", fixedCell );
+console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
         // count the difference from placed cell to fixed cell
-        var fixedDistance = validVGrid[ placedShip ].indexOf( parseInt(placedVGrid, 10) ) - validVGrid[ placedShip ].indexOf( parseInt(lastValidElement, 10) );// index of place cell minus the index of the fixed cell
+        var fixedDistance = alphaMap;
+console.log( "alphaMap", alphaMap[placedVGrid] );
+
+        // not valid code      validVGrid[ placedShip ].indexOf( parseInt(placedVGrid, 10) ) - validVGrid[ placedShip ].indexOf( parseInt(lastValidElement, 10) );// index of place cell minus the index of the fixed cell
         // multiply by 25 px
         fixedDistance = fixedDistance * 25;
         // get the draggable style and
         var getTheShip = "#draggable"+ placedShip.name;
+console.log("getTheShip", getTheShip);
         var theShipStyle = $(getTheShip).attr('style');
-        console.log("theShipStyle", theShipStyle);
+console.log("theShipStyle", theShipStyle);
         // subtract the fixed cell distance from the style's location
+
+        //*********          var rightValue = theShipStyle.slice( indexTop, indexLeft-1);
 
         // add that to the img style
         // once working, add the companion fix to the else block

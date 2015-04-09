@@ -8,11 +8,12 @@
   <script src="/js/jquery-1.11.2.js"></script>
 
   <!-- +++++++++++++++++ CDN Bootstrap CSS +++++++++++++ -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"> -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"> -->
 
   <!-- +++++++++++++++++ LOCAL Bootstrap CSS +++++++++++ -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-theme.min.css">
 
   <!-- +++++++++++++++++ CDN jQuery CSS ++++++++++++++++ -->
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -90,13 +91,13 @@
     <!-- <div id="placeShips"> -->
       <h4>Place your ships by dragging them to the left grid.<br>Double click a ship to rotate it 90 degrees.</h4><br>
 
-      <span class="ui-widget-content draggableAircraftCarrier battleship ship" style="position: relative; left: -50;">
+      <span id="draggableAircraftCarrier" class="ui-widget-content draggableAircraftCarrier aircraftCarrier ship" >
         <img src="/images/wholeCarrier.png">
       </span><br><br><br>
 <!-- ****************************************************************************** -->
     <!-- <div id="placeShips"> -->
 
-      <img src="/images/wholeCarrier.png"
+<!--       <img src="/images/wholeCarrier.png"
            alt="Drag your Aircraft Carrier to Your Ships Board"
            id="draggableAircraftCarrier"
            class="ui-widget-content aircraftCarrier ship">
@@ -119,7 +120,7 @@
       <img src="/images/wholePatrol.png"
            alt="Drag your Patrol Boat to Your Ships Board"
            id="draggablePtBoat"
-           class="ui-widget-content ptBoat ship">
+           class="ui-widget-content ptBoat ship"> -->
 
       <!-- <input id="readyToPlay" class="btn btn-success" type="submit" value="Ready To Play"> -->
       <!-- jQuery UI is overridding Bootstrap's styling -->

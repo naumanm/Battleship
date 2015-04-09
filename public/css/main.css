@@ -155,7 +155,7 @@ td {
   height: 25px;
 }
 
-img.droppable { /* these are the ships */
+img.droppable { /* this was attempt at making the img element one grid HxW but letting the img overflow. */
   height: 25px;
   width: 25px;
   overflow: visible;
@@ -245,7 +245,9 @@ img.droppable { /* these are the ships */
 #draggableDestroyer,
 #draggableSubmarine,
 #draggablePtBoat {
-  z-index: 100; 
+  z-index: 100;
+  width: 25px;
+  height: 25px;
 }
 
 #gameWrapper { margin: 0px auto; }
