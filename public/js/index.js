@@ -1,14 +1,7 @@
 $(document).ready(function(){
 
 var socket = io(),
-  // gameStarted = false ==> disallows firing and allows placing ships.
-  // gameStarted = true ==> disallows placing ships and allows firing.
   gameStarted = gameStarted || false;
-
-// objects to emit to backend
-// Christian thinks gameObj should be an object with key value pairs. gameObj['battleship']['name']  ==> "battleship"  THIS works. I tested it in console.
-// This way, the checkShipPlacement function can receive the ship name to check then use the global gameObj and work.
-// Once we do game persistance, we should have function here to check any existing game then add that to the gameObj
 
   var placedShipObj = {
     rotation: 0
@@ -35,7 +28,6 @@ var socket = io(),
       name: "PtBoat",
       rotation: 0
       },
-    gameStarted: false, // gameStarted: gameObj['gameStarted'] || false   <== doesn't seem to work. Tried several options in console.
     playerName: ""    
   };
 
@@ -47,9 +39,6 @@ var socket = io(),
         console.log("test");
   });
 
-  // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
-  // gameObj.playerName = $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
-  /*var playerName = */
   $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
       gameObj.playerName = $('#personsName').val();  // var playerName = $('#personsName').val();
       $( "#userName" ).text( "Hello " + /* playerName */ gameObj.playerName );
@@ -64,20 +53,11 @@ var socket = io(),
     console.log("playerName", /* playerName */ gameObj.playerName );
 
     socket.emit('playerName', /* playerName */ gameObj.playerName );
-
-
-
     return /* playerName */ gameObj.playerName;
-    // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
-    // 1) Player already connected to the game and refreshed.
-    // 2) Player started a new game (using a different player name)
-    // 3) New player but their entered name already exists with another player. I think the socet ID needs to be the "PK" of the player's data
 
   }); // END listener for the form submit
 
 
-// *******************UN-COMMENT ONCE DONE WITH TESTING**************************
-//TEMPORARY DISABLE SINCE IT'S SO ANNOYING WHILE TESTING
   var isNameEmpty = function(a){
     $('#playerSignIn').modal('show'); // shows the get player's name modal
   }();
@@ -105,60 +85,52 @@ var socket = io(),
       }
     });
 
-
-
-
-
-
-      // color change on hover
-      $("td").mouseover(function(){
-        var cellState = $(this).data("state");
-        var cellId = $(this).data("id");
-        var cellTable = $(this).closest("table").attr("class");
-        if (isTrue){
-          if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
-            $(this).css("background-color", "red");
-          }
+    // color change on hover
+    $("td").mouseover(function(){
+      var cellState = $(this).data("state");
+      var cellId = $(this).data("id");
+      var cellTable = $(this).closest("table").attr("class");
+      if (isTrue){
+        if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
+          $(this).css("background-color", "red");
         }
-      });  // end of color change on hover
+      }
+    });  // end of color change on hover
 
-      // revert color if not clicked
-      $("td").mouseleave(function(){
-        var cellState = $(this).data("state");
-        var cellTable = $(this).closest("table").attr("class");
-        if (isTrue){
-          if (cellState === "unselected" && cellTable === "opponent") {
-            $(this).css("background-color", "lightyellow");  // if not selected change color back
-          }
+    // revert color if not clicked
+    $("td").mouseleave(function(){
+      var cellState = $(this).data("state");
+      var cellTable = $(this).closest("table").attr("class");
+      if (isTrue){
+        if (cellState === "unselected" && cellTable === "opponent") {
+          $(this).css("background-color", "lightyellow");  // if not selected change color back
         }
-      });  // end of revert color if not clicked
+      }
+    });  // end of revert color if not clicked
 
-      // select to take a shot
-      $("td").click(function(){
-        var cellId = $(this).data("id"); // get the cellId for the current cell
-        var cellState = $(this).data("state");
-        var cellTable = $(this).closest("table").attr("class");
+    // select to take a shot
+    $("td").click(function(){
+      var cellId = $(this).data("id"); // get the cellId for the current cell
+      var cellState = $(this).data("state");
+      var cellTable = $(this).closest("table").attr("class");
 
-        if (isTrue){
+      if (isTrue){
 
-          if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
-            $(this).css("background-color", "blue"); // add the hit/miss animation here?
-            $(this).data("state", "miss");
-            if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
-              selectedArr.push(cellId); // push the selected cell into the selectedArr
-              var shotObj = {};
-              shotObj.player = $('#personsName').val(); //person;
-              shotObj.id = cellId;
-              //console.log('\nshotObj (player name - cell ID)' , shotObj);
-              socket.emit('shot', shotObj);
-            } // END of (selectedArr.indexOf(cellId) === -1)
-          } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
-        }
+        if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
+          $(this).css("background-color", "blue"); // add the hit/miss animation here?
+          $(this).data("state", "miss");
+          if (selectedArr.indexOf(cellId) === -1) { // prevent duplicates in the selectedArr
+            selectedArr.push(cellId); // push the selected cell into the selectedArr
+            var shotObj = {};
+            shotObj.player = $('#personsName').val(); //person;
+            shotObj.id = cellId;
+            //console.log('\nshotObj (player name - cell ID)' , shotObj);
+            socket.emit('shot', shotObj);
+          } // END of (selectedArr.indexOf(cellId) === -1)
+        } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
+      }
 
-      });  // end of select to take a shot
-
-
-    
+    });  // end of select to take a shot
 
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
@@ -508,11 +480,11 @@ console.log("theShipStyle", theShipStyle);
 
 
   function shipsPlaced () {
-    if ((gameObj.AircraftCarrier.cell !== undefined) &&
-        (gameObj.Battleship.cell !== undefined) &&
-        (gameObj.Destroyer.cell !== undefined) &&
-        (gameObj.Submarine.cell !== undefined) &&
-        (gameObj.PtBoat.cell !== undefined))
+    if ((gameObj.AircraftCarrier.cell !== "") &&
+        (gameObj.Battleship.cell !== "") &&
+        (gameObj.Destroyer.cell !== "") &&
+        (gameObj.Submarine.cell !== "") &&
+        (gameObj.PtBoat.cell !== ""))
     {
       return true;  
     }
