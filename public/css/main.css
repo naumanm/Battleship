@@ -7,7 +7,6 @@ body {
 
 table {
   margin: 5px;
-  z-index: -100;
 }
 
 td {
@@ -18,11 +17,10 @@ td {
   text-align: center;
   /* only right and bottom so as not to double up on the borders per table cell */
   border: 1px solid black;
-  z-index: -100 !important;
 }
 
 /* -- Classes --*/
-/* -- Table styles --*/
+
 .headerTop {
   position: absolute;
   left: 66px;
@@ -66,11 +64,12 @@ td {
   text-align: center;
 }
 
-.gameboard {
-  text-align: center;
+.gameboard, .noColor {
+  text-align: middle;
+  position-align: center;
+
 }
 
-/* -- No longer used --*/
 .dashboard {
   /*background: blue;*/
   width: 400px;
@@ -85,7 +84,16 @@ td {
   top: 3px;
 }
 
-/* -- to rotate --*/
+.aircraftCarrier,
+.battleship,
+.destroyer,
+.submarine,
+.ptBoat,
+.dashboardTitle {
+  position: absolute;
+  z-index: 100;
+}
+
 .hor {
   transform: rotate(0deg);
 }
@@ -94,6 +102,11 @@ td {
   transform: rotate(90deg);
 }
 
+/*
+rotates correctly in codepen but not here!!!
+http://codepen.io/anon/pen/jERroO?editors=011
+wanted ease-in-out
+*/
 .ship {
   -webkit-transition: transform 300ms linear;
   -webkit-transform-origin: 13px 50%;
@@ -124,39 +137,26 @@ td {
 }
 
 /* These left: settings on the ships are for the starting location of the ships to look nice in a row prior to placing them on the board */
-.aircraftCarrier { left: 240px;}
-.battleship { left: 370px;}
-.destroyer { left: 475px;}
-.submarine { left: 555px;}
-.ptBoat { left: 635px;}
+.aircraftCarrier { left: 240px; top: 8px; z-index: 100;}
+.battleship { left: 370px; top: 8px; z-index: 100;}
+.destroyer { left: 475px; top: 8px; z-index: 100;}
+.submarine { left: 555px; top: 8px; z-index: 100;}
+.ptBoat { left: 635px; top: 8px; z-index: 100;}
 
-/* -- Ships for droppable and stay on top --*/
-.aircraftCarrier,
-.battleship,
-.destroyer,
-.submarine,
-.ptBoat,
-.dashboardTitle {
-  position: absolute;
-  z-index: 100;
-  /*top: 8px;*/
-}
-
-/*.aircraftCarrier {
+.aircraftCarrier {
   offset: 100px;
+  z-index: 100;
 }
-*/
-.droppable  {
+
+.droppable span {
   width: 25px;
   height: 25px;
 }
 
-img.droppable { /* this was attempt at making the img element one grid HxW but letting the img overflow. */
+img.droppable { /* these are the ships */
   height: 25px;
   width: 25px;
   overflow: visible;
-  z-index: 50 !important;
-
   
   /* set width height: to 25  px */
   /* the image overflow is visible */
@@ -190,9 +190,20 @@ img.droppable { /* this was attempt at making the img element one grid HxW but l
   display: none;
 }
 
+.noLIDisk {
+  list-style-type: none;
+  list-style-position: outside;
+  position: relative;
+  left: -5px;
+}
+
 .snaptarget {
   width: 200px;
   height: 200px;
+}
+
+.gameboard h4 {
+  display: inline;
 }
 
 
@@ -203,9 +214,19 @@ img.droppable { /* this was attempt at making the img element one grid HxW but l
   top: -10px;
 }
 
-#placeShipsWrapper span {
-  border: 0;
-  background-color: transparent;
+#placeShips {
+  background: lightyellow;
+  padding: 8px 8px;
+  border: 1px solid black;
+  width: 760px;
+  position: relative;
+}
+
+#stats {
+  margin-top: 15px;
+  padding: 4px 8px;
+  border: 1px solid black;
+  width: 234px;
 }
 
 #playerBoard,
@@ -219,11 +240,8 @@ img.droppable { /* this was attempt at making the img element one grid HxW but l
 #draggableSubmarine,
 #draggablePtBoat {
   z-index: 100;
-  width: 25px;
-  height: 25px;
 }
 
 #gameWrapper {
-  margin: 0px auto;
-  z-index: -100;
+  #wrapper { margin: 0px auto; }
 }
