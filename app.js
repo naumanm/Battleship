@@ -238,8 +238,13 @@ function Fleet (carrier,battleship,submarine,destroyer,ptboat){
 
 //assists with vertical adjustments by droppable ships
 function nextLetter(str) {
-  return str.replace(/[a-j]/, function(c){
+  return str.replace(/[b-i]/, function(c){ //bounds of ship placement
     return String.fromCharCode(c.charCodeAt(0)+1);
+  });
+}
+function backLetter(str) {
+  return str.replace(/[b-i]/, function(c){  //bounds of ship placement
+    return String.fromCharCode(c.charCodeAt(0)-1);
   });
 }
 
@@ -247,16 +252,27 @@ function nextLetter(str) {
 function buildCarrier(shipStart,rotation,docklocation,first,second){
   var carrier=[];             //ship 'container'
   var newloc; //where the next coordinates will go
-  carrier[0]=shipStart.cell;   //first cell from clientside
+  var front;
+  var back;
+  carrier[2]=shipStart.cell;   //first cell from clientside
   if (rotation===0){       //fill out of ship coords if horizontal
-    for (var i = 0; i < 4; i++) {
-      second++; 
-      newloc=first+second; 
-      carrier.push(newloc);
+    //front of ship
+    front=second-2;
+    for (var i = 0; i < 2; i++) {
+      front=front+i; 
+      newloc=first+front; 
+      carrier[i]=newloc;
+    }
+    //back of ship
+    back=second;
+    for (var j = 3; j < 5; j++) {
+      back++; 
+      newloc=first+back; 
+      carrier[j]=newloc;
     }
   }
   if (rotation===90){   //vertical handling
-    for (var j = 0; j < 4; j++) {
+    for (var k = 0; k < 4; k++) {
       first=nextLetter(first); 
       newloc=first+second; 
       carrier.push(newloc);
@@ -268,12 +284,19 @@ function buildCarrier(shipStart,rotation,docklocation,first,second){
 function buildBattleship(shipStart,rotation,docklocation,first,second){
   var battleship=[];             //ship 'container'
   var newloc;
-  battleship[0]=shipStart.cell;   //first cell from clientside
+  var front;
+  var back;
+  battleship[1]=shipStart.cell;   //first cell from clientside
   if (rotation===0){       //fill out of ship coords if horizontal
-    for (var i = 0; i < 3; i++) {
-      second++; 
-      newloc=first+second; 
-      battleship.push(newloc);
+    front=second-1; 
+    newloc=first+front; 
+    battleship[0]=newloc;
+    //back of ship
+    back=second;
+    for (var i = 2; i < 4; i++) {
+      back++; 
+      newloc=first+back; 
+      battleship[i]=newloc;
     }
   }
   if (rotation===90){   //vertical handling
@@ -289,13 +312,16 @@ function buildBattleship(shipStart,rotation,docklocation,first,second){
 function buildSubmarine(shipStart,rotation,docklocation,first,second){
   var submarine=[];             //ship 'container'
   var newloc;
-  submarine[0]=shipStart.cell;   //first cell from clientside
+  var front;
+  var back;
+  submarine[1]=shipStart.cell;   //middle cell from clientside
   if (rotation===0){       //fill out of ship coords if horizontal
-    for (var i = 0; i < 2; i++) {
-      second++; 
-      newloc=first+second; 
-      submarine.push(newloc);
-    }
+    front=second-1; 
+    newloc=first+front; 
+    submarine[0]=newloc;
+    back=second++;
+    newloc=first+back;
+    submarine[2]=newloc;
   }
   if (rotation===90){   //vertical handling
     for (var j = 0; j < 2; j++) {
@@ -310,13 +336,16 @@ function buildSubmarine(shipStart,rotation,docklocation,first,second){
 function buildDestroyer(shipStart,rotation,docklocation,first,second){
   var destroyer=[];             //ship 'container'
   var newloc;
-  destroyer[0]=shipStart.cell;   //first cell from clientside
+  var front;
+  var back;
+  destroyer[1]=shipStart.cell;   //middle cell from clientside
   if (rotation===0){       //fill out of ship coords if horizontal
-    for (var i = 0; i < 2; i++) {
-      second++; 
-      newloc=first+second; 
-      destroyer.push(newloc);
-    }
+    front=second-1; 
+    newloc=first+front; 
+    destroyer[0]=newloc;
+    back=second++;
+    newloc=first+back;
+    destroyer[2]=newloc;
   }
   if (rotation===90){   //vertical handling
     for (var j = 0; j < 2; j++) {
