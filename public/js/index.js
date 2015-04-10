@@ -51,15 +51,12 @@ $(document).ready(function(){
   // listener for the form submit
   $('form').submit(function(e){
     e.preventDefault();
-    var playerName = document.getElementsByTagName("input")[0].value; // wasn't working using same code from above function like like 10 (  var playerName = $('#personsName').val();  )
-
+    var playerName = document.getElementsByTagName("input")[0].value;
     $('#playerSignIn').modal('hide'); // shows the get player's name modal
     console.log("playerName", /* playerName */ gameObj.playerName );
-
     socket.emit('playerName', /* playerName */ gameObj.playerName );
     return /* playerName */ gameObj.playerName;
-
-  }); // END listener for the form submit
+  });
 
   var isNameEmpty = function(a){
     $('#playerSignIn').modal('show'); // shows the get player's name modal
@@ -71,6 +68,7 @@ $(document).ready(function(){
     var isTurn;
 
     socket.on('turn', function(controller){ 
+      // kludge for first shot of game
       if (controllerIndex === 0){
         if (readyToPlay){
           document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
@@ -79,51 +77,45 @@ $(document).ready(function(){
         }
       }
 
+      // sets isTurn for game flow based on controller
       if (controller===true){
-        console.log("Controller is TRUE");
-        console.log("controllerIndex = " + controllerIndex);
         controllerIndex++;
         isTurn = true;
-        //$(".opponent").prop('disabled', false);
       } else {
-        console.log("Controller is FALSE");
-        console.log("controllerIndex = " + controllerIndex);
         isTurn = false;
       }
     });
 
     // color change on hover
     $("td").mouseover(function(){
-      var cellState = $(this).data("state");
-      var cellId = $(this).data("id");
-      var cellTable = $(this).closest("table").attr("class");
       console.log("isTurn = " + isTurn);
-      if (isTurn){
+      if (isTurn) {
+        var cellState = $(this).data("state");
+        var cellId = $(this).data("id");
+        var cellTable = $(this).closest("table").attr("class");
         if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "red");
         }
       }
-    });  // end of color change on hover
+    }); 
 
     // revert color if not clicked
     $("td").mouseleave(function(){
-      var cellState = $(this).data("state");
-      var cellTable = $(this).closest("table").attr("class");
       if (isTurn){
+        var cellState = $(this).data("state");
+        var cellTable = $(this).closest("table").attr("class");
         if (cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "lightyellow");  // if not selected change color back
         }
       }
-    });  // end of revert color if not clicked
+    });
 
     // select to take a shot
     $("td").click(function(){
-      var cellId = $(this).data("id"); // get the cellId for the current cell
-      var cellState = $(this).data("state");
-      var cellTable = $(this).closest("table").attr("class");
-
       if (isTurn){
-
+        var cellId = $(this).data("id"); // get the cellId for the current cell
+        var cellState = $(this).data("state");
+        var cellTable = $(this).closest("table").attr("class");
         if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "blue"); // add the hit/miss animation here?
           $(this).data("state", "miss");
@@ -134,11 +126,10 @@ $(document).ready(function(){
             shotObj.id = cellId;
             //console.log('\nshotObj (player name - cell ID)' , shotObj);
             socket.emit('shot', shotObj);
-          } // END of (selectedArr.indexOf(cellId) === -1)
-        } // END of (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent")
+          }
+        }
       }
-
-    });  // end of select to take a shot
+    });
 
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
@@ -177,17 +168,14 @@ $(document).ready(function(){
           $(hitArr[3]).removeClass("hide"); // the miss img
         }
       }
-
-    }); // END of socket.on 'shot'
+    });
 
     // make this into game_status to start or end game
     socket.on('game_status', function( gameOver ){
       if ( gameOver ) {
         document.getElementById("shotPlayer").innerHTML = gameOver.winner+" won, " +gameOver.loser+ " lost. Thanks for playing."; // Add Play again?
         document.getElementById("userName").innerHTML =  "Game Over!";
-
-        alert("Game Over");
-      } else {
+        //alert("Game Over");
       }
     }); 
 
@@ -198,36 +186,35 @@ $(document).ready(function(){
 
   $( "#draggableAircraftCarrier" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
+    snapMode: "inner",
+    containment: "#snaptarget"
     // grid: [13, 13] 
   });
 
   $( "#draggableBattleship" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
+    snapMode: "inner",
+    containment: "#snaptarget"
     // grid: [25, 25] 
   });
   $( "#draggableDestroyer" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
+    snapMode: "inner",
+    containment: "#snaptarget"
     // grid: [25, 25] 
   });
   $( "#draggableSubmarine" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
+    snapMode: "inner",
+    containment: "#snaptarget"
     // grid: [25, 25] 
   });
   $( "#draggablePtBoat" ).draggable({
     snap: ".snapCell",
-    snapMode: "inner"
-    // containment: "#snaptarget",
+    snapMode: "inner",
+    containment: "#snaptarget"
     // grid: [25, 25]
   });
-
 
 function emitShip(name, cellId, rotation) {
 
@@ -238,7 +225,6 @@ function emitShip(name, cellId, rotation) {
   socket.emit('place_ship', placedShipObj);
   console.log(placedShipObj);  
 }
-
 
 $( ".droppable" ).droppable({
   drop: function( event, ui ) {
@@ -414,13 +400,13 @@ $( ".droppable" ).droppable({
         // get the draggable style and
         var getTheShip = "#draggable"+ placedShip.name;
         var theShipStyle = $(getTheShip).attr('style');
-console.log("theShipStyle", theShipStyle);
+        console.log("theShipStyle", theShipStyle);
         // subtract the fixed cell distance from the style's location
 
         // add that to the img style
         // once working, add the companion fix to the else block
-// var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
-// var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
+        // var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
+        // var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
 
 
       } // END invalid HORIZONTAL placement with ship placement fix
