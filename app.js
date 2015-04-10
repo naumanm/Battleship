@@ -238,12 +238,12 @@ function Fleet (carrier,battleship,submarine,destroyer,ptboat){
 
 //assists with vertical adjustments by droppable ships
 function nextLetter(str) {
-  return str.replace(/[a-j]/, function(c){ //bounds of ship placement
+  return str.replace(/[b-i]/, function(c){ //bounds of ship placement
     return String.fromCharCode(c.charCodeAt(0)+1);
   });
 }
 function backLetter(str) {
-  return str.replace(/[a-j]/, function(c){  //bounds of ship placement
+  return str.replace(/[b-i]/, function(c){  //bounds of ship placement
     return String.fromCharCode(c.charCodeAt(0)-1);
   });
 }
@@ -313,14 +313,13 @@ function buildSubmarine(shipStart,rotation,docklocation,first,second){
   var submarine=[];             //ship 'container'
   var newloc;
   var front;
-  var back;
   submarine[1]=shipStart.cell;   //middle cell from clientside
   if (rotation===0){       //fill out of ship coords if horizontal
     front=second-1; 
     newloc=first+front; 
     submarine[0]=newloc;
-    back=second++;
-    newloc=first+back;
+    second++;
+    newloc=first+second;
     submarine[2]=newloc;
   }
   if (rotation===90){   //vertical handling
@@ -337,14 +336,13 @@ function buildDestroyer(shipStart,rotation,docklocation,first,second){
   var destroyer=[];             //ship 'container'
   var newloc;
   var front;
-  var back;
   destroyer[1]=shipStart.cell;   //middle cell from clientside
   if (rotation===0){       //fill out of ship coords if horizontal
     front=second-1; 
     newloc=first+front; 
     destroyer[0]=newloc;
-    back=second++;
-    newloc=first+back;
+    second++;
+    newloc=first+second;
     destroyer[2]=newloc;
   }
   if (rotation===90){   //vertical handling
