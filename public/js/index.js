@@ -1,7 +1,10 @@
 $(document).ready(function(){
 
-var socket = io(),
-  gameStarted = gameStarted || false;
+  var controllerIndex = 0;
+  var readyToPlay = false;
+
+  var socket = io(),
+    gameStarted = gameStarted || false;
 
   var placedShipObj = {
     rotation: 0
@@ -28,7 +31,8 @@ var socket = io(),
       name: "PtBoat",
       rotation: 0
       },
-    playerName: ""    
+    playerName: "",
+    opponentName: ""   
   };
 
   $("#readyToPlay").css("visibility","visible");
@@ -57,7 +61,6 @@ var socket = io(),
 
   }); // END listener for the form submit
 
-
   var isNameEmpty = function(a){
     $('#playerSignIn').modal('show'); // shows the get player's name modal
   }();
@@ -65,18 +68,23 @@ var socket = io(),
   function gamePlay(){
 
     var selectedArr = selectedArr || []; // array of all shots
-    var isTrue;
-
+    var isTurn;
 
     socket.on('turn', function(controller){ 
-      var controllerIndex = 
+      if (controllerIndex === 0){
+        if (readyToPlay){
+        document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
+      } else {
+        document.getElementById("userName").innerHTML =  "Place your ships...";
+      }
+      }
 
-
-      console.log("controller = " + controller);
       if (controller===true){
         //jquery magic to allow clickable spaces, shoudl be off by default
         console.log("Controller is TRUE");
-        isTrue = true;
+        console.log("controllerIndex = " + controllerIndex);
+        controllerIndex++;
+        isTurn = true;
         $(".opponent").prop('disabled', false);
       }
     });
@@ -86,7 +94,7 @@ var socket = io(),
       var cellState = $(this).data("state");
       var cellId = $(this).data("id");
       var cellTable = $(this).closest("table").attr("class");
-      if (isTrue){
+      if (isTurn){
         if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "red");
         }
@@ -97,7 +105,7 @@ var socket = io(),
     $("td").mouseleave(function(){
       var cellState = $(this).data("state");
       var cellTable = $(this).closest("table").attr("class");
-      if (isTrue){
+      if (isTurn){
         if (cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "lightyellow");  // if not selected change color back
         }
@@ -110,7 +118,7 @@ var socket = io(),
       var cellState = $(this).data("state");
       var cellTable = $(this).closest("table").attr("class");
 
-      if (isTrue){
+      if (isTurn){
 
         if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "blue"); // add the hit/miss animation here?
@@ -130,23 +138,24 @@ var socket = io(),
 
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
-
+      // adds the current shooter to the gameObj as the opponentName
+      gameObj.opponentName = shotObj.player;
       // Updates the Header UI for who took a shot and the cell location
       if (shotObj.hitORmiss){
         if(shotObj.sunk!==null){
-          document.getElementById("shotPlayer").innerHTML = shotObj.player + " sunk "+shotObj.sunk+ " at " + shotObj.id;
+          document.getElementById("shotPlayer").innerHTML = gameObj.opponentName + " sunk "+shotObj.sunk+ " at " + shotObj.id;
         }
         else{
-          document.getElementById("shotPlayer").innerHTML = shotObj.player + " HIT at " + shotObj.id;
+          document.getElementById("shotPlayer").innerHTML = gameObj.opponentName + " HIT at " + shotObj.id;
         }
       }
       else {
-        document.getElementById("shotPlayer").innerHTML = shotObj.player + " missed at " + shotObj.id;        
+        document.getElementById("shotPlayer").innerHTML = gameObj.opponentName + " missed at " + shotObj.id;        
       }
 
       var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
 
-      if (shotObj.player !== gameObj.playerName) {
+      if (gameObj.opponentName !== gameObj.playerName) {
         // this is the current shooter
 
         document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
@@ -157,10 +166,10 @@ var socket = io(),
         }
       } 
   
-      if (shotObj.player === gameObj.playerName) {
+      if (gameObj.opponentName === gameObj.playerName) {
         // this is NOT the current shooter
 
-        document.getElementById("userName").innerHTML =  "Not " + gameObj.playerName + "'s turn";
+        document.getElementById("userName").innerHTML =  "Not your turn";
         //var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
         if( shotObj.hitORmiss ){
           $(hitArr[2]).removeClass("hide"); // the hit img
@@ -492,9 +501,14 @@ console.log("theShipStyle", theShipStyle);
         // emit to server player is ready
         $("#readyToPlay").css("display","none");  
         $('h4').text(''); 
+        readyToPlay = true;
+
+        if (controllerIndex === 1) {
+            document.getElementById("userName").innerHTML =  "Take the first shot!";
+        }
+
       }
       else {
-
         console.log("should prompt user");
       }
 

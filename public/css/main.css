@@ -15,7 +15,6 @@ td {
   color: black;
   background: lightyellow;
   text-align: center;
-  /* only right and bottom so as not to double up on the borders per table cell */
   border: 1px solid black;
 }
 
@@ -67,7 +66,6 @@ td {
 .gameboard, .noColor {
   text-align: middle;
   position-align: center;
-
 }
 
 .dashboard {
@@ -102,11 +100,6 @@ td {
   transform: rotate(90deg);
 }
 
-/*
-rotates correctly in codepen but not here!!!
-http://codepen.io/anon/pen/jERroO?editors=011
-wanted ease-in-out
-*/
 .ship {
   -webkit-transition: transform 300ms linear;
   -webkit-transform-origin: 13px 50%;

@@ -169,6 +169,7 @@ player2.on("game_status", function(){
   player1.on('shot', function(shotObj){
     if (player1turn===true){
       shotObj.player=player1.nickname;
+      console.log("player1 nickname shot " + player1.nickname);
       shotObj.hitORmiss=false;
       shotObj.sunk=null;
       hitOrMiss(shotObj,player2Fleet);
@@ -186,6 +187,7 @@ player2.on("game_status", function(){
   player2.on('shot', function(shotObj){  
     if (player2turn===true){
       shotObj.player=player2.nickname;
+      console.log("player2 nickname shot " + player2.nickname);
       shotObj.hitORmiss=false;
       shotObj.sunk=null;
       hitOrMiss(shotObj,player1Fleet);
