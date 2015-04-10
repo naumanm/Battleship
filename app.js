@@ -238,12 +238,12 @@ function Fleet (carrier,battleship,submarine,destroyer,ptboat){
 
 //assists with vertical adjustments by droppable ships
 function nextLetter(str) {
-  return str.replace(/[b-i]/, function(c){ //bounds of ship placement
+  return str.replace(/[a-j]/, function(c){ //bounds of ship placement
     return String.fromCharCode(c.charCodeAt(0)+1);
   });
 }
 function backLetter(str) {
-  return str.replace(/[b-i]/, function(c){  //bounds of ship placement
+  return str.replace(/[a-j]/, function(c){  //bounds of ship placement
     return String.fromCharCode(c.charCodeAt(0)-1);
   });
 }
