@@ -73,19 +73,22 @@ $(document).ready(function(){
     socket.on('turn', function(controller){ 
       if (controllerIndex === 0){
         if (readyToPlay){
-        document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
-      } else {
-        document.getElementById("userName").innerHTML =  "Place your ships...";
-      }
+          document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
+        } else {
+          document.getElementById("userName").innerHTML =  "Place your ships...";
+        }
       }
 
       if (controller===true){
-        //jquery magic to allow clickable spaces, shoudl be off by default
         console.log("Controller is TRUE");
         console.log("controllerIndex = " + controllerIndex);
         controllerIndex++;
         isTurn = true;
-        $(".opponent").prop('disabled', false);
+        //$(".opponent").prop('disabled', false);
+      } else {
+        console.log("Controller is FALSE");
+        console.log("controllerIndex = " + controllerIndex);
+        isTurn = false;
       }
     });
 
@@ -94,6 +97,7 @@ $(document).ready(function(){
       var cellState = $(this).data("state");
       var cellId = $(this).data("id");
       var cellTable = $(this).closest("table").attr("class");
+      console.log("isTurn = " + isTurn);
       if (isTurn){
         if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "red");
@@ -140,24 +144,21 @@ $(document).ready(function(){
     socket.on('shot', function(shotObj){
       // adds the current shooter to the gameObj as the opponentName
       gameObj.opponentName = shotObj.player;
+      // the data-id is the cell, then select imgages.
+      var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img');
       // Updates the Header UI for who took a shot and the cell location
       if (shotObj.hitORmiss){
         if(shotObj.sunk!==null){
-          document.getElementById("shotPlayer").innerHTML = gameObj.opponentName + " sunk "+shotObj.sunk+ " at " + shotObj.id;
-        }
+          document.getElementById("shotPlayer").innerHTML = gameObj.opponentName + " sunk "+shotObj.sunk+ " at " + shotObj.id;}
         else{
-          document.getElementById("shotPlayer").innerHTML = gameObj.opponentName + " HIT at " + shotObj.id;
-        }
+          document.getElementById("shotPlayer").innerHTML = gameObj.opponentName + " HIT at " + shotObj.id;}
       }
       else {
         document.getElementById("shotPlayer").innerHTML = gameObj.opponentName + " missed at " + shotObj.id;        
       }
 
-      var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
-
+      // this is the current shooter(player)
       if (gameObj.opponentName !== gameObj.playerName) {
-        // this is the current shooter
-
         document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
         if( shotObj.hitORmiss ){
           $(hitArr[0]).removeClass("hide"); // the hit img
@@ -165,10 +166,9 @@ $(document).ready(function(){
           $(hitArr[1]).removeClass("hide"); // the miss img
         }
       } 
-  
-      if (gameObj.opponentName === gameObj.playerName) {
-        // this is NOT the current shooter
 
+      // this is the opponent
+      if (gameObj.opponentName === gameObj.playerName) {
         document.getElementById("userName").innerHTML =  "Not your turn";
         //var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
         if( shotObj.hitORmiss ){
@@ -451,17 +451,15 @@ console.log("theShipStyle", theShipStyle);
 
         // add that to the img style
         // once working, add the companion fix to the else block
-// var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
-// var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
-
-
+        // var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
+        // var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
 
       } // END invalid VERTICAL placement with ship placement fix
 
     } // END of placedOrientation check for rotaion at 0 or 90 degrees
 
     // put the dropped cell location or fixed cell location into the global gameObj
-    gameObj[ placedShip ].cell = placedLocation;
+    // gameObj[ placedShip ].cell = placedLocation;  Dont think this does anything
 
   }; // END of checkShipPlacement function
 
@@ -494,7 +492,6 @@ console.log("theShipStyle", theShipStyle);
     'click': function() {
       if (shipsPlaced()) {
         event.preventDefault();
-
         // disable droppable
         $('#shotPlayer').text("Game ON!");
         gameReady(true);
@@ -502,16 +499,13 @@ console.log("theShipStyle", theShipStyle);
         $("#readyToPlay").css("display","none");  
         $('h4').text(''); 
         readyToPlay = true;
-
         if (controllerIndex === 1) {
-            document.getElementById("userName").innerHTML =  "Take the first shot!";
+            document.getElementById("userName").innerHTML =  "Take the first shot!"; //kludge to make first shot work
         }
-
       }
       else {
         console.log("should prompt user");
       }
-
     }
   });
 
