@@ -35,17 +35,19 @@ $(document).ready(function(){
     opponentName: ""   
   };
 
+  // set classes for css
   $("#readyToPlay").css("visibility","visible");
   $("#placeShips").css("visibility","visible");
 
+  // show sign in modal
   $('#playerSignIn').on('shown.bs.modal', function () {
       $('#personsName').focus();
-        console.log("test");
   });
 
-  $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
-      gameObj.playerName = $('#personsName').val();  // var playerName = $('#personsName').val();
-      $( "#userName" ).text( "Hello " + /* playerName */ gameObj.playerName );
+  // enter player name
+  $( "#personsName" ).keyup(function() {
+      gameObj.playerName = $('#personsName').val();
+      $( "#userName" ).text( "Hello " + gameObj.playerName );
   }).keyup();
 
   // listener for the form submit
@@ -53,9 +55,9 @@ $(document).ready(function(){
     e.preventDefault();
     var playerName = document.getElementsByTagName("input")[0].value;
     $('#playerSignIn').modal('hide'); // shows the get player's name modal
-    console.log("playerName", /* playerName */ gameObj.playerName );
-    socket.emit('playerName', /* playerName */ gameObj.playerName );
-    return /* playerName */ gameObj.playerName;
+    console.log("playerName", gameObj.playerName );
+    socket.emit('playerName', gameObj.playerName );
+    return gameObj.playerName;
   });
 
   var isNameEmpty = function(a){
@@ -67,6 +69,7 @@ $(document).ready(function(){
     var selectedArr = selectedArr || []; // array of all shots
     var isTurn;
 
+    // catch turn emits from server
     socket.on('turn', function(controller){ 
       // kludge for first shot of game
       if (controllerIndex === 0){
@@ -88,11 +91,11 @@ $(document).ready(function(){
 
     // color change on hover
     $("td").mouseover(function(){
+      var cellState = $(this).data("state");
+      var cellId = $(this).data("id");
+      var cellTable = $(this).closest("table").attr("class");
       console.log("isTurn = " + isTurn);
-      if (isTurn) {
-        var cellState = $(this).data("state");
-        var cellId = $(this).data("id");
-        var cellTable = $(this).closest("table").attr("class");
+      if (isTurn){
         if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "red");
         }
@@ -101,9 +104,9 @@ $(document).ready(function(){
 
     // revert color if not clicked
     $("td").mouseleave(function(){
+      var cellState = $(this).data("state");
+      var cellTable = $(this).closest("table").attr("class");
       if (isTurn){
-        var cellState = $(this).data("state");
-        var cellTable = $(this).closest("table").attr("class");
         if (cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "lightyellow");  // if not selected change color back
         }
@@ -112,10 +115,10 @@ $(document).ready(function(){
 
     // select to take a shot
     $("td").click(function(){
-      if (isTurn){
-        var cellId = $(this).data("id"); // get the cellId for the current cell
-        var cellState = $(this).data("state");
-        var cellTable = $(this).closest("table").attr("class");
+      var cellId = $(this).data("id"); // get the cellId for the current cell
+      var cellState = $(this).data("state");
+      var cellTable = $(this).closest("table").attr("class");
+      if (isTurn){        
         if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "blue"); // add the hit/miss animation here?
           $(this).data("state", "miss");
@@ -124,14 +127,13 @@ $(document).ready(function(){
             var shotObj = {};
             shotObj.player = $('#personsName').val(); //person;
             shotObj.id = cellId;
-            //console.log('\nshotObj (player name - cell ID)' , shotObj);
             socket.emit('shot', shotObj);
           }
         }
       }
     });
 
-    // update the ship board with other players shots
+    // update both players shipboards with each shot
     socket.on('shot', function(shotObj){
       // adds the current shooter to the gameObj as the opponentName
       gameObj.opponentName = shotObj.player;
@@ -148,7 +150,7 @@ $(document).ready(function(){
         document.getElementById("shotPlayer").innerHTML = gameObj.opponentName + " missed at " + shotObj.id;        
       }
 
-      // this is the current shooter(player)
+      // this is the current player (shooter)
       if (gameObj.opponentName !== gameObj.playerName) {
         document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
         if( shotObj.hitORmiss ){
@@ -158,10 +160,9 @@ $(document).ready(function(){
         }
       } 
 
-      // this is the opponent
+      // this is the opponent (waiting)
       if (gameObj.opponentName === gameObj.playerName) {
         document.getElementById("userName").innerHTML =  "Not your turn";
-        //var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
         if( shotObj.hitORmiss ){
           $(hitArr[2]).removeClass("hide"); // the hit img
         } else { // this block is the miss scenario
@@ -179,7 +180,7 @@ $(document).ready(function(){
       }
     }); 
 
-  } // End of gamePlay function
+  } // end gamePlay
 
 
   // -----   SHIP PLACEMENT AND ROTATION   ----
