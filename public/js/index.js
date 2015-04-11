@@ -1,8 +1,5 @@
 $(document).ready(function(){
 
-  var controllerIndex = 0;
-  var readyToPlay = false;
-
   var socket = io(),
     gameStarted = gameStarted || false;
 
@@ -13,30 +10,42 @@ $(document).ready(function(){
   var gameObj = {
     AircraftCarrier: {
       name: "AircraftCarrier",
+      cellId:  "",
       rotation: 0
       },
     Battleship: {
       name: "Battleship",
+      cellId:  "",
       rotation: 0
       },
     Destroyer: {
       name: "Destroyer",
+      cellId:  "",
       rotation: 0
       },
     Submarine: {
       name: "Submarine",
+      cellId:  "",
       rotation: 0
       },
     PtBoat: {
       name: "PtBoat",
+      cellId:  "",
       rotation: 0
       },
     playerName: "",
-    opponentName: ""   
+    opponentName: "",
+    player1: false,
+    signedIn: false,
+    shipsPlaced: false,
+    gameReady: false,
+    readyToPlay: false,
+    isTurn: false,
+    controllerIndex: 0
   };
 
   // set classes for css
-  $("#readyToPlay").css("visibility","visible");
+  $("#readyToPlayButton").css("visibility","visible");
   $("#placeShips").css("visibility","visible");
 
   // show sign in modal
@@ -53,9 +62,9 @@ $(document).ready(function(){
   // listener for the form submit
   $('form').submit(function(e){
     e.preventDefault();
-    var playerName = document.getElementsByTagName("input")[0].value;
     $('#playerSignIn').modal('hide'); // shows the get player's name modal
-    console.log("playerName", gameObj.playerName );
+    gameObj.signedIn = true;
+    console.log("test " + gameObj.playerName);
     socket.emit('playerName', gameObj.playerName );
     return gameObj.playerName;
   });
@@ -67,25 +76,24 @@ $(document).ready(function(){
   function gamePlay(){
 
     var selectedArr = selectedArr || []; // array of all shots
-    var isTurn;
 
     // catch turn emits from server
     socket.on('turn', function(controller){ 
       // kludge for first shot of game
-      if (controllerIndex === 0){
-        if (readyToPlay){
+      if (gameObj.controllerIndex === 0){
+        if (gameObj.readyToPlay){
           document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
         } else {
           document.getElementById("userName").innerHTML =  "Place your ships...";
         }
       }
 
-      // sets isTurn for game flow based on controller
+      // sets gameObj.isTurn for game flow based on controller
       if (controller===true){
-        controllerIndex++;
-        isTurn = true;
+        gameObj.controllerIndex++;
+        gameObj.isTurn = true;
       } else {
-        isTurn = false;
+        gameObj.isTurn = false;
       }
     });
 
@@ -94,8 +102,8 @@ $(document).ready(function(){
       var cellState = $(this).data("state");
       var cellId = $(this).data("id");
       var cellTable = $(this).closest("table").attr("class");
-      console.log("isTurn = " + isTurn);
-      if (isTurn){
+      console.log("isTurn = " + gameObj.isTurn);
+      if (gameObj.isTurn){
         if (cellId !== "header" && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "red");
         }
@@ -106,7 +114,7 @@ $(document).ready(function(){
     $("td").mouseleave(function(){
       var cellState = $(this).data("state");
       var cellTable = $(this).closest("table").attr("class");
-      if (isTurn){
+      if (gameObj.isTurn){
         if (cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "lightyellow");  // if not selected change color back
         }
@@ -118,7 +126,7 @@ $(document).ready(function(){
       var cellId = $(this).data("id"); // get the cellId for the current cell
       var cellState = $(this).data("state");
       var cellTable = $(this).closest("table").attr("class");
-      if (isTurn){        
+      if (gameObj.isTurn){        
         if (cellId !== 'header' && cellState === "unselected" && cellTable === "opponent") {
           $(this).css("background-color", "blue"); // add the hit/miss animation here?
           $(this).data("state", "miss");
@@ -464,29 +472,32 @@ $( ".droppable" ).droppable({
   // need to add check to see if all ships have a cell value if if so enable the button.
 
 
-  function shipsPlaced () {
+  function checkShipsPlaced () { // should be replaced with updating gameObj
     if ((gameObj.AircraftCarrier.cell !== "") &&
         (gameObj.Battleship.cell !== "") &&
         (gameObj.Destroyer.cell !== "") &&
         (gameObj.Submarine.cell !== "") &&
         (gameObj.PtBoat.cell !== ""))
     {
-      return true;  
+      gameObj.shipsPlaced = true;   
     }
   }
 
-  $('#readyToPlay').on({
+  $('#readyToPlayButton').on({
     'click': function() {
-      if (shipsPlaced()) {
+
+
+      checkShipsPlaced();
+      if (gameObj.shipsPlaced) {
         event.preventDefault();
         // disable droppable
         $('#shotPlayer').text("Game ON!");
         gameReady(true);
         // emit to server player is ready
-        $("#readyToPlay").css("display","none");  
+        $("#readyToPlayButton").css("display","none");  
         $('h4').text(''); 
-        readyToPlay = true;
-        if (controllerIndex === 1) {
+        gameObj.readyToPlay = true;
+        if (gameObj.controllerIndex === 1) {
             document.getElementById("userName").innerHTML =  "Take the first shot!"; //kludge to make first shot work
         }
       }
