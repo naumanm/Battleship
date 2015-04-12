@@ -1,12 +1,14 @@
 $(document).ready(function(){
 
-  var socket = io(),
-    gameStarted = gameStarted || false;
+  // initialize socket.io
+  var socket = io();
 
+  // for dragging and dropping ships
   var placedShipObj = {
     rotation: 0
   };
 
+  // stores all the game data for the client
   var gameObj = {
     AircraftCarrier: {
       name: "AircraftCarrier",
@@ -40,9 +42,12 @@ $(document).ready(function(){
     shipsPlaced: false,
     gameReady: false,
     readyToPlay: false,
+    gameStarted: false,
     isTurn: false,
     controllerIndex: 0
   };
+
+  // player login
 
   // set classes for css
   $("#readyToPlayButton").css("visibility","visible");
@@ -59,18 +64,19 @@ $(document).ready(function(){
       $( "#userName" ).text( "Hello " + gameObj.playerName );
   }).keyup();
 
-  // listener for the form submit
+  // hides the get player's name modal
   $('form').submit(function(e){
     e.preventDefault();
-    $('#playerSignIn').modal('hide'); // shows the get player's name modal
+    $('#playerSignIn').modal('hide'); 
     gameObj.signedIn = true;
     console.log("test " + gameObj.playerName);
     socket.emit('playerName', gameObj.playerName );
     return gameObj.playerName;
   });
 
-  var isNameEmpty = function(a){
-    $('#playerSignIn').modal('show'); // shows the get player's name modal
+  // shows the get player's name modal
+  var isNameEmpty = function(a){  
+    $('#playerSignIn').modal('show'); 
   }();
 
   function gamePlay(){
@@ -79,7 +85,6 @@ $(document).ready(function(){
 
     // catch turn emits from server
     socket.on('turn', function(controller){ 
-      // kludge for first shot of game
       if (gameObj.controllerIndex === 0){
         if (gameObj.readyToPlay){
           document.getElementById("userName").innerHTML =  "FIRE " + gameObj.playerName + "!";
@@ -245,20 +250,16 @@ $( ".droppable" ).droppable({
     if (name === "AircraftCarrier"){
       gameObj.AircraftCarrier.cell = cell;
       rotation = gameObj.AircraftCarrier.rotation;
-    }
-    if (name === "Battleship"){
+    } else if (name === "Battleship"){
       gameObj.Battleship.cell = cell;
       rotation = gameObj.Battleship.rotation;
-    }
-    if (name === "Destroyer"){
+    } else if (name === "Destroyer"){
       gameObj.Destroyer.cell = cell;
       rotation = gameObj.Destroyer.rotation;
-    }
-    if (name === "Submarine"){
+    } else if (name === "Submarine"){
       gameObj.Submarine.cell = cell;
       rotation = gameObj.Submarine.rotation;
-    }
-    if (name === "PtBoat"){
+    } else if (name === "PtBoat"){
       gameObj.PtBoat.cell = cell;
       rotation = gameObj.PtBoat.rotation;
     }
@@ -273,7 +274,7 @@ $( ".droppable" ).droppable({
   // ship rotation
   $('#draggableAircraftCarrier').on({
     'dblclick': function() {
-      if( !gameStarted ){
+      if( !gameObj.gameStarted ){
         if ( gameObj.AircraftCarrier.rotation === 0 ) {
           $('#draggableAircraftCarrier').removeClass('hor');
           $('#draggableAircraftCarrier').addClass('ver');
@@ -291,7 +292,7 @@ $( ".droppable" ).droppable({
 
   $('#draggableBattleship').on({
     'dblclick': function() {
-      if( !gameStarted ){
+      if( !gameObj.gameStarted ){
         if ( gameObj.Battleship.rotation === 0 ) {
           $('#draggableBattleship').removeClass('hor');
           $('#draggableBattleship').addClass('ver');
@@ -310,7 +311,7 @@ $( ".droppable" ).droppable({
 
   $('#draggableDestroyer').on({
     'dblclick': function() {
-      if( !gameStarted ){
+      if( !gameObj.gameStarted ){
         if ( gameObj.Destroyer.rotation === 0 ) {
           $('#draggableDestroyer').removeClass('hor');
           $('#draggableDestroyer').addClass('ver');
@@ -328,7 +329,7 @@ $( ".droppable" ).droppable({
 
   $('#draggableSubmarine').on({
     'dblclick': function() {
-      if( !gameStarted ){
+      if( !gameObj.gameStarted ){
         if ( gameObj.Submarine.rotation === 0 ) {
           $('#draggableSubmarine').removeClass('hor');
           $('#draggableSubmarine').addClass('ver');
@@ -346,7 +347,7 @@ $( ".droppable" ).droppable({
 
   $('#draggablePtBoat').on({
     'dblclick': function() {
-      if( !gameStarted ){
+      if( !gameObj.gameStarted ){
         if ( gameObj.PtBoat.rotation === 0 ) {
           $('#draggablePtBoat').removeClass('hor');
           $('#draggablePtBoat').addClass('ver');
@@ -363,15 +364,13 @@ $( ".droppable" ).droppable({
   });
 
 // checks each ship's placement on the grid if it is a valid location. i.e. a ship isn't off the grid.
-  var checkShipPlacement = function( placedShipObj ){
+  function checkShipPlacement( placedShipObj ){
     placedShip = placedShipObj.name;
     placedLocation = placedShipObj.cell;
     placedOrientation = placedShipObj.rotation;
-    //console.log("placedShip",placedShip,"placedLocation",placedLocation,"placedOrientation",placedOrientation);
 
     var placedHGrid = placedLocation.substr(1, 2).toString(); //check the 2nd (and maybe the 3rd) char of the grid location
     var placedVGrid = placedLocation.substr(0, 1).toString(); //check the 1st char of the grid location
-    //console.log("placedVGrid", placedVGrid, "placedHGrid", placedHGrid);
 
     var validHGrid = { // use with rotation === 0
       "AircraftCarrier": [1,2,3,4,5,6],
@@ -390,89 +389,47 @@ $( ".droppable" ).droppable({
     };
 
     if( placedOrientation === 0 ){ // HORIZONTAL
-      // use validHGrid
       var validH = validHGrid[ placedShip ].indexOf( parseInt(placedHGrid, 10) ); // .toString()
-      //console.log(placedShip, "is at", parseInt(placedHGrid, 10), "and can be in",validHGrid[ placedShip ]);
       if ( validH === -1 ) {
-        //console.log("not valid Horiz placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-        // correct the grid location here
-        // get the last array element of the given ships validHGrid
         var lastValidElement = validHGrid[ placedShip ][ validHGrid[ placedShip ].length-1 ];
-        // console.log( "lastValidElement", lastValidElement );
         var fixedCell = placedVGrid + lastValidElement.toString(); // add that after the current placedVGrid
         console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
-        // count the difference from placed cell to fixed cell
         var fixedDistance = validHGrid[ placedShip ].indexOf( parseInt(placedHGrid, 10) ) - validHGrid[ placedShip ].indexOf( parseInt(lastValidElement, 10) );// index of place cell minus the index of the fixed cell
-        // multiply by 25 px
         fixedDistance = fixedDistance * 25;
-        // get the draggable style and
         var getTheShip = "#draggable"+ placedShip.name;
         var theShipStyle = $(getTheShip).attr('style');
         console.log("theShipStyle", theShipStyle);
-        // subtract the fixed cell distance from the style's location
-
-        // add that to the img style
-        // once working, add the companion fix to the else block
-        // var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
-        // var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
-
-
-      } // END invalid HORIZONTAL placement with ship placement fix
-
+      }
     } else { // VERTICAL
-      // use validVGrid
       var validV = validVGrid[ placedShip ].indexOf( placedVGrid );
       console.log(placedShip, "is at", placedVGrid, "and can be in",validVGrid[ placedShip ]);
       if ( validV === -1 ) {
-        //console.log("not valid Vert placement");//invalid drop. change change ship_grid location to closest valid value validHGrid[ ship_name.toString() ][ validHGrid[ ship_name.toString() ].length-1 ];
-        // correct the grid location here
-        // get the last array element of the given ships validVGrid
         var lastValidElement = validVGrid[ placedShip ][ validVGrid[ placedShip ].length-1 ]; // the linter incorrectly thinks this var has already been defined. There is another assignment but inside the conditional. The logic will only use one or the other.
-        // console.log( "lastValidElement", lastValidElement );
-        // var fixedCell = lastValidElement + placedHGrid; // I think this is the incorrect code. Suspect needs placedVGrid which is next line
         var fixedCell = lastValidElement + placedHGrid; // add that after the current placedVGrid
         console.log( "fixedCell", fixedCell );
         placedLocation = fixedCell;
-        // count the difference from placed cell to fixed cell
         var fixedDistance = validVGrid[ placedShip ].indexOf( parseInt(placedVGrid, 10) ) - validVGrid[ placedShip ].indexOf( parseInt(lastValidElement, 10) );// index of place cell minus the index of the fixed cell
-        // multiply by 25 px
         fixedDistance = fixedDistance * 25;
-        // get the draggable style and
         var getTheShip = "#draggable"+ placedShip.name;
         var theShipStyle = $(getTheShip).attr('style');
         console.log("theShipStyle", theShipStyle);
-        // subtract the fixed cell distance from the style's location
+      }
+    }
 
-        // add that to the img style
-        // once working, add the companion fix to the else block
-        // var result = str.replace(/top: -?\d+/, "top: " + val.toString() ); // works
-        // var result2 = str.replace(/left: -?\d+/, "left: " + val.toString() ); // works
-
-      } // END invalid VERTICAL placement with ship placement fix
-
-    } // END of placedOrientation check for rotaion at 0 or 90 degrees
-
-    // put the dropped cell location or fixed cell location into the global gameObj
-    // gameObj[ placedShip ].cell = placedLocation;  Dont think this does anything
-
-  }; // END of checkShipPlacement function
+  };
 
   // toggle ships droppable
   var gameReady = function( setTo ){
   // accepts val to set . gameStarted is a global var. Should only be called by player clicking "Ready To Play" button, by starting a new game
-    setTo = setTo || gameStarted;
-    gameStarted = setTo;
-    $( ".ship" ).draggable( "option", "disabled", gameStarted );
-    socket.emit('game_status', gameStarted);
-  }; // END disable gameReady funct
-
-  // "Ready To Play" button to dissable ship draggable and rotation.
-
-  // need to add check to see if all ships have a cell value if if so enable the button.
+    setTo = setTo || gameObj.gameStarted;
+    gameObj.gameStarted = setTo;
+    $( ".ship" ).draggable( "option", "disabled", gameObj.gameStarted );
+    socket.emit('game_status', gameObj.gameStarted);
+  };
 
 
-  function checkShipsPlaced () { // should be replaced with updating gameObj
+  function checkShipsPlaced () {
     if ((gameObj.AircraftCarrier.cell !== "") &&
         (gameObj.Battleship.cell !== "") &&
         (gameObj.Destroyer.cell !== "") &&
@@ -485,8 +442,6 @@ $( ".droppable" ).droppable({
 
   $('#readyToPlayButton').on({
     'click': function() {
-
-
       checkShipsPlaced();
       if (gameObj.shipsPlaced) {
         event.preventDefault();
@@ -506,6 +461,7 @@ $( ".droppable" ).droppable({
       }
     }
   });
+
 
   gamePlay();
 
