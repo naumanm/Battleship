@@ -1,4 +1,4 @@
-// entry point when server starts
+// server setup 
 var express = require('express'),
 app = express(),
 http = require('http').Server(app),
@@ -12,10 +12,10 @@ drydockA=[],   //ship placeholders
 drydockB=[]; 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
-
 // location for static files
 app.use(express.static(__dirname + '/public'));
 
+//Routes
 // root route
 app.get('/', function(req, res){
   res.render("index.ejs");
@@ -31,6 +31,8 @@ app.get('/instructions', function(req, res){
   res.render("instructions.ejs");
 });
 
+
+//Socket IO Setup
 // game communication. ALL game emit events need to be handled within this block
 io.on('connection', function(socket){  //step #1 connection
   socket.join(roomNumber);  //each game gets a room 
