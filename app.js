@@ -1,15 +1,10 @@
 // entry point when server starts
-
-// setup env
-
 var express = require('express'),
 app = express(),
 http = require('http').Server(app),
 io = require('socket.io')(http),
-methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
-bodyParser = require("body-parser"),
 waitingRoom =[], 
 controller, //for turns
 gameRooms=[],
@@ -17,10 +12,6 @@ drydockA=[],   //ship placeholders
 drydockB=[]; 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
-
-// more middleware  Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(methodOverride('_method')); // probably not needed.
 
 // location for static files
 app.use(express.static(__dirname + '/public'));
