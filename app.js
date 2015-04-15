@@ -1,15 +1,11 @@
 // entry point when server starts
 
 // setup env
-require('dotenv').load();
+
 var express = require('express'),
 app = express(),
 http = require('http').Server(app),
 io = require('socket.io')(http),
-//redis = require("redis"),
-//url = require('url'),
-//redisURL = url.parse(process.env.REDISCLOUD_URL),
-//client = redis.createClient(),
 methodOverride = require("method-override"),
 roomNumber=1,
 playerPair=0,
@@ -21,11 +17,6 @@ drydockA=[],   //ship placeholders
 drydockB=[]; 
 // allows us to use ejs instead of html
 app.set("view engine", "ejs");
-
-//client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-//client.auth(redisURL.auth.split(":")[1]);
-
-//console.log(process.env.REDISCLOUD_URL);
 
 // more middleware  Christian added this... found in my class examples... do we need? body parser to get the player's name from the form withing the modal. method override for the routes that add to redis. wondering about this one since we already are emitting the moves, I'm thinking the controller would handle the action based on that.
 app.use(bodyParser.urlencoded({extended: true}));
@@ -58,16 +49,11 @@ io.on('connection', function(socket){  //step #1 connection
   socket.on('playerName', function(playerName) { 
     socket.nickname=playerName;
   });
-  //SAVE USERNAME FROM playername TO REDIS FOR WIN/LOSS KEEPING, ALSO SESSION KEEPING use SOCKET.ID FOR THAT PART
-  //client.HSETNX("playersName", socket.id, socket.id);  //this is the socket has not the actual user name
-  //client.HSETNX("gameIDs", socket.id, socket.id);  //connecting the first player as a game id ref point 
+ 
   waitingRoom.push(socket);
   playerPair++;
   //assign a game, roomNumber, and reset queue when two players are in the waiting room
   if (playerPair===2){
-    //client.HSETNX("opponent", socket.id, socket.id);  ? will we still need this...since player is being saved above as a player with session?
-    // in case line above doesn't work client.HSETNX("opponent", gameObj.playerID, gameObj.opponentID); 
-    
     gameRooms.push(new Game(waitingRoom[0],waitingRoom[1],roomNumber));
     waitingRoom=[];   //outside of the game object, socket controller is ready to add more players
     roomNumber++;
