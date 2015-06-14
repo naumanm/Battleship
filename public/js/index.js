@@ -36,7 +36,7 @@ var socket = io(),
       rotation: 0
       },
     gameStarted: false, // gameStarted: gameObj['gameStarted'] || false   <== doesn't seem to work. Tried several options in console.
-    playerName: ""    
+    playerName: ""
   };
 
   $("#readyToPlay").css("visibility","visible");
@@ -131,7 +131,7 @@ var socket = io(),
       });  // end of select to take a shot
 
 
-    
+
 
     // update the ship board with other players shots
     socket.on('shot', function(shotObj){
@@ -148,7 +148,7 @@ var socket = io(),
         document.getElementById("shotPlayer").innerHTML = shotObj.player + " HIT at " + shotObj.id;
       }
       else {
-        document.getElementById("shotPlayer").innerHTML = shotObj.player + " missed at " + shotObj.id;        
+        document.getElementById("shotPlayer").innerHTML = shotObj.player + " missed at " + shotObj.id;
       }
 
       var hitArr = document.querySelectorAll('[data-id=' + shotObj.id + '] img'); // the data-id is the cell, then select imgages.
@@ -173,8 +173,8 @@ var socket = io(),
         } else { // this block is the miss scenario
           $(hitArr[1]).removeClass("hide"); // the miss img
         }
-      } 
-  
+      }
+
 
       if (shotObj.player === gameObj.playerName) {
         // this is NOT the current shooter
@@ -199,7 +199,7 @@ var socket = io(),
         document.getElementById("shotPlayer").innerHTML = "Game Over. Thanks for playing."; // Add Play again?
       } else {
       }
-    }); 
+    });
 
   } // End of gamePlay function
 
@@ -210,26 +210,26 @@ var socket = io(),
     snap: ".snapCell",
     snapMode: "inner"
     // containment: "#snaptarget",
-    // grid: [13, 13] 
+    // grid: [13, 13]
   });
 
   $( "#draggableBattleship" ).draggable({
     snap: ".snapCell",
     snapMode: "inner"
     // containment: "#snaptarget",
-    // grid: [25, 25] 
+    // grid: [25, 25]
   });
   $( "#draggableDestroyer" ).draggable({
     snap: ".snapCell",
     snapMode: "inner"
     // containment: "#snaptarget",
-    // grid: [25, 25] 
+    // grid: [25, 25]
   });
   $( "#draggableSubmarine" ).draggable({
     snap: ".snapCell",
     snapMode: "inner"
     // containment: "#snaptarget",
-    // grid: [25, 25] 
+    // grid: [25, 25]
   });
   $( "#draggablePtBoat" ).draggable({
     snap: ".snapCell",
@@ -246,7 +246,7 @@ function emitShip(name, cellId, rotation) {
   placedShipObj.rotation = rotation;
 
   socket.emit('place_ship', placedShipObj);
-  console.log(placedShipObj);  
+  console.log(placedShipObj);
 }
 
 
@@ -496,7 +496,7 @@ console.log("theShipStyle", theShipStyle);
         (gameObj.Submarine.cell !== undefined) &&
         (gameObj.PtBoat.cell !== undefined))
     {
-      return true;  
+      return true;
     }
   }
 
@@ -509,8 +509,8 @@ console.log("theShipStyle", theShipStyle);
         $('#shotPlayer').text("Game ON!");
         gameReady(true);
         // emit to server player is ready
-        $("#readyToPlay").css("display","none");  
-        $('h4').text(''); 
+        $("#readyToPlay").css("display","none");
+        $('h4').text('');
       }
       else {
 
