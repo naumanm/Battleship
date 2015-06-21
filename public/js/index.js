@@ -1,14 +1,7 @@
 $(document).ready(function(){
 
 var socket = io(),
-  // gameStarted = false ==> disallows firing and allows placing ships.
-  // gameStarted = true ==> disallows placing ships and allows firing.
   gameStarted = gameStarted || false;
-
-// objects to emit to backend
-// Christian thinks gameObj should be an object with key value pairs. gameObj['battleship']['name']  ==> "battleship"  THIS works. I tested it in console.
-// This way, the checkShipPlacement function can receive the ship name to check then use the global gameObj and work.
-// Once we do game persistance, we should have function here to check any existing game then add that to the gameObj
 
   var placedShipObj = {
     rotation: 0
@@ -47,9 +40,6 @@ var socket = io(),
         console.log("test");
   });
 
-  // as the user types, populate the client side "Hello xyz" but wait for the sumbit to sent the info to redis
-  // gameObj.playerName = $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
-  /*var playerName = */
   $( "#personsName" ).keyup(function() { // #personsName is the id of the name input field in the modal
       gameObj.playerName = $('#personsName').val();  // var playerName = $('#personsName').val();
       $( "#userName" ).text( "Hello " + /* playerName */ gameObj.playerName );
@@ -64,20 +54,10 @@ var socket = io(),
     console.log("playerName", /* playerName */ gameObj.playerName );
 
     socket.emit('playerName', /* playerName */ gameObj.playerName );
-
-
-
     return /* playerName */ gameObj.playerName;
-    // HOW DO WE WANT TO DO THIS???? Many scenarios!!!
-    // 1) Player already connected to the game and refreshed.
-    // 2) Player started a new game (using a different player name)
-    // 3) New player but their entered name already exists with another player. I think the socet ID needs to be the "PK" of the player's data
 
   }); // END listener for the form submit
 
-
-// *******************UN-COMMENT ONCE DONE WITH TESTING**************************
-//TEMPORARY DISABLE SINCE IT'S SO ANNOYING WHILE TESTING
   var isNameEmpty = function(a){
     $('#playerSignIn').modal('show'); // shows the get player's name modal
   }();
@@ -85,11 +65,6 @@ var socket = io(),
   function gamePlay(){
 
     var selectedArr = selectedArr || []; // array of all shots
-
-
-    //turn.on('turn', function(turnObj){
-
-
 
       // color change on hover
       $("td").mouseover(function(){
